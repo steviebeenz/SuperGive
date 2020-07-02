@@ -112,10 +112,9 @@ public class ItemBuilder {
 						: item.getAmount() + " ")
 				.append(MSG.FORMAT_INFO);
 		result.append(MSG.camelCase(item.getType().toString())).append(item.getAmount() == 1 ? " " : "s ");
-
 		for (ItemAttribute at : attr) {
 			String mod = at.getModification(item);
-			if (mod == null)
+			if (mod == null || mod.isEmpty())
 				continue;
 			result.append(mod).append(" ");
 		}

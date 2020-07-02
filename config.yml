@@ -58,6 +58,8 @@ SmartEquip:
   - 'HEAD'
   CHESTPLATE:
   - 'CHEST'
+  ELYTRA:
+  - 'CHEST'
   LEGGING:
   - 'LEGS'
   BOOTS:

@@ -25,7 +25,7 @@ public class PotionAttribute implements ItemAttribute {
 			return item;
 		try {
 			PotionEffect eff = new PotionEffect(type, Integer.parseInt(line.split(":")[1]),
-					line.split(":").length > 2 ? Integer.parseInt(line.split(":")[2]) : 1);
+					line.split(":").length > 2 ? Integer.parseInt(line.split(":")[2]) : 0);
 			potion.addCustomEffect(eff, true);
 		} catch (IndexOutOfBoundsException | NumberFormatException e) {
 			MSG.warn("Potentially invalid potion format: " + line);
@@ -38,7 +38,7 @@ public class PotionAttribute implements ItemAttribute {
 	public String getModification(ItemStack item) {
 		ItemMeta meta = item.getItemMeta();
 		if (!(meta instanceof PotionMeta))
-			return "";
+			return null;
 		PotionMeta potion = (PotionMeta) meta;
 		StringBuilder result = new StringBuilder();
 		for (PotionEffect effect : potion.getCustomEffects()) {
