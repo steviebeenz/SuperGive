@@ -13,6 +13,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
 import com.google.common.base.Preconditions;
@@ -56,6 +57,22 @@ public class Utils {
 				return t;
 		}
 		for (EntityType t : EntityType.values()) {
+			if (MSG.normalize(t.toString()).contains(MSG.normalize(type)))
+				return t;
+		}
+		return null;
+	}
+
+	public static PotionEffectType getPotionEffect(String type) {
+		for (PotionEffectType t : PotionEffectType.values()) {
+			if (MSG.normalize(t.toString()).equals(MSG.normalize(type)))
+				return t;
+		}
+		for (PotionEffectType t : PotionEffectType.values()) {
+			if (MSG.normalize(t.toString()).startsWith(MSG.normalize(type)))
+				return t;
+		}
+		for (PotionEffectType t : PotionEffectType.values()) {
 			if (MSG.normalize(t.toString()).contains(MSG.normalize(type)))
 				return t;
 		}

@@ -25,6 +25,7 @@ public class ItemBuilder {
 		attr.add(new OwnerAttribute());
 		attr.add(new LoreAttribute());
 		attr.add(new ItemFlagAttribute());
+		attr.add(new PotionAttribute());
 	}
 
 	public void addAttribute(ItemAttribute attr) {
@@ -106,7 +107,10 @@ public class ItemBuilder {
 		StringBuilder result = new StringBuilder();
 		if (item == null || item.getType() == Material.AIR)
 			return null;
-		result.append(MSG.NUMBER).append(item.getAmount() == 1 ? "a " : item.getAmount() + " ").append(MSG.FORMAT_INFO);
+		result.append(MSG.NUMBER)
+				.append(item.getAmount() == 1 ? (item.getType().toString().toLowerCase().startsWith("a") ? "an " : "a ")
+						: item.getAmount() + " ")
+				.append(MSG.FORMAT_INFO);
 		result.append(MSG.camelCase(item.getType().toString())).append(item.getAmount() == 1 ? " " : "s ");
 
 		for (ItemAttribute at : attr) {

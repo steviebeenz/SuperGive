@@ -151,6 +151,9 @@ public class Loadout implements ConfigurationSerializable {
 				continue;
 			builder.append(SuperGive.getPlugin().getBuilder().humanReadable(item)).append(", ");
 		}
+		if (builder.toString().isEmpty()) {
+			return "No items";
+		}
 		return builder.toString().substring(0, builder.length() - 2);
 	}
 

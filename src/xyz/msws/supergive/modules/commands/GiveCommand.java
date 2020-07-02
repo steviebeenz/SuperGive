@@ -7,6 +7,8 @@ import java.util.List;
 import org.apache.commons.lang.ArrayUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.block.Container;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.defaults.BukkitCommand;
 import org.bukkit.enchantments.Enchantment;
@@ -17,6 +19,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffectType;
+import org.bukkit.util.RayTraceResult;
 
 import xyz.msws.supergive.SuperGive;
 import xyz.msws.supergive.items.ItemBuilder;
@@ -87,15 +91,44 @@ public class GiveCommand extends BukkitCommand {
 		Loadout loadout = null;
 		switch (args[1].toLowerCase()) {
 			case "@hand":
-				if (!sender.hasPermission("supergive.command.give.hand"))
-					break;
-				if (sender instanceof Player)
+				if (!sender.hasPermission("supergive.command.give.hand")) {
+					MSG.tell(sender, "SuperGive", "You do not have the proper permission to give this item.");
+					return true;
+				}
+				if (sender instanceof Player) {
 					loadout = new Loadout(((Player) sender).getInventory().getItemInMainHand());
+					item = ((Player) sender).getInventory().getItemInMainHand();
+				}
 				break;
 			case "@inventory":
-				if (!sender.hasPermission("supergive.command.give.inventory"))
-					break;
+				if (!sender.hasPermission("supergive.command.give.inventory")) {
+					MSG.tell(sender, "SuperGive", "You do not have the proper permission to give this loadout.");
+					return true;
+				}
 				loadout = new Loadout(((Player) sender).getInventory().getContents());
+				break;
+			case "@block":
+				if (!sender.hasPermission("supergive.command.give.block")) {
+					MSG.tell(sender, "SuperGive", "You do not have the proper permission to give this loadout.");
+					return true;
+				}
+				if (!(sender instanceof Player)) {
+					MSG.tell(sender, "SuperGive", "Huh... not sure what you want me to do here.");
+					return true;
+				}
+				RayTraceResult result = ((Player) sender).rayTraceBlocks(20);
+				if (result == null || result.getHitBlock() == null) {
+					MSG.tell(sender, "SuperGive", "Please look at a block that can hold items.");
+					return true;
+				}
+				Block target = result.getHitBlock();
+				if (!(target.getState() instanceof Container)) {
+					MSG.tell(sender, "SuperGive",
+							"&e" + MSG.camelCase(target.getType().toString()) + "s&7 cannot contain items.");
+					return true;
+				}
+
+				loadout = new Loadout(((Container) target.getState()).getInventory().getContents());
 				break;
 			default:
 				if (args[1].startsWith("#")) {
@@ -119,6 +152,11 @@ public class GiveCommand extends BukkitCommand {
 
 		if (loadout == null) {
 			MSG.tell(sender, "SuperGive", "Unable to parse item.");
+			return true;
+		}
+
+		if (item != null && item.getType() == Material.AIR) {
+			MSG.tell(sender, "SuperGive", "You successfully did nothing.");
 			return true;
 		}
 
@@ -177,7 +215,7 @@ public class GiveCommand extends BukkitCommand {
 				if (s.toLowerCase().startsWith(current.toLowerCase()))
 					result.add(prev + s);
 			}
-			if (current.length() > 3)
+			if (current.length() > 3) {
 				for (EntityType type : EntityType.values()) {
 					String t = MSG.normalize(type.toString());
 					if (("@" + t).startsWith(current)) {
@@ -192,11 +230,18 @@ public class GiveCommand extends BukkitCommand {
 						}
 					}
 				}
+			}
+
 		}
 		if (args.length == 2) {
 			for (Material mat : Material.values()) {
 				if (MSG.normalize(mat.getKey().getKey()).startsWith(args[1].toLowerCase())) {
 					result.add(MSG.normalize(mat.getKey().getKey()));
+				}
+			}
+			for (String s : new String[] { "@hand", "@inventory", "@block" }) {
+				if (s.toLowerCase().startsWith(args[1].toLowerCase())) {
+					result.add(s);
 				}
 			}
 			if ("#".toLowerCase().startsWith(args[1].toLowerCase()))
@@ -211,7 +256,7 @@ public class GiveCommand extends BukkitCommand {
 			}
 		}
 		if (args.length > 2) {
-			for (String res : new String[] { "name:", "lore:", "unbreakable:true", "damage:", "flag:" }) {
+			for (String res : new String[] { "name:", "lore:", "unbreakable:", "damage:", "flag:" }) {
 				boolean cont = true;
 				for (String arg : args) {
 					if (arg.toLowerCase().contains(res)) {
@@ -245,11 +290,17 @@ public class GiveCommand extends BukkitCommand {
 					}
 				}
 			}
-			if (args[args.length - 1].length() >= 3)
+			if (args[args.length - 1].length() >= 3) {
 				for (Enchantment ench : Enchantment.values()) {
 					if (MSG.normalize(ench.getKey().getKey()).startsWith(MSG.normalize(args[args.length - 1])))
 						result.add(MSG.normalize(ench.getKey().getKey()) + ":");
 				}
+				for (PotionEffectType type : PotionEffectType.values()) {
+					if (MSG.normalize(type.getName()).startsWith(MSG.normalize(args[args.length - 1])))
+						result.add(MSG.normalize(type.getName()) + ":");
+				}
+			}
+
 		}
 		return result;
 	}

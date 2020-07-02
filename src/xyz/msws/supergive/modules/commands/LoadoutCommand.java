@@ -177,6 +177,7 @@ public class LoadoutCommand extends BukkitCommand {
 
 				MSG.tell(sender, "SuperGive",
 						"You are now editing the " + MSG.FORMAT_INFO + name + " " + MSG.DEFAULT + "loadout.");
+				MSG.tell(sender, "SuperGive", "To edit the loadout, simply &lmodify your own inventory&7.");
 				MSG.tell(sender, "SuperGive", "Type &e/" + commandLabel + " edit &7to save the loadout, or &e/"
 						+ commandLabel + " cancel &7to cancel editing.");
 				loadouts.put(player.getUniqueId(), name);
