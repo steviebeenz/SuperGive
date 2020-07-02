@@ -5,16 +5,39 @@ import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 
 public class VanillaSelector implements Selector {
 
 	@Override
 	public List<Entity> getEntities(String arg, CommandSender sender) {
+		if(!sender.hasPermission("supergive.selector.vanilla"))
+			return null;
 		try {
 			return Bukkit.selectEntities(sender, arg);
 		} catch (IllegalArgumentException e) {
 			return null;
 		}
+	}
+
+	@Override
+	public String getDescriptor(String arg, CommandSender sender) {
+		switch (arg.toLowerCase()) {
+			case "@a":
+				return "all players";
+			case "@p":
+				return "the nearest player";
+			case "@e":
+				return "all entities";
+			case "@r":
+				return "a random player";
+			case "@s":
+				return "yourself";
+		}
+		Player player = Bukkit.getPlayer(arg);
+		if (player != null)
+			return player.getName();
+		return arg;
 	}
 
 }

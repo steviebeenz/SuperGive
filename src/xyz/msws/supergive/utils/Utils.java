@@ -2,6 +2,7 @@ package xyz.msws.supergive.utils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map.Entry;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -11,6 +12,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
 import com.google.common.base.Preconditions;
@@ -46,7 +48,15 @@ public class Utils {
 
 	public static EntityType getEntityType(String type) {
 		for (EntityType t : EntityType.values()) {
-			if (MSG.normalize(t.toString()).startsWith(MSG.normalize(type.toLowerCase())))
+			if (MSG.normalize(t.toString()).equals(MSG.normalize(type)))
+				return t;
+		}
+		for (EntityType t : EntityType.values()) {
+			if (MSG.normalize(t.toString()).startsWith(MSG.normalize(type)))
+				return t;
+		}
+		for (EntityType t : EntityType.values()) {
+			if (MSG.normalize(t.toString()).contains(MSG.normalize(type)))
 				return t;
 		}
 		return null;
@@ -109,12 +119,30 @@ public class Utils {
 					return Enchantment.getByKey(NamespacedKey.minecraft(ench.toUpperCase()));
 				} catch (IllegalArgumentException e) {
 					for (Enchantment en : Enchantment.values()) {
-						if (MSG.normalize(en.toString()).contains(MSG.normalize(ench)))
+						if (MSG.normalize(en.getKey().getKey()).equalsIgnoreCase(MSG.normalize(ench)))
+							return en;
+					}
+					for (Enchantment en : Enchantment.values()) {
+						if (MSG.normalize(en.getKey().getKey()).startsWith(MSG.normalize(ench)))
+							return en;
+					}
+					for (Enchantment en : Enchantment.values()) {
+						if (MSG.normalize(en.getKey().getKey()).contains(MSG.normalize(ench)))
 							return en;
 					}
 				}
 				break;
 		}
 		return null;
+	}
+
+	public static boolean containsUnsafeEnchantments(ItemStack item) {
+		for (Entry<Enchantment, Integer> entry : item.getEnchantments().entrySet()) {
+			if (!entry.getKey().canEnchantItem(item))
+				return true;
+			if (entry.getKey().getMaxLevel() < entry.getValue())
+				return true;
+		}
+		return false;
 	}
 }

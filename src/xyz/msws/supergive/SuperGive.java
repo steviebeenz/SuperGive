@@ -1,5 +1,6 @@
 package xyz.msws.supergive;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
@@ -10,8 +11,9 @@ import java.util.stream.Collectors;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import xyz.msws.supergive.inventory.CItem;
 import xyz.msws.supergive.items.ItemBuilder;
+import xyz.msws.supergive.loadout.Loadout;
+import xyz.msws.supergive.loadout.LoadoutManager;
 import xyz.msws.supergive.modules.AbstractModule;
 import xyz.msws.supergive.modules.ModulePriority;
 import xyz.msws.supergive.modules.commands.CommandModule;
@@ -24,17 +26,27 @@ public class SuperGive extends JavaPlugin {
 	private ItemBuilder builder;
 	private Selector selector;
 
+	private static SuperGive instance;
+
 	@Override
 	public void onEnable() {
-		saveResource("config.yml", false);
+		instance = this;
+		File conf = new File(this.getDataFolder(), "config.yml");
+		if (!conf.exists())
+			saveResource("config.yml", false);
 
 		modules.add(new CommandModule(this));
+		modules.add(new LoadoutManager(this));
 
 		this.builder = new ItemBuilder();
 		this.selector = new NativeSelector();
 
-		ConfigurationSerialization.registerClass(CItem.class, "CItem");
+		ConfigurationSerialization.registerClass(Loadout.class, "Loadout");
 		enableModules();
+	}
+
+	public static SuperGive getPlugin() {
+		return instance;
 	}
 
 	public ItemBuilder getBuilder() {

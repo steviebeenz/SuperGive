@@ -12,9 +12,9 @@ public class NameSelector implements Selector {
 
 	@Override
 	public List<Entity> getEntities(String arg, CommandSender sender) {
-		for (Player p : Bukkit.getOnlinePlayers()) {
+		for (Player p : Bukkit.getOnlinePlayers()) { // Avoid clashing with VanillaSelector
 			if (p.getName().equalsIgnoreCase(arg))
-				return Arrays.asList(p);
+				return null;
 		}
 
 		for (Player p : Bukkit.getOnlinePlayers()) {
@@ -25,8 +25,12 @@ public class NameSelector implements Selector {
 			if (p.getName().toLowerCase().contains(arg.toLowerCase()))
 				return Arrays.asList(p);
 		}
-
 		return null;
+	}
+
+	@Override
+	public String getDescriptor(String arg, CommandSender sender) {
+		return getEntities(arg, sender).get(0).getName();
 	}
 
 }

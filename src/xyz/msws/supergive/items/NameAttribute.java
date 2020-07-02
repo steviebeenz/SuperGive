@@ -1,5 +1,6 @@
 package xyz.msws.supergive.items;
 
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -17,4 +18,15 @@ public class NameAttribute implements ItemAttribute {
 		item.setItemMeta(meta);
 		return item;
 	}
+
+	@Override
+	public String getModification(ItemStack item) {
+		if (item == null || item.getType() == Material.AIR)
+			return null;
+		ItemMeta meta = item.getItemMeta();
+		if (!meta.hasDisplayName())
+			return null;
+		return "name:" + meta.getDisplayName();
+	}
+
 }

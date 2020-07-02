@@ -1,0 +1,85 @@
+AllSelectorWarning: true
+Loadouts:
+  DiamondArmor:
+    ==: xyz.msws.supergive.loadout.Loadout
+    Name: 'Diamond Armor'
+    Items:
+    - 'diamondhelmet'
+    - 'diamondchestplate'
+    - 'diamondleggings'
+    - 'diamondboots'
+  BuildKit:
+    ==: xyz.msws.supergive.loadout.Loadout
+    Name: 'Build Loadout'
+    Clear: true
+    Items:
+    - 'whitewool 64'
+    - 'redwool 64'
+    - 'orangewool 64'
+    - 'yellowwool 64'
+    - 'greenwool 64'
+    - 'bluewool 64'
+    - 'magentawool 64'
+    - 'purplewool 64'
+    - 'blackwool 64'
+  Food:
+    ==: xyz.msws.supergive.loadout.Loadout
+    Name: 'Food'
+    Smart: true
+    Items:
+    - 'cookedchicken 64'
+    - 'cookedsteak 64'
+    - 'goldencarrot 64'
+    - 'cookie 64'
+    - 'cake 64'
+    - 'cookedmutton 64'
+    - 'enchantedgoldenapple 64'
+    - 'pumpkinpie 64'
+  FullLoadout:
+    ==: xyz.msws.supergive.loadout.Loadout
+    Name: 'Full Loadout'
+    Clear: true
+    Items:
+    - 'diamondhelmet diamondhelmet aqua:1 mending:1 protection:4 respiration:3 thorns:3 unbreaking:3'
+    - 'diamondchestplate mending:1 prot:4 thorns:3 unbreaking:3'
+    - 'diamondleggings mending:1 protection:4 thorns:3 unbreaking:3'
+    - 'diamondboots featherfalling:4 frostwalker:2 mend:1 protection:4 soulspeed:3 thorns:3 unbreak:3'
+    - 'diamondsword fireaspect:2 knockback:2 looting:3 mending:1 sharp:5 sweeping:3 unbreaking:3'
+    - 'bow flame:1 infinity:1 power:5 punch:2 unbreak:3'
+    - 'diamondaxe eff:5 fortune:3 mending:1 sharp:5 unbreak:3'
+    - 'waterbucket'
+    - 'enchantedgoldenapple 64'
+    - 'arrow'
+    - 'shield'
+    - 'cookedsteak 64'
+    - 'goldencarrot 64'
+SmartEquip:
+  HELMET:
+  - 'HEAD'
+  CHESTPLATE:
+  - 'CHEST'
+  LEGGING:
+  - 'LEGS'
+  BOOTS:
+  - 'FEET'
+  SWORD:
+  - '0'
+  - 'HAND'
+  SHIELD:
+  - 'OFF_HAND'
+  PICKAXE:
+  - '1'
+  - '2'
+  BOW:
+  - '1'
+  - 'OFF_HAND'
+  AXE:
+  - '2'
+  COOKED:
+  - '6'
+  - '7'
+  ARROW:
+  - '9'
+  BUCKET:
+  - '8'
+  - 'OFF_HAND'

@@ -11,10 +11,17 @@ public class PermissionSelector implements Selector {
 
 	@Override
 	public List<Entity> getEntities(String arg, CommandSender sender) {
+		if (!sender.hasPermission("supergive.selector.permission"))
+			return null;
 		if (!arg.startsWith("perm:"))
 			return null;
 		return Bukkit.getOnlinePlayers().stream().filter(p -> p.hasPermission(arg.substring("perm:".length())))
 				.collect(Collectors.toList());
+	}
+
+	@Override
+	public String getDescriptor(String arg, CommandSender sender) {
+		return "permissioned players";
 	}
 
 }

@@ -59,6 +59,7 @@ public class CommandModule extends AbstractModule implements Listener {
 		MSG.log("&9Enabling commands...");
 
 		commands.put(new GiveCommand(plugin, "give"), false);
+		commands.put(new LoadoutCommand(plugin, "loadout"), false);
 
 		List<Command> cmds = new ArrayList<>();
 		for (Command cmd : commands.keySet()) {

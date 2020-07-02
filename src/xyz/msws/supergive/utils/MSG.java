@@ -4,7 +4,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Collection;
 
-import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -84,9 +83,6 @@ public class MSG {
 	}
 
 	public static void tell(CommandSender sender, String module, String message) {
-		if (StringUtils.isAlphanumeric(message.charAt(message.length() - 1) + ""))
-			message += MSG.DEFAULT + ".";
-
 		tell(sender, PREFIX + module + "> " + DEFAULT + message);
 	}
 
@@ -280,7 +276,7 @@ public class MSG {
 	public static String parseDecimal(String decimal, int length) {
 		return parseDecimal(Double.parseDouble(decimal), length);
 	}
-	
+
 	public static void sendMethods(Class<?> cl) {
 		MSG.log("Declared methods for " + cl.getName());
 		StringBuilder builder = new StringBuilder();

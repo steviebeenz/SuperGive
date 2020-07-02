@@ -3,3 +3,23 @@ name: SuperGive
 version: 1.0
 author: MSWS
 api-version: 1.16
+description: Improved give command
+permissions:
+  supergive.*:
+    description: Full control and access to SuperGive's abilities
+    children:
+      supergive.command.loadout: true
+      supergive.command.give: true
+      supergive.command.give.*: true
+  supergive.command.give:
+    description: Access to the /give command
+    children:
+      supergive.command.give.hand: true
+      supergive.command.give.inventory: true
+      supergive.command.give.unsafeenchants: true
+  supergive.command.loadout:
+    description: Access to the /loadout command
+    children:
+      supergive.command.loadout.create: true
+      supergive.command.loadout.edit: true
+      supergive.command.loadout.delete: true

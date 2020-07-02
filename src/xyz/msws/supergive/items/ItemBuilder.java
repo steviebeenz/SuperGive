@@ -21,6 +21,10 @@ public class ItemBuilder {
 		attr.add(new NameAttribute());
 		attr.add(new UnbreakableAttribute());
 		attr.add(new EnchantmentAttribute());
+		attr.add(new DamageAttribute());
+		attr.add(new OwnerAttribute());
+		attr.add(new LoreAttribute());
+		attr.add(new ItemFlagAttribute());
 	}
 
 	public void addAttribute(ItemAttribute attr) {
@@ -80,13 +84,38 @@ public class ItemBuilder {
 
 		base = new ItemStack(mat, amo);
 
-		for (ItemAttribute at : attr) {
-			for (String s : attribuites) {
-				MSG.log("Att: " + s);
+		for (ItemAttribute at : attr)
+			for (String s : attribuites)
 				base = at.modify(s, base);
-			}
-		}
+
 		return base;
+	}
+
+	public String toString(ItemStack item) {
+		StringBuilder result = new StringBuilder();
+		for (ItemAttribute at : attr) {
+			String mod = at.getModification(item);
+			if (mod == null)
+				continue;
+			result.append(mod).append(" ");
+		}
+		return (item.getType() + " " + item.getAmount() + " " + result.toString()).trim();
+	}
+
+	public String humanReadable(ItemStack item) {
+		StringBuilder result = new StringBuilder();
+		if (item == null || item.getType() == Material.AIR)
+			return null;
+		result.append(MSG.NUMBER).append(item.getAmount() == 1 ? "a " : item.getAmount() + " ").append(MSG.FORMAT_INFO);
+		result.append(MSG.camelCase(item.getType().toString())).append(item.getAmount() == 1 ? " " : "s ");
+
+		for (ItemAttribute at : attr) {
+			String mod = at.getModification(item);
+			if (mod == null)
+				continue;
+			result.append(mod).append(" ");
+		}
+		return result.toString().trim();
 	}
 
 	@Test
