@@ -107,6 +107,10 @@ public class GiveCommand extends BukkitCommand {
 					MSG.tell(sender, "SuperGive", "You do not have the proper permission to give this loadout.");
 					return true;
 				}
+				if (!(sender instanceof Player)) {
+					MSG.tell(sender, "SuperGive", "You have too many items in your non-existent inventory.");
+					return true;
+				}
 				loadout = new Loadout(((Player) sender).getInventory().getContents());
 				break;
 			case "@block":
@@ -126,7 +130,7 @@ public class GiveCommand extends BukkitCommand {
 				Block target = result.getHitBlock();
 				if (!(target.getState() instanceof Container)) {
 					MSG.tell(sender, "SuperGive",
-							"&e" + MSG.camelCase(target.getType().toString()) + "s&7 cannot contain items.");
+							"&e" + MSG.camelCase(target.getType().toString()) + "s&7 cannot hold items.");
 					return true;
 				}
 

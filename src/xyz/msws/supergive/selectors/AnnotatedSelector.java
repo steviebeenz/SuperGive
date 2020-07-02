@@ -114,15 +114,16 @@ public class AnnotatedSelector implements Selector {
 	public String getDescriptor(String arg, CommandSender sender) {
 		switch (arg.substring(1).toLowerCase()) {
 			case "all":
-			case "everyone":
 				return "all entities";
 			case "world":
 				return "current world";
 			case "worldplayers":
 				return "current players in world";
 			case "players":
+			case "everyone":
 				return "all players";
 			case "me":
+			case "self":
 				return "yourself";
 		}
 		GameMode mode = Utils.getGameMode(arg.substring(1));
