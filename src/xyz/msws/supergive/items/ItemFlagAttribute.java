@@ -5,19 +5,21 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import xyz.msws.supergive.utils.MSG;
+import xyz.msws.supergive.utils.Utils;
+
 public class ItemFlagAttribute implements ItemAttribute {
 
 	@Override
 	public ItemStack modify(String line, ItemStack item) {
 		if (!line.startsWith("flag:"))
 			return item;
-		try {
-			ItemFlag flag = ItemFlag.valueOf(line.substring("flag:".length()).toUpperCase());
-			ItemMeta meta = item.getItemMeta();
-			meta.addItemFlags(flag);
-			item.setItemMeta(meta);
-		} catch (IllegalArgumentException e) {
-		}
+		ItemFlag flag = Utils.getItemFlag(line.substring("flag:".length()));
+		if (flag == null)
+			return item;
+		ItemMeta meta = item.getItemMeta();
+		meta.addItemFlags(flag);
+		item.setItemMeta(meta);
 		return item;
 	}
 
@@ -28,9 +30,9 @@ public class ItemFlagAttribute implements ItemAttribute {
 		ItemMeta meta = item.getItemMeta();
 		StringBuilder result = new StringBuilder();
 		for (ItemFlag flag : meta.getItemFlags()) {
-			result.append("flag:").append(flag.toString());
+			result.append("flag:").append(MSG.normalize(flag.toString())).append(" ");
 		}
-		return result.toString();
+		return result.toString().trim();
 	}
 
 }

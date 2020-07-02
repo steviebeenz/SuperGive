@@ -12,6 +12,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
@@ -74,6 +75,22 @@ public class Utils {
 		}
 		for (PotionEffectType t : PotionEffectType.values()) {
 			if (MSG.normalize(t.toString()).contains(MSG.normalize(type)))
+				return t;
+		}
+		return null;
+	}
+
+	public static ItemFlag getItemFlag(String flag) {
+		for (ItemFlag t : ItemFlag.values()) {
+			if (MSG.normalize(t.toString()).equals(MSG.normalize(flag)))
+				return t;
+		}
+		for (ItemFlag t : ItemFlag.values()) {
+			if (MSG.normalize(t.toString()).startsWith(MSG.normalize(flag)))
+				return t;
+		}
+		for (ItemFlag t : ItemFlag.values()) {
+			if (MSG.normalize(t.toString()).contains(MSG.normalize(flag)))
 				return t;
 		}
 		return null;

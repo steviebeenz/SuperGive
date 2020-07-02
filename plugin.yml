@@ -11,6 +11,7 @@ permissions:
       supergive.command.loadout: true
       supergive.command.give: true
       supergive.command.give.*: true
+      supergive.command.generate: true
   supergive.command.give:
     description: Access to the /give command
     children:
@@ -23,3 +24,6 @@ permissions:
       supergive.command.loadout.create: true
       supergive.command.loadout.edit: true
       supergive.command.loadout.delete: true
+  supergive.command.generate:
+    description: Access to the /generate command
+    default: true

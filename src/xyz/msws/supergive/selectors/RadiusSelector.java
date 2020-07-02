@@ -13,7 +13,7 @@ public class RadiusSelector implements Selector {
 	@Override
 	public List<Entity> getEntities(String arg, CommandSender sender) {
 		int radius = 0;
-		if(!sender.hasPermission("supergive.selector.radius"))
+		if (!sender.hasPermission("supergive.selector.radius"))
 			return null;
 		if (!arg.startsWith("radius:"))
 			return null;

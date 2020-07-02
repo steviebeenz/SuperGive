@@ -26,6 +26,7 @@ public class ItemBuilder {
 		attr.add(new LoreAttribute());
 		attr.add(new ItemFlagAttribute());
 		attr.add(new PotionAttribute());
+		attr.add(new PatternAttribute());
 	}
 
 	public void addAttribute(ItemAttribute attr) {
@@ -108,10 +109,11 @@ public class ItemBuilder {
 		if (item == null || item.getType() == Material.AIR)
 			return null;
 		result.append(MSG.NUMBER)
-				.append(item.getAmount() == 1 ? (item.getType().toString().toLowerCase().startsWith("a") ? "an " : "a ")
+				.append(item.getAmount() == 1 ? (isVowel(item.getType().toString().charAt(0)) ? "an " : "a ")
 						: item.getAmount() + " ")
 				.append(MSG.FORMAT_INFO);
-		result.append(MSG.camelCase(item.getType().toString())).append(item.getAmount() == 1 ? " " : "s ");
+		result.append(MSG.camelCase(item.getType().toString()))
+				.append((item.getAmount() == 1 || item.getType().toString().toLowerCase().endsWith("s")) ? " " : "s ");
 		for (ItemAttribute at : attr) {
 			String mod = at.getModification(item);
 			if (mod == null || mod.isEmpty())
@@ -119,6 +121,14 @@ public class ItemBuilder {
 			result.append(mod).append(" ");
 		}
 		return result.toString().trim();
+	}
+
+	private boolean isVowel(char c) {
+		for (char v : new char[] { 'a', 'e', 'i', 'o', 'u', 'A', 'E', 'I', 'O', 'U' }) {
+			if (v == c)
+				return true;
+		}
+		return false;
 	}
 
 	@Test

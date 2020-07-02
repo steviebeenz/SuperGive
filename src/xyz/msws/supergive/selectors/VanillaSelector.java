@@ -11,7 +11,7 @@ public class VanillaSelector implements Selector {
 
 	@Override
 	public List<Entity> getEntities(String arg, CommandSender sender) {
-		if(!sender.hasPermission("supergive.selector.vanilla"))
+		if (!sender.hasPermission("supergive.selector.vanilla"))
 			return null;
 		try {
 			return Bukkit.selectEntities(sender, arg);

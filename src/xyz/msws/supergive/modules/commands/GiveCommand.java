@@ -6,9 +6,11 @@ import java.util.List;
 
 import org.apache.commons.lang.ArrayUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Container;
+import org.bukkit.block.banner.PatternType;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.defaults.BukkitCommand;
 import org.bukkit.enchantments.Enchantment;
@@ -282,10 +284,10 @@ public class GiveCommand extends BukkitCommand {
 						result.add("owner:");
 				}
 			}
-			if (args[args.length - 1].startsWith("flag:")) {
+			if (args[args.length - 1].toLowerCase().startsWith("flag:")) {
 				for (ItemFlag flag : ItemFlag.values()) {
 					String fs = MSG.normalize(flag.toString());
-					if (("flag:" + fs).startsWith(MSG.normalize(args[args.length - 1]))) {
+					if (MSG.normalize(("flag:" + fs)).toLowerCase().startsWith(MSG.normalize(args[args.length - 1]))) {
 						result.add("flag:" + fs);
 					}
 				}
@@ -295,10 +297,29 @@ public class GiveCommand extends BukkitCommand {
 					if (MSG.normalize(ench.getKey().getKey()).startsWith(MSG.normalize(args[args.length - 1])))
 						result.add(MSG.normalize(ench.getKey().getKey()) + ":");
 				}
-				for (PotionEffectType type : PotionEffectType.values()) {
-					if (MSG.normalize(type.getName()).startsWith(MSG.normalize(args[args.length - 1])))
-						result.add(MSG.normalize(type.getName()) + ":");
+				if (args[1].toLowerCase().contains("potion"))
+					for (PotionEffectType type : PotionEffectType.values()) {
+						if (MSG.normalize(type.getName()).startsWith(MSG.normalize(args[args.length - 1])))
+							result.add(MSG.normalize(type.getName()) + ":");
+					}
+			}
+			if (args[1].toLowerCase().contains("banner")) {
+				for (PatternType type : PatternType.values()) {
+					if (type.toString().toLowerCase().startsWith(args[args.length - 1].toLowerCase())) {
+						result.add(type.toString().toLowerCase() + ":");
+					}
 				}
+				if (args[args.length - 1].contains(":")) {
+					String current = args[args.length - 1].split(":").length > 1 ? (args[args.length - 1]).split(":")[1]
+							: "";
+					String prev = args[args.length - 1].split(":")[0] + ":";
+
+					for (DyeColor color : DyeColor.values()) {
+						if (color.toString().toLowerCase().startsWith(current.toLowerCase()))
+							result.add(prev + color.toString().toLowerCase());
+					}
+				}
+
 			}
 
 		}
