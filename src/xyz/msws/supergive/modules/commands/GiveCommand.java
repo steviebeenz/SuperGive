@@ -271,6 +271,18 @@ public class GiveCommand extends BukkitCommand {
 				if (res.toLowerCase().startsWith(args[args.length - 1].toLowerCase()))
 					result.add(res);
 			}
+			if (MSG.normalize(args[1]).equalsIgnoreCase("enchantedbook")) {
+				if ("stored:".startsWith(args[args.length - 1]))
+					result.add("stored:");
+				if (args[args.length - 1].startsWith("stored:")) {
+					for (Enchantment ench : Enchantment.values()) {
+						if (("stored:" + MSG.normalize(ench.getKey().getKey()))
+								.startsWith(MSG.normalize(args[args.length - 1])))
+							result.add("stored:" + MSG.normalize(ench.getKey().getKey()) + ":");
+					}
+				}
+
+			}
 			if (MSG.normalize(args[1]).equalsIgnoreCase("playerhead")) {
 				boolean cont = true;
 				for (String arg : args) {

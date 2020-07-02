@@ -27,6 +27,7 @@ public class ItemBuilder {
 		attr.add(new ItemFlagAttribute());
 		attr.add(new PotionAttribute());
 		attr.add(new PatternAttribute());
+		attr.add(new StoredEnchantmentAttribute());
 	}
 
 	public void addAttribute(ItemAttribute attr) {
@@ -53,7 +54,7 @@ public class ItemBuilder {
 				args.split(" ").length)) {
 			if (!last.isEmpty() && arg.contains(":")) {
 				attribuites.add(last.trim());
-				last = arg;
+				last = arg + " ";
 				continue;
 			}
 			last += arg + " ";
