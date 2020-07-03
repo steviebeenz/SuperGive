@@ -108,8 +108,11 @@ public class FireworkAttribute implements ItemAttribute {
 		if (!(meta instanceof FireworkMeta))
 			return null;
 		FireworkMeta fire = (FireworkMeta) meta;
-		StringBuilder result = new StringBuilder("firework:");
-		for (FireworkEffect effect : fire.getEffects()) {
+		StringBuilder result = new StringBuilder();
+		for (int i = 0; i < fire.getEffectsSize(); i++) {
+			FireworkEffect effect = fire.getEffects().get(i);
+
+			result.append("firework:");
 			StringBuilder eff = new StringBuilder(String.join(" ",
 					effect.getColors().stream().map(c -> colorToString(c)).collect(Collectors.toList())));
 			result.append(eff).append(",");
@@ -118,13 +121,14 @@ public class FireworkAttribute implements ItemAttribute {
 						effect.getFadeColors().stream().map(c -> colorToString(c)).collect(Collectors.toList())))
 						.append(",");
 			}
-			result.append(effect.getType() + ",");
+			result.append(effect.getType());
 			if (effect.hasFlicker())
-				result.append("flicker,");
+				result.append(",flicker");
 			if (effect.hasTrail())
-				result.append("trail,");
+				result.append(",trail");
+			result.append((i == fire.getEffectsSize()-1) ? ",power" + fire.getPower() : " ");
 		}
-		result.append("power").append(fire.getPower());
+//		result.append("power").append(fire.getPower());
 
 		return result.toString();
 	}

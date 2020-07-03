@@ -28,7 +28,7 @@ public class ItemBuilder {
 		attr.add(new PotionAttribute());
 		attr.add(new PatternAttribute());
 		attr.add(new StoredEnchantmentAttribute());
-		attr.add(new SpawnerAttribute());
+		attr.add(new EntityAttribute());
 		attr.add(new FireworkAttribute());
 	}
 
@@ -104,7 +104,7 @@ public class ItemBuilder {
 				continue;
 			result.append(mod).append(" ");
 		}
-		return (item.getType() + " " + item.getAmount() + " " + result.toString()).trim();
+		return (MSG.normalize(item.getType().toString()) + " " + item.getAmount() + " " + result.toString()).trim();
 	}
 
 	public String humanReadable(ItemStack item) {

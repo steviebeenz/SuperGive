@@ -9,11 +9,11 @@ import org.bukkit.inventory.meta.ItemMeta;
 import xyz.msws.supergive.utils.MSG;
 import xyz.msws.supergive.utils.Utils;
 
-public class SpawnerAttribute implements ItemAttribute {
+public class EntityAttribute implements ItemAttribute {
 
 	@Override
 	public ItemStack modify(String line, ItemStack item) {
-		if (!line.startsWith("spawner:"))
+		if (!line.startsWith("entity:"))
 			return item;
 		ItemMeta meta = item.getItemMeta();
 		if (!(meta instanceof BlockStateMeta))
@@ -48,7 +48,7 @@ public class SpawnerAttribute implements ItemAttribute {
 		if (!(bsm.getBlockState() instanceof CreatureSpawner))
 			return null;
 		CreatureSpawner spawner = (CreatureSpawner) bsm.getBlockState();
-		return "spawner:" + MSG.normalize(spawner.getSpawnedType().toString());
+		return "entity:" + MSG.normalize(spawner.getSpawnedType().toString());
 	}
 
 }

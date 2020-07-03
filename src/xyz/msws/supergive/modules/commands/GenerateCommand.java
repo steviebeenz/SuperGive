@@ -42,12 +42,22 @@ public class GenerateCommand extends BukkitCommand {
 		}
 		String str = "&7/give @self &e" + plugin.getBuilder().toString(item);
 
-		MSG.tell(sender, "SuperGive", "The item in your hand can be generated with the following line:");
-		BaseComponent[] result = new ComponentBuilder(MSG.color(str))
-				.event(new ClickEvent(Action.SUGGEST_COMMAND, ChatColor.stripColor(MSG.color(str))))
-				.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-						TextComponent.fromLegacyText(MSG.color("&7Click to prepare command"))))
-				.create();
+		MSG.tell(sender, "SuperGive", "The item in your hand can be generated with:");
+		BaseComponent[] result = null;
+		if (ChatColor.stripColor(MSG.color(str)).length() > 256) {
+			result = new ComponentBuilder(MSG.color("&7/give @self &e[Click to copy...]"))
+					.event(new ClickEvent(Action.COPY_TO_CLIPBOARD, ChatColor.stripColor(MSG.color(str))))
+					.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+							TextComponent.fromLegacyText(MSG.color("&7Click to copy command"))))
+					.create();
+		} else {
+			result = new ComponentBuilder(MSG.color(str))
+					.event(new ClickEvent(Action.SUGGEST_COMMAND, ChatColor.stripColor(MSG.color(str))))
+					.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+							TextComponent.fromLegacyText(MSG.color("&7Click to prepare command"))))
+					.create();
+		}
+
 		player.spigot().sendMessage(result);
 		return true;
 	}
