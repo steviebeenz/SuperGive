@@ -7,6 +7,7 @@ import java.util.List;
 import org.apache.commons.lang.ArrayUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
+import org.bukkit.FireworkEffect.Type;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Container;
@@ -29,6 +30,7 @@ import xyz.msws.supergive.items.ItemBuilder;
 import xyz.msws.supergive.loadout.Loadout;
 import xyz.msws.supergive.loadout.LoadoutManager;
 import xyz.msws.supergive.selectors.Selector;
+import xyz.msws.supergive.utils.CColor;
 import xyz.msws.supergive.utils.MSG;
 import xyz.msws.supergive.utils.Sounds;
 import xyz.msws.supergive.utils.Utils;
@@ -352,6 +354,36 @@ public class GiveCommand extends BukkitCommand {
 						if (("spawner:" + MSG.normalize(type.toString())).startsWith(args[args.length - 1]))
 							result.add("spawner:" + MSG.normalize(type.toString()));
 					}
+			}
+			if (MSG.normalize(args[1]).contains("fireworkrocket")) {
+				String current = args[args.length - 1].split(",")[args[args.length - 1].split(",").length - 1];
+				String prev = args[args.length - 1].substring(0, args[args.length - 1].lastIndexOf(",") + 1);
+				boolean cont = true;
+				for (String arg : args) {
+					if (arg.toLowerCase().contains("firework:")) {
+						cont = false;
+						break;
+					}
+				}
+				if (cont) {
+					if ("firework:".startsWith(args[args.length - 1].toLowerCase()))
+						result.add("firework:");
+				}
+				for (String s : new String[] { "power", "flicker", "trail" }) {
+					if (s.startsWith(current.toLowerCase()))
+						result.add(prev + s);
+				}
+				for (CColor color : CColor.values()) {
+					if (("firework:" + color).toLowerCase().startsWith(args[args.length - 1]))
+						result.add("firework:" + MSG.normalize(color.toString()));
+					if (color.toString().toLowerCase().startsWith(current.toLowerCase())||current.isEmpty())
+						result.add(prev + MSG.normalize(color.toString()));
+				}
+				for (Type type : Type.values()) {
+					if (type.toString().toLowerCase().startsWith(current.toLowerCase())) {
+						result.add(prev + type.toString());
+					}
+				}
 			}
 
 		}

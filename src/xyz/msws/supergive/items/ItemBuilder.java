@@ -29,6 +29,7 @@ public class ItemBuilder {
 		attr.add(new PatternAttribute());
 		attr.add(new StoredEnchantmentAttribute());
 		attr.add(new SpawnerAttribute());
+		attr.add(new FireworkAttribute());
 	}
 
 	public void addAttribute(ItemAttribute attr) {

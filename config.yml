@@ -71,14 +71,14 @@ Loadouts:
     ==: xyz.msws.supergive.loadout.Loadout
     Items:
     - 'SPAWNER 1 spawner:pig name:Pig Spawner'
-    - 'SPAWNER 1 spawner:creeper'
-    - 'SPAWNER 1 spawner:irongolem'
-    - 'SPAWNER 1 spawner:chicken'
-    - 'SPAWNER 1 spawner:cow'
-    - 'SPAWNER 1 spawner:enderman'
-    - 'SPAWNER 1 spawner:arrow'
-    - 'SPAWNER 1 spawner:polarbear'
-    - 'SPAWNER 1 spawner:painting'
+    - 'SPAWNER 1 spawner:creeper name:Creeper Spawner'
+    - 'SPAWNER 1 spawner:irongolem name:Iron Golem Spawner'
+    - 'SPAWNER 1 spawner:chicken name:Chicken Spawner'
+    - 'SPAWNER 1 spawner:cow name:Cow Spawner'
+    - 'SPAWNER 1 spawner:enderman name:Enderman Spawner'
+    - 'SPAWNER 1 spawner:arrow name:Arrow Spawner'
+    - 'SPAWNER 1 spawner:polarbear name:Polar Bear Spawner'
+    - 'SPAWNER 1 spawner:painting name:Painting Spawner'
     Name: Spawners
 # SmartEquip is used by SuperGive to conveniently give items to players in the proper
 # equipment slot, or by preference. An item will try to go top down and if not found
