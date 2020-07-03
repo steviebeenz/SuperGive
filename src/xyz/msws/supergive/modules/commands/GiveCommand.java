@@ -285,7 +285,6 @@ public class GiveCommand extends BukkitCommand {
 							result.add("stored:" + MSG.normalize(ench.getKey().getKey()) + ":");
 					}
 				}
-
 			}
 			if (MSG.normalize(args[1]).equalsIgnoreCase("playerhead")) {
 				boolean cont = true;
@@ -335,7 +334,24 @@ public class GiveCommand extends BukkitCommand {
 							result.add(prev + color.toString().toLowerCase());
 					}
 				}
-
+			}
+			if (args[1].toLowerCase().contains("spawner")) {
+				boolean cont = true;
+				for (String arg : args) {
+					if (arg.toLowerCase().contains("spawner:")) {
+						cont = false;
+						break;
+					}
+				}
+				if (cont) {
+					if ("spawner:".startsWith(args[args.length - 1].toLowerCase()))
+						result.add("spawner:");
+				}
+				if (args[args.length - 1].toLowerCase().startsWith("spawner:"))
+					for (EntityType type : EntityType.values()) {
+						if (("spawner:" + MSG.normalize(type.toString())).startsWith(args[args.length - 1]))
+							result.add("spawner:" + MSG.normalize(type.toString()));
+					}
 			}
 
 		}

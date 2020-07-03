@@ -11,7 +11,7 @@ Loadouts:
   BuildKit:
     ==: xyz.msws.supergive.loadout.Loadout
     Name: 'Build Loadout'
-    Clear: true
+    Clear: false
     Items:
     - 'whitewool 64'
     - 'redwool 64'
@@ -47,12 +47,44 @@ Loadouts:
     - 'diamondsword fireaspect:2 knockback:2 looting:3 mending:1 sharp:5 sweeping:3 unbreaking:3'
     - 'bow flame:1 infinity:1 power:5 punch:2 unbreak:3'
     - 'diamondaxe eff:5 fortune:3 mending:1 sharp:5 unbreak:3'
+    - 'diamondpick eff:5 fortune:3 mending:1 unbreak:3'
     - 'waterbucket'
     - 'enchantedgoldenapple 64'
     - 'arrow'
     - 'shield'
     - 'cookedsteak 64'
     - 'goldencarrot 64'
+  banners:
+    ==: xyz.msws.supergive.loadout.Loadout
+    Items:
+    - 'WHITE_BANNER 1 triangle_bottom:black triangles_bottom:white triangle_top:black triangles_top:white rhombus_middle:black circle_middle:light_blue'
+    - 'LIGHT_BLUE_BANNER 1 triangle_top:black rhombus_middle:black triangle_bottom:black curly_border:black flower:light_blue circle_middle:blue'
+    - 'GREEN_BANNER 1 bricks:cyan gradient_up:magenta globe:black'
+    - 'BLACK_BANNER 1 gradient_up:cyan rhombus_middle:black curly_border:black border:black'
+    - 'BLACK_BANNER 1 stripe_middle:white stripe_center:white border:white triangles_top:white triangles_bottom:white straight_cross:black'
+    - 'PURPLE_BANNER 1 stripe_small:magenta bricks:purple curly_border:magenta border:black'
+    - 'YELLOW_BANNER 1 rhombus_middle:green mojang:light_blue border:black stripe_bottom:black stripe_top:black gradient_up:black'
+    - 'WHITE_BANNER 1 stripe_small:purple stripe_left:black stripe_right:black square_bottom_left:black square_bottom_right:black triangles_bottom:black'
+    - 'BLUE_BANNER 1 mojang:light_gray gradient_up:light_blue gradient:black triangles_bottom:black circle_middle:white square_bottom_left:black'
+    Name: Banners
+  spawners:
+    ==: xyz.msws.supergive.loadout.Loadout
+    Items:
+    - 'SPAWNER 1 spawner:pig name:Pig Spawner'
+    - 'SPAWNER 1 spawner:creeper'
+    - 'SPAWNER 1 spawner:irongolem'
+    - 'SPAWNER 1 spawner:chicken'
+    - 'SPAWNER 1 spawner:cow'
+    - 'SPAWNER 1 spawner:enderman'
+    - 'SPAWNER 1 spawner:arrow'
+    - 'SPAWNER 1 spawner:polarbear'
+    - 'SPAWNER 1 spawner:painting'
+    Name: Spawners
+# SmartEquip is used by SuperGive to conveniently give items to players in the proper
+# equipment slot, or by preference. An item will try to go top down and if not found
+# it will replace the last slot. For exaple a bow will try to go in the 1 slot if it
+# is empty. If it is not empty it will move the item that is in the off hand and replace
+# it.
 SmartEquip:
   HELMET:
   - 'HEAD'

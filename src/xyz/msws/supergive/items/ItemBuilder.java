@@ -28,6 +28,7 @@ public class ItemBuilder {
 		attr.add(new PotionAttribute());
 		attr.add(new PatternAttribute());
 		attr.add(new StoredEnchantmentAttribute());
+		attr.add(new SpawnerAttribute());
 	}
 
 	public void addAttribute(ItemAttribute attr) {
@@ -98,7 +99,7 @@ public class ItemBuilder {
 		StringBuilder result = new StringBuilder();
 		for (ItemAttribute at : attr) {
 			String mod = at.getModification(item);
-			if (mod == null)
+			if (mod == null || mod.isEmpty())
 				continue;
 			result.append(mod).append(" ");
 		}
