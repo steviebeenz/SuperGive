@@ -66,7 +66,7 @@ Loadouts:
     - 'YELLOW_BANNER 1 rhombus_middle:green mojang:light_blue border:black stripe_bottom:black stripe_top:black gradient_up:black'
     - 'WHITE_BANNER 1 stripe_small:purple stripe_left:black stripe_right:black square_bottom_left:black square_bottom_right:black triangles_bottom:black'
     - 'BLUE_BANNER 1 mojang:light_gray gradient_up:light_blue gradient:black triangles_bottom:black circle_middle:white square_bottom_left:black'
-    Name: Banners
+    Name: 'Banners'
   spawners:
     ==: xyz.msws.supergive.loadout.Loadout
     Items:
@@ -79,7 +79,27 @@ Loadouts:
     - 'SPAWNER 1 entity:arrow name:Arrow Spawner'
     - 'SPAWNER 1 entity:polarbear name:Polar Bear Spawner'
     - 'SPAWNER 1 entity:painting name:Painting Spawner'
-    Name: Spawners
+    Name: 'Spawners'
+  fireworks:
+    ==: xyz.msws.supergive.loadout.Loadout
+    Items:
+    - 'fireworkrocket 1 firework:179|49|44 240|240|240,102|137|211,BALL_LARGE,flicker,trail
+      firework:222|207|42 240|240|240,30|27|27 37|49|146,BALL,flicker,trail firework:179|49|44
+      59|81|26 222|207|42 235|136|68,37|49|146 216|129|152 102|137|211 195|84|205,STAR,power3'
+    - 'fireworkrocket 1 firework:30|27|27 171|171|171,179|49|44 37|49|146 240|240|240,BALL,flicker,trail
+      firework:222|207|42 235|136|68,179|49|44 102|137|211 240|240|240,BURST,flicker,trail,power1'
+    - 'fireworkrocket 1 firework:30|27|27 59|81|26,179|49|44 222|207|42 235|136|68,CREEPER,flicker,trail,power2'
+    - 'fireworkrocket 1 firework:30|27|27 171|171|171 240|240|240,222|207|42 102|137|211
+      235|136|68,BURST,flicker,trail firework:179|49|44 102|137|211 240|240|240,37|49|146
+      171|171|171 67|67|67,BURST,power3'
+    - 'fireworkrocket 1 firework:179|49|44 81|48|26 171|171|171 67|67|67 216|129|152
+      240|240|240,37|49|146 40|118|151 67|67|67 222|207|42 102|137|211,BALL_LARGE,flicker,trail
+      firework:37|49|146 171|171|171 222|207|42 102|137|211,30|27|27 59|81|26 81|48|26
+      216|129|152 65|205|52 195|84|205 240|240|240,BALL,flicker,trail firework:37|49|146
+      40|118|151 171|171|171 222|207|42 102|137|211,179|49|44 59|81|26 67|67|67,STAR,flicker,trail
+      firework:30|27|27 40|118|151 67|67|67 195|84|205,179|49|44 59|81|26 81|48|26
+      195|84|205 235|136|68 240|240|240,CREEPER,flicker,trail,power3'
+    Name: Fireworks
 # SmartEquip is used by SuperGive to conveniently give items to players in the proper
 # equipment slot, or by preference. An item will try to go top down and if not found
 # it will replace the last slot. For exaple a bow will try to go in the 1 slot if it
