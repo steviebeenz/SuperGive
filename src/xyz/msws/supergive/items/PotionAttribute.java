@@ -1,5 +1,9 @@
 package xyz.msws.supergive.items;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
@@ -46,6 +50,20 @@ public class PotionAttribute implements ItemAttribute {
 					.append(effect.getAmplifier()).append(" ");
 		}
 		return result.toString().trim();
+	}
+
+	@Override
+	public List<String> tabComplete(String current, String[] args, CommandSender sender) {
+		if (args.length < 2)
+			return null;
+		if (!args[1].toLowerCase().contains("potion"))
+			return null;
+		List<String> result = new ArrayList<>();
+		for (PotionEffectType type : PotionEffectType.values()) {
+			if (MSG.normalize(type.getName()).startsWith(MSG.normalize(current)))
+				result.add(MSG.normalize(type.getName()) + ":");
+		}
+		return result;
 	}
 
 }

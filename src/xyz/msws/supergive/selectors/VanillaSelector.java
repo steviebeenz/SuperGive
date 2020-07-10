@@ -1,5 +1,7 @@
 package xyz.msws.supergive.selectors;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.Bukkit;
@@ -38,6 +40,20 @@ public class VanillaSelector implements Selector {
 		if (player != null)
 			return player.getName();
 		return arg;
+	}
+
+	@Override
+	public List<String> tabComplete(String current) {
+		if (!current.toLowerCase().startsWith("@")) {
+			if ("@".startsWith(current.toLowerCase()))
+				return Arrays.asList("@");
+		}
+		List<String> result = new ArrayList<>();
+		for (String s : new String[] { "a", "p", "e", "r", "s" }) {
+			if (("@" + s).startsWith(current.toLowerCase()))
+				result.add("@" + s);
+		}
+		return result;
 	}
 
 }

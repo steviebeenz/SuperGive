@@ -1,6 +1,7 @@
 package xyz.msws.supergive.selectors;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.block.CommandBlock;
@@ -35,6 +36,16 @@ public class RadiusSelector implements Selector {
 	@Override
 	public String getDescriptor(String arg, CommandSender sender) {
 		return "entities within " + arg.substring("radius:".length()) + " blocks";
+	}
+
+	@Override
+	public List<String> tabComplete(String current) {
+		if (!current.toLowerCase().startsWith("radius:")) {
+			if ("radius:".startsWith(current.toLowerCase()))
+				return Arrays.asList("radius:");
+			return null;
+		}
+		return null;
 	}
 
 }

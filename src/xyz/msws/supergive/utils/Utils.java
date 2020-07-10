@@ -1,8 +1,10 @@
 package xyz.msws.supergive.utils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -41,59 +43,44 @@ public class Utils {
 	}
 
 	public static GameMode getGameMode(String mode) {
-		for (GameMode m : GameMode.values()) {
-			if (MSG.normalize(m.toString()).startsWith(MSG.normalize(mode.toLowerCase())))
-				return m;
-		}
-		return null;
+		String result = getOption(mode, GameMode.values());
+		return result == null ? null : GameMode.valueOf(result);
 	}
 
 	public static EntityType getEntityType(String type) {
-		for (EntityType t : EntityType.values()) {
-			if (MSG.normalize(t.toString()).equals(MSG.normalize(type)))
-				return t;
-		}
-		for (EntityType t : EntityType.values()) {
-			if (MSG.normalize(t.toString()).startsWith(MSG.normalize(type)))
-				return t;
-		}
-		for (EntityType t : EntityType.values()) {
-			if (MSG.normalize(t.toString()).contains(MSG.normalize(type)))
-				return t;
-		}
-		return null;
+		String result = getOption(type, EntityType.values());
+		return result == null ? null : EntityType.valueOf(result);
 	}
 
 	public static PotionEffectType getPotionEffect(String type) {
-		for (PotionEffectType t : PotionEffectType.values()) {
-			if (MSG.normalize(t.toString()).equals(MSG.normalize(type)))
-				return t;
+		String result = getOption(type, PotionEffectType.values());
+		return result == null ? null : PotionEffectType.getByName(result);
+	}
+
+	public static ItemFlag getItemFlag(String flag) {
+		String result = getOption(flag, ItemFlag.values());
+		return result == null ? null : ItemFlag.valueOf(result);
+	}
+
+	public static String getOption(String key, List<Object> options) {
+		List<String> values = options.stream().map(m -> m.toString()).collect(Collectors.toList());
+		for (String s : values) {
+			if (MSG.normalize(key).equals(MSG.normalize(s)))
+				return s;
 		}
-		for (PotionEffectType t : PotionEffectType.values()) {
-			if (MSG.normalize(t.toString()).startsWith(MSG.normalize(type)))
-				return t;
+		for (String s : values) {
+			if (MSG.normalize(key).startsWith(MSG.normalize(s)))
+				return s;
 		}
-		for (PotionEffectType t : PotionEffectType.values()) {
-			if (MSG.normalize(t.toString()).contains(MSG.normalize(type)))
-				return t;
+		for (String s : values) {
+			if (MSG.normalize(key).contains(MSG.normalize(s)))
+				return s;
 		}
 		return null;
 	}
 
-	public static ItemFlag getItemFlag(String flag) {
-		for (ItemFlag t : ItemFlag.values()) {
-			if (MSG.normalize(t.toString()).equals(MSG.normalize(flag)))
-				return t;
-		}
-		for (ItemFlag t : ItemFlag.values()) {
-			if (MSG.normalize(t.toString()).startsWith(MSG.normalize(flag)))
-				return t;
-		}
-		for (ItemFlag t : ItemFlag.values()) {
-			if (MSG.normalize(t.toString()).contains(MSG.normalize(flag)))
-				return t;
-		}
-		return null;
+	public static String getOption(String key, Object[] options) {
+		return getOption(key, Arrays.asList(options));
 	}
 
 	public static Player matchPlayer(CommandSender sender, String name, boolean verbose) {
@@ -132,41 +119,24 @@ public class Utils {
 	}
 
 	public static Enchantment getEnchantment(String ench) {
-		switch (MSG.normalize(ench)) {
-			case "power":
-				return Enchantment.ARROW_DAMAGE;
-			case "infinity":
-			case "infinite":
-				return Enchantment.ARROW_INFINITE;
-			case "flame":
-				return Enchantment.ARROW_FIRE;
-			case "sharpness":
-				return Enchantment.DAMAGE_ALL;
-			case "bane":
-				return Enchantment.DAMAGE_ARTHROPODS;
-			case "smite":
-				return Enchantment.DAMAGE_UNDEAD;
-			case "efficiency":
-				return Enchantment.DIG_SPEED;
-			default:
-				try {
-					return Enchantment.getByKey(NamespacedKey.minecraft(ench.toUpperCase()));
-				} catch (IllegalArgumentException e) {
-					for (Enchantment en : Enchantment.values()) {
-						if (MSG.normalize(en.getKey().getKey()).equalsIgnoreCase(MSG.normalize(ench)))
-							return en;
-					}
-					for (Enchantment en : Enchantment.values()) {
-						if (MSG.normalize(en.getKey().getKey()).startsWith(MSG.normalize(ench)))
-							return en;
-					}
-					for (Enchantment en : Enchantment.values()) {
-						if (MSG.normalize(en.getKey().getKey()).contains(MSG.normalize(ench)))
-							return en;
-					}
-				}
-				break;
+
+		try {
+			return Enchantment.getByKey(NamespacedKey.minecraft(ench.toUpperCase()));
+		} catch (IllegalArgumentException e) {
+			for (Enchantment en : Enchantment.values()) {
+				if (MSG.normalize(en.getKey().getKey()).equalsIgnoreCase(MSG.normalize(ench)))
+					return en;
+			}
+			for (Enchantment en : Enchantment.values()) {
+				if (MSG.normalize(en.getKey().getKey()).startsWith(MSG.normalize(ench)))
+					return en;
+			}
+			for (Enchantment en : Enchantment.values()) {
+				if (MSG.normalize(en.getKey().getKey()).contains(MSG.normalize(ench)))
+					return en;
+			}
 		}
+
 		return null;
 	}
 

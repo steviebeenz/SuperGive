@@ -1,6 +1,10 @@
 package xyz.msws.supergive.items;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.bukkit.Material;
+import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -24,6 +28,16 @@ public class UnbreakableAttribute implements ItemAttribute {
 			return null;
 		ItemMeta meta = item.getItemMeta();
 		return meta.isUnbreakable() ? "unbreakable:true" : null;
+	}
+
+	@Override
+	public List<String> tabComplete(String current, String[] args, CommandSender sender) {
+		if (!current.toLowerCase().startsWith("unbrekable:")) {
+			if ("unbreakable:".startsWith(current.toLowerCase()))
+				return Arrays.asList("unbreakable:");
+			return null;
+		}
+		return null;
 	}
 
 }

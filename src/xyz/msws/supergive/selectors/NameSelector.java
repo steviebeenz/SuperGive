@@ -1,5 +1,6 @@
 package xyz.msws.supergive.selectors;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -31,6 +32,16 @@ public class NameSelector implements Selector {
 	@Override
 	public String getDescriptor(String arg, CommandSender sender) {
 		return getEntities(arg, sender).get(0).getName();
+	}
+
+	@Override
+	public List<String> tabComplete(String current) {
+		List<String> result = new ArrayList<>();
+		for (Player p : Bukkit.getOnlinePlayers()) {
+			if (p.getName().toLowerCase().contains(current.toLowerCase()))
+				result.add(p.getName());
+		}
+		return result;
 	}
 
 }

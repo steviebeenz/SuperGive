@@ -1,6 +1,10 @@
 package xyz.msws.supergive.items;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.bukkit.Material;
+import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -32,6 +36,13 @@ public class DamageAttribute implements ItemAttribute {
 		if (((Damageable) meta).getDamage() == 0)
 			return null;
 		return "damage:" + ((Damageable) meta).getDamage();
+	}
+
+	@Override
+	public List<String> tabComplete(String current, String[] args, CommandSender sender) {
+		if(!"damage:".startsWith(current.toLowerCase()))
+			return null;
+		return Arrays.asList("damage:");
 	}
 
 }

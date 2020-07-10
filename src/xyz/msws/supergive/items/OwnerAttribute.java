@@ -1,7 +1,11 @@
 package xyz.msws.supergive.items;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -30,6 +34,20 @@ public class OwnerAttribute implements ItemAttribute {
 			return null;
 		SkullMeta skull = (SkullMeta) meta;
 		return "owner:" + skull.getOwningPlayer().getName();
+	}
+
+	@Override
+	public List<String> tabComplete(String current, String[] args, CommandSender sender) {
+		if (args.length > 2) {
+			if (!args[1].equalsIgnoreCase("playerhead"))
+				return null;
+		}
+		if (!current.toLowerCase().startsWith("owner:")) {
+			if ("owner:".startsWith(current.toLowerCase()))
+				return Arrays.asList("owner:");
+			return null;
+		}
+		return null;
 	}
 
 }

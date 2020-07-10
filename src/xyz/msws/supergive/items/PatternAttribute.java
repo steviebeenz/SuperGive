@@ -1,8 +1,12 @@
 package xyz.msws.supergive.items;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bukkit.DyeColor;
 import org.bukkit.block.banner.Pattern;
 import org.bukkit.block.banner.PatternType;
+import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BannerMeta;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -52,6 +56,34 @@ public class PatternAttribute implements ItemAttribute {
 					.append(" ");
 		}
 		return result.toString().trim();
+	}
+
+	@Override
+	public List<String> tabComplete(String current, String[] args, CommandSender sender) {
+		if (args.length < 2) {
+			return null;
+		}
+
+		if (!args[1].toLowerCase().contains("banner"))
+			return null;
+
+		List<String> result = new ArrayList<>();
+
+		for (PatternType type : PatternType.values()) {
+			if (type.toString().toLowerCase().startsWith(current.toLowerCase())) {
+				result.add(type.toString().toLowerCase() + ":");
+			}
+		}
+		if (current.contains(":")) {
+			String c = current.split(":").length > 1 ? current.split(":")[1] : "";
+			String prev = current.split(":")[0] + ":";
+
+			for (DyeColor color : DyeColor.values()) {
+				if (color.toString().toLowerCase().startsWith(c.toLowerCase()))
+					result.add(prev + color.toString().toLowerCase());
+			}
+		}
+		return result;
 	}
 
 }

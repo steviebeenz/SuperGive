@@ -1,5 +1,6 @@
 package xyz.msws.supergive.selectors;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,6 +23,16 @@ public class PermissionSelector implements Selector {
 	@Override
 	public String getDescriptor(String arg, CommandSender sender) {
 		return "permissioned players";
+	}
+
+	@Override
+	public List<String> tabComplete(String current) {
+		if (!current.toLowerCase().startsWith("perm:")) {
+			if ("perm:".startsWith(current.toLowerCase()))
+				return Arrays.asList("perm:");
+			return null;
+		}
+		return null;
 	}
 
 }

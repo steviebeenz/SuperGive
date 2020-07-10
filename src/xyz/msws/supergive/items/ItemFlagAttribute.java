@@ -1,6 +1,11 @@
 package xyz.msws.supergive.items;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import org.bukkit.Material;
+import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -33,6 +38,25 @@ public class ItemFlagAttribute implements ItemAttribute {
 			result.append("flag:").append(MSG.normalize(flag.toString())).append(" ");
 		}
 		return result.toString().trim();
+	}
+
+	@Override
+	public List<String> tabComplete(String current, String[] args, CommandSender sender) {
+		if (!current.toLowerCase().startsWith("flag:")) {
+			if ("flag:".startsWith(current.toLowerCase()))
+				return Arrays.asList("flag:");
+			return null;
+		}
+		List<String> result = new ArrayList<>();
+
+		for (ItemFlag flag : ItemFlag.values()) {
+			String fs = MSG.normalize(flag.toString());
+			if (MSG.normalize(("flag:" + fs)).toLowerCase().startsWith(MSG.normalize(current))) {
+				result.add("flag:" + fs);
+			}
+		}
+
+		return result;
 	}
 
 }

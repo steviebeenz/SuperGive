@@ -15,11 +15,21 @@ import org.bukkit.entity.Entity;
  *
  */
 public interface Selector {
-	public default List<Entity> getEntities(String arg) {
+	default List<Entity> getEntities(String arg) {
 		return getEntities(arg, null);
 	}
 
-	public List<Entity> getEntities(String arg, @Nullable CommandSender sender);
+	List<Entity> getEntities(String arg, @Nullable CommandSender sender);
 
-	public String getDescriptor(String arg, @Nullable CommandSender sender);
+	String getDescriptor(String arg, @Nullable CommandSender sender);
+
+	/**
+	 * Note: not the whole string is provided, a substring of the characters after
+	 * the last , is provided
+	 * 
+	 * @param current
+	 * @return
+	 */
+	List<String> tabComplete(String current);
+
 }

@@ -1,7 +1,10 @@
 package xyz.msws.supergive.items;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map.Entry;
 
+import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
@@ -48,6 +51,26 @@ public class StoredEnchantmentAttribute implements ItemAttribute {
 					.append(entry.getValue()).append(" ");
 		}
 		return builder.toString().trim();
+	}
+
+	@Override
+	public List<String> tabComplete(String current, String[] args, CommandSender sender) {
+		if (args.length < 2)
+			return null;
+		if (!MSG.normalize(args[1]).equalsIgnoreCase("enchantedbook"))
+			return null;
+		List<String> result = new ArrayList<>();
+
+		if ("stored:".startsWith(current))
+			result.add("stored:");
+		if (args[args.length - 1].startsWith("stored:")) {
+			for (Enchantment ench : Enchantment.values()) {
+				if (("stored:" + MSG.normalize(ench.getKey().getKey()))
+						.startsWith(MSG.normalize(args[args.length - 1])))
+					result.add("stored:" + MSG.normalize(ench.getKey().getKey()) + ":");
+			}
+		}
+		return result;
 	}
 
 }

@@ -78,4 +78,18 @@ public class NativeSelector implements Selector {
 		return msg.toString();
 	}
 
+	@Override
+	public List<String> tabComplete(String current) {
+		List<String> result = new ArrayList<>();
+		for (String string : current.split(",")) {
+			for (Selector sel : selectors) {
+				List<String> r = sel.tabComplete(string);
+				if (r == null || r.isEmpty())
+					continue;
+				result.addAll(r);
+			}
+		}
+		return result;
+	}
+
 }

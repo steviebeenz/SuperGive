@@ -1,6 +1,10 @@
 package xyz.msws.supergive.items;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.bukkit.Material;
+import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -27,6 +31,18 @@ public class NameAttribute implements ItemAttribute {
 		if (!meta.hasDisplayName())
 			return null;
 		return "name:" + meta.getDisplayName();
+	}
+
+	@Override
+	public List<String> tabComplete(String current, String[] args, CommandSender sender) {
+		if (args.length < 2)
+			return null;
+		if (!current.toLowerCase().startsWith("name:")) {
+			if ("name:".startsWith(current.toLowerCase()))
+				return Arrays.asList("name:");
+			return null;
+		}
+		return null;
 	}
 
 }

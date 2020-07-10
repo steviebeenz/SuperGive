@@ -1,11 +1,15 @@
 package xyz.msws.supergive.items;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map.Entry;
 
 import org.bukkit.Material;
+import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 
+import xyz.msws.supergive.utils.MSG;
 import xyz.msws.supergive.utils.Utils;
 
 public class EnchantmentAttribute implements ItemAttribute {
@@ -35,6 +39,19 @@ public class EnchantmentAttribute implements ItemAttribute {
 			result.append(ench.getKey().getKey().getKey()).append(":").append(ench.getValue()).append(" ");
 		}
 		return result.toString().trim();
+	}
+
+	@Override
+	public List<String> tabComplete(String current, String[] args, CommandSender sender) {
+		if (current.length() < 3)
+			return null;
+		List<String> result = new ArrayList<>();
+		for (Enchantment ench : Enchantment.values()) {
+			String n = ench.getKey().getKey();
+			if (MSG.normalize(n).startsWith(MSG.normalize(current)))
+				result.add(MSG.normalize(n) + ":");
+		}
+		return result;
 	}
 
 }

@@ -5,32 +5,22 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.lang.ArrayUtils;
-import org.bukkit.Bukkit;
-import org.bukkit.DyeColor;
-import org.bukkit.FireworkEffect.Type;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Container;
-import org.bukkit.block.banner.PatternType;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.defaults.BukkitCommand;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.InventoryHolder;
-import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.RayTraceResult;
 
 import xyz.msws.supergive.SuperGive;
+import xyz.msws.supergive.items.ItemAttribute;
 import xyz.msws.supergive.items.ItemBuilder;
 import xyz.msws.supergive.loadout.Loadout;
 import xyz.msws.supergive.loadout.LoadoutManager;
 import xyz.msws.supergive.selectors.Selector;
-import xyz.msws.supergive.utils.CColor;
 import xyz.msws.supergive.utils.MSG;
 import xyz.msws.supergive.utils.Sounds;
 import xyz.msws.supergive.utils.Utils;
@@ -189,7 +179,7 @@ public class GiveCommand extends BukkitCommand {
 			loadout.give(ent);
 		}
 
-		MSG.tell(sender, "SuperGive", "Successfully gave " + MSG.SUBJECT + selector.getDescriptor(args[0], sender)
+		MSG.tell(sender, "SuperGive", "successfully gave " + MSG.SUBJECT + selector.getDescriptor(args[0], sender)
 				+ MSG.FORMAT_INFO + " " + loadout.humanReadable() + MSG.DEFAULT + ".");
 		return true;
 	}
@@ -199,48 +189,44 @@ public class GiveCommand extends BukkitCommand {
 		List<String> result = new ArrayList<>();
 		if (!(sender.hasPermission(this.getPermission())))
 			return result;
+
+		if (args.length > 2)
+			for (ItemAttribute attr : plugin.getBuilder().getAttributes()) {
+				List<String> add = attr.tabComplete(args[args.length - 1], args, sender);
+				if (add == null || add.isEmpty())
+					continue;
+				result.addAll(add);
+			}
+
 		if (args.length == 1) {
-			for (Player p : Bukkit.getOnlinePlayers()) {
-				if (p.getName().toLowerCase().startsWith(args[0].toLowerCase()))
-					result.add(p.getName());
-			}
-
-			String current = args[0].split(",")[args[0].split(",").length - 1];
-			String prev = "";
-			if (args[0].split(",").length > 1) {
-				prev = String.join(",", args).substring(0, String.join(",", args).lastIndexOf(",") + 1);
-			}
-
-			if (current.startsWith("@"))
-				for (String s : new String[] { "players", "everyone", "me", "world", "worldplayers", "all", "survival",
-						"creative", "adventure", "spectator", "worldsurvival", "worldcreative", "worldadventure",
-						"worldspectator" }) {
-					if (("@" + s).toLowerCase().startsWith(current.toLowerCase()))
-						result.add(prev + "@" + s);
-				}
-
-			for (String s : new String[] { "radius:", "world:", "perm:", "@" }) {
-				if (s.toLowerCase().startsWith(current.toLowerCase()))
-					result.add(prev + s);
-			}
-			if (current.length() > 3) {
-				for (EntityType type : EntityType.values()) {
-					String t = MSG.normalize(type.toString());
-					if (("@" + t).startsWith(current)) {
-						if (sender instanceof Player) {
-							if (((Player) sender).getWorld().getEntities().stream()
-									.anyMatch(e -> e.getType() == type && e instanceof InventoryHolder
-											|| e instanceof LivingEntity)) {
-								result.add(prev + "@" + t);
-							}
-						} else {
-							result.add(prev + "@" + t);
-						}
-					}
-				}
-			}
-
+			result.addAll(plugin.getSelector().tabComplete(args[0]));
+			/*
+			 * for (Player p : Bukkit.getOnlinePlayers()) { if
+			 * (p.getName().toLowerCase().startsWith(args[0].toLowerCase()))
+			 * result.add(p.getName()); }
+			 * 
+			 * String current = args[0].split(",")[args[0].split(",").length - 1]; String
+			 * prev = ""; if (args[0].split(",").length > 1) { prev = String.join(",",
+			 * args).substring(0, String.join(",", args).lastIndexOf(",") + 1); }
+			 * 
+			 * if (current.startsWith("@")) for (String s : new String[] { "players",
+			 * "everyone", "me", "world", "worldplayers", "all", "survival", "creative",
+			 * "adventure", "spectator", "worldsurvival", "worldcreative", "worldadventure",
+			 * "worldspectator" }) { if (("@" +
+			 * s).toLowerCase().startsWith(current.toLowerCase())) result.add(prev + "@" +
+			 * s); }
+			 * 
+			 * for (String s : new String[] { "radius:", "world:", "perm:", "@" }) { if
+			 * (s.toLowerCase().startsWith(current.toLowerCase())) result.add(prev + s); }
+			 * if (current.length() > 3) { for (EntityType type : EntityType.values()) {
+			 * String t = MSG.normalize(type.toString()); if (("@" + t).startsWith(current))
+			 * { if (sender instanceof Player) { if (((Player)
+			 * sender).getWorld().getEntities().stream() .anyMatch(e -> e.getType() == type
+			 * && e instanceof InventoryHolder || e instanceof LivingEntity)) {
+			 * result.add(prev + "@" + t); } } else { result.add(prev + "@" + t); } } } }
+			 */
 		}
+
 		if (args.length == 2) {
 			for (Material mat : Material.values()) {
 				if (MSG.normalize(mat.getKey().getKey()).startsWith(args[1].toLowerCase())) {
@@ -262,130 +248,6 @@ public class GiveCommand extends BukkitCommand {
 						result.add("#" + s);
 				}
 			}
-		}
-		if (args.length > 2) {
-			for (String res : new String[] { "name:", "lore:", "unbreakable:", "damage:", "flag:" }) {
-				boolean cont = true;
-				for (String arg : args) {
-					if (arg.toLowerCase().contains(res)) {
-						cont = false;
-						break;
-					}
-				}
-				if (!cont)
-					continue;
-				if (res.toLowerCase().startsWith(args[args.length - 1].toLowerCase()))
-					result.add(res);
-			}
-			if (MSG.normalize(args[1]).equalsIgnoreCase("enchantedbook")) {
-				if ("stored:".startsWith(args[args.length - 1]))
-					result.add("stored:");
-				if (args[args.length - 1].startsWith("stored:")) {
-					for (Enchantment ench : Enchantment.values()) {
-						if (("stored:" + MSG.normalize(ench.getKey().getKey()))
-								.startsWith(MSG.normalize(args[args.length - 1])))
-							result.add("stored:" + MSG.normalize(ench.getKey().getKey()) + ":");
-					}
-				}
-			}
-			if (MSG.normalize(args[1]).equalsIgnoreCase("playerhead")) {
-				boolean cont = true;
-				for (String arg : args) {
-					if (arg.toLowerCase().contains("owner:")) {
-						cont = false;
-						break;
-					}
-				}
-				if (cont) {
-					if ("owner:".startsWith(args[args.length - 1].toLowerCase()))
-						result.add("owner:");
-				}
-			}
-			if (args[args.length - 1].toLowerCase().startsWith("flag:")) {
-				for (ItemFlag flag : ItemFlag.values()) {
-					String fs = MSG.normalize(flag.toString());
-					if (MSG.normalize(("flag:" + fs)).toLowerCase().startsWith(MSG.normalize(args[args.length - 1]))) {
-						result.add("flag:" + fs);
-					}
-				}
-			}
-			if (args[args.length - 1].length() >= 3) {
-				for (Enchantment ench : Enchantment.values()) {
-					if (MSG.normalize(ench.getKey().getKey()).startsWith(MSG.normalize(args[args.length - 1])))
-						result.add(MSG.normalize(ench.getKey().getKey()) + ":");
-				}
-				if (args[1].toLowerCase().contains("potion"))
-					for (PotionEffectType type : PotionEffectType.values()) {
-						if (MSG.normalize(type.getName()).startsWith(MSG.normalize(args[args.length - 1])))
-							result.add(MSG.normalize(type.getName()) + ":");
-					}
-			}
-			if (args[1].toLowerCase().contains("banner")) {
-				for (PatternType type : PatternType.values()) {
-					if (type.toString().toLowerCase().startsWith(args[args.length - 1].toLowerCase())) {
-						result.add(type.toString().toLowerCase() + ":");
-					}
-				}
-				if (args[args.length - 1].contains(":")) {
-					String current = args[args.length - 1].split(":").length > 1 ? (args[args.length - 1]).split(":")[1]
-							: "";
-					String prev = args[args.length - 1].split(":")[0] + ":";
-
-					for (DyeColor color : DyeColor.values()) {
-						if (color.toString().toLowerCase().startsWith(current.toLowerCase()))
-							result.add(prev + color.toString().toLowerCase());
-					}
-				}
-			}
-			if (args[1].toLowerCase().contains("spawner")) {
-				boolean cont = true;
-				for (String arg : args) {
-					if (arg.toLowerCase().contains("spawner:")) {
-						cont = false;
-						break;
-					}
-				}
-				if (cont) {
-					if ("spawner:".startsWith(args[args.length - 1].toLowerCase()))
-						result.add("spawner:");
-				}
-				if (args[args.length - 1].toLowerCase().startsWith("spawner:"))
-					for (EntityType type : EntityType.values()) {
-						if (("spawner:" + MSG.normalize(type.toString())).startsWith(args[args.length - 1]))
-							result.add("spawner:" + MSG.normalize(type.toString()));
-					}
-			}
-			if (MSG.normalize(args[1]).contains("fireworkrocket")) {
-				String current = args[args.length - 1].split(",")[args[args.length - 1].split(",").length - 1];
-				String prev = args[args.length - 1].substring(0, args[args.length - 1].lastIndexOf(",") + 1);
-				boolean cont = true;
-				for (String arg : args) {
-					if (arg.toLowerCase().contains("firework:")) {
-						cont = false;
-						break;
-					}
-				}
-				if (cont) {
-					if ("firework:".startsWith(args[args.length - 1].toLowerCase()))
-						result.add("firework:");
-				}
-				for (String s : new String[] { "power", "flicker", "trail" }) {
-					if (s.startsWith(current.toLowerCase()))
-						result.add(prev + s);
-				}
-				for (CColor color : CColor.values()) {
-					if (("firework:" + color).toLowerCase().startsWith(args[args.length - 1]))
-						result.add("firework:" + MSG.normalize(color.toString()));
-					if (color.toString().toLowerCase().startsWith(current.toLowerCase())||current.isEmpty())
-						result.add(prev + MSG.normalize(color.toString()));
-				}
-				for (Type type : Type.values()) {
-					if (type.toString().toLowerCase().startsWith(current.toLowerCase())) {
-						result.add(prev + type.toString());
-					}
-				}
-			}
-
 		}
 		return result;
 	}

@@ -35,6 +35,10 @@ public class ItemBuilder {
 	public void addAttribute(ItemAttribute attr) {
 		this.attr.add(attr);
 	}
+	
+	public List<ItemAttribute> getAttributes(){
+		return attr;
+	}
 
 	public ItemStack build(String args) {
 		ItemStack base = null;

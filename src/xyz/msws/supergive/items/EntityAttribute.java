@@ -1,6 +1,11 @@
 package xyz.msws.supergive.items;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import org.bukkit.block.CreatureSpawner;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BlockStateMeta;
@@ -49,6 +54,24 @@ public class EntityAttribute implements ItemAttribute {
 			return null;
 		CreatureSpawner spawner = (CreatureSpawner) bsm.getBlockState();
 		return "entity:" + MSG.normalize(spawner.getSpawnedType().toString());
+	}
+
+	@Override
+	public List<String> tabComplete(String current, String[] args, CommandSender sender) {
+		if (args.length < 2)
+			return null;
+		if (!args[1].equalsIgnoreCase("spawner"))
+			return null;
+		if ("entity:".startsWith(current.toLowerCase()) && !current.equalsIgnoreCase("entity:")) {
+			return Arrays.asList("entity:");
+		} else {
+			List<String> result = new ArrayList<>();
+			for (EntityType type : EntityType.values()) {
+				if (MSG.normalize(("entity:" + type.toString())).startsWith(MSG.normalize(current)))
+					result.add("entity:" + MSG.normalize(type.toString()));
+			}
+			return result;
+		}
 	}
 
 }

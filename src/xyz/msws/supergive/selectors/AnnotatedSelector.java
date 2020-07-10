@@ -135,4 +135,19 @@ public class AnnotatedSelector implements Selector {
 		return arg.substring(1);
 	}
 
+	@Override
+	public List<String> tabComplete(String current) {
+		List<String> result = new ArrayList<>();
+		if (!current.startsWith("@"))
+			return null;
+		String prev = "";
+		for (String s : new String[] { "players", "everyone", "me", "world", "worldplayers", "all", "survival",
+				"creative", "adventure", "spectator", "worldsurvival", "worldcreative", "worldadventure",
+				"worldspectator" }) {
+			if (("@" + s).toLowerCase().startsWith(current.toLowerCase()))
+				result.add(prev + "@" + s);
+		}
+		return result;
+	}
+
 }

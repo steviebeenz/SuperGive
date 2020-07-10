@@ -1,9 +1,11 @@
 package xyz.msws.supergive.items;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.Material;
+import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -33,5 +35,15 @@ public class LoreAttribute implements ItemAttribute {
 		if (!meta.hasLore())
 			return null;
 		return "lore:" + String.join(",", meta.getLore());
+	}
+
+	@Override
+	public List<String> tabComplete(String current, String[] args, CommandSender sender) {
+		if (!current.toLowerCase().startsWith("lore:")) {
+			if ("lore:".startsWith(current.toLowerCase()))
+				return Arrays.asList("lore:");
+			return null;
+		}
+		return null;
 	}
 }
