@@ -1,6 +1,7 @@
 package xyz.msws.supergive;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
@@ -8,6 +9,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -19,12 +21,14 @@ import xyz.msws.supergive.modules.ModulePriority;
 import xyz.msws.supergive.modules.commands.CommandModule;
 import xyz.msws.supergive.selectors.NativeSelector;
 import xyz.msws.supergive.selectors.Selector;
+import xyz.msws.supergive.utils.Lang;
 
 public class SuperGive extends JavaPlugin {
 	private Set<AbstractModule> modules = new HashSet<>();
 
 	private ItemBuilder builder;
 	private Selector selector;
+	private YamlConfiguration lang;
 
 	private static SuperGive instance;
 
@@ -34,6 +38,21 @@ public class SuperGive extends JavaPlugin {
 		File conf = new File(this.getDataFolder(), "config.yml");
 		if (!conf.exists())
 			saveResource("config.yml", false);
+		File langFile = new File(this.getDataFolder(), "lang.yml");
+		if (!langFile.exists()) {
+			try {
+				langFile.createNewFile();
+				YamlConfiguration c = new YamlConfiguration();
+				for (Lang l : Lang.values()) {
+					c.set(l.getKey(), l.getValue());
+				}
+				c.save(langFile);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		lang = YamlConfiguration.loadConfiguration(langFile);
+		Lang.load(lang);
 
 		modules.add(new CommandModule(this));
 		modules.add(new LoadoutManager(this));
@@ -43,6 +62,10 @@ public class SuperGive extends JavaPlugin {
 
 		ConfigurationSerialization.registerClass(Loadout.class, "Loadout");
 		enableModules();
+	}
+
+	public YamlConfiguration getLang() {
+		return lang;
 	}
 
 	public static SuperGive getPlugin() {

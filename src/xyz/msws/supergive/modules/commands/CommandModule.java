@@ -43,8 +43,9 @@ public class CommandModule extends AbstractModule implements Listener {
 		commands = new HashMap<>();
 
 		try {
-			map = Bukkit.getCommandMap(); // Paper
-		} catch (NoSuchMethodError e) {
+			map = (CommandMap) Bukkit.class.getMethod("getCommandMap").invoke(null);
+		} catch (NoSuchMethodError | IllegalAccessException | IllegalArgumentException | InvocationTargetException
+				| NoSuchMethodException | SecurityException e) {
 			try {
 				final Field bukkitCommandMap = Bukkit.getServer().getClass().getDeclaredField("commandMap");
 				bukkitCommandMap.setAccessible(true);
@@ -109,8 +110,9 @@ public class CommandModule extends AbstractModule implements Listener {
 	@SuppressWarnings("unchecked")
 	public Map<String, Command> getKnownCommands() {
 		try {
-			return map.getKnownCommands();
-		} catch (NoSuchMethodError e) {
+			return (Map<String, Command>) map.getClass().getMethod("getKnownCommands").invoke(map);
+		} catch (NoSuchMethodError | IllegalAccessException | IllegalArgumentException | InvocationTargetException
+				| NoSuchMethodException | SecurityException e) {
 			try {
 				final Map<String, Command> knownCommands = (Map<String, Command>) getPrivateField(map, "knownCommands");
 				return knownCommands;

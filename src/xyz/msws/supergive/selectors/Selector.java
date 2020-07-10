@@ -2,8 +2,6 @@ package xyz.msws.supergive.selectors;
 
 import java.util.List;
 
-import javax.annotation.Nullable;
-
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 
@@ -19,13 +17,11 @@ public interface Selector {
 		return getEntities(arg, null);
 	}
 
-	List<Entity> getEntities(String arg, @Nullable CommandSender sender);
+	List<Entity> getEntities(String arg, CommandSender sender);
 
-	String getDescriptor(String arg, @Nullable CommandSender sender);
+	String getDescriptor(String arg, CommandSender sender);
 
 	/**
-	 * Note: not the whole string is provided, a substring of the characters after
-	 * the last , is provided
 	 * 
 	 * @param current
 	 * @return

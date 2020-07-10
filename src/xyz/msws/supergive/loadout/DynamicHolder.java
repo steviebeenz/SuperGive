@@ -9,7 +9,8 @@ import org.bukkit.inventory.ItemStack;
 import com.google.common.base.Preconditions;
 
 /**
- * @author imodm
+ * @author imodm A simple wrapper to allow for simple giving of items to both
+ *         {@link InventoryHolder} and {@link LivingEntity} in one class
  *
  */
 public class DynamicHolder {

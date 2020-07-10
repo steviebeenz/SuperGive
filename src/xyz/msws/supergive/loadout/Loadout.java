@@ -8,8 +8,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Nullable;
-
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
@@ -22,11 +20,22 @@ import org.bukkit.inventory.ItemStack;
 import xyz.msws.supergive.SuperGive;
 import xyz.msws.supergive.utils.MSG;
 
+/**
+ * Represents a loadout that contains numerous items
+ * 
+ * @author imodm
+ *
+ */
 public class Loadout implements ConfigurationSerializable {
 	private ItemStack[] items = null;
 	private boolean clear = false, smartEquip = true;
 	private String name = null;
 
+	/**
+	 * Initialize a loadout from a configuration section
+	 * 
+	 * @param section
+	 */
 	public Loadout(ConfigurationSection section) {
 		name = section.getString("Name");
 		List<ItemStack> its = new ArrayList<>();
@@ -43,6 +52,12 @@ public class Loadout implements ConfigurationSerializable {
 		this.items = its.toArray(new ItemStack[0]);
 	}
 
+	/**
+	 * Initialize a loadout from a map of data, used for
+	 * {@link ConfigurationSerializable}
+	 * 
+	 * @param data
+	 */
 	@SuppressWarnings("unchecked")
 	public Loadout(Map<String, Object> data) {
 		name = (String) data.getOrDefault("Name", null);
@@ -56,6 +71,9 @@ public class Loadout implements ConfigurationSerializable {
 		this.items = res.toArray(new ItemStack[0]);
 	}
 
+	/**
+	 * Convert the loadout to a map
+	 */
 	@Override
 	public Map<String, Object> serialize() {
 		Map<String, Object> data = new HashMap<>();
@@ -83,35 +101,75 @@ public class Loadout implements ConfigurationSerializable {
 		this.items = itemStacks;
 	}
 
+	/**
+	 * Sets the loadout's name
+	 * 
+	 * @param name
+	 */
 	public void setName(String name) {
 		this.name = name;
 	}
 
-	@Nullable
+	/**
+	 * Gets the loadout's name, can be null
+	 * 
+	 * @return
+	 */
 	public String getName() {
 		return name;
 	}
 
+	/**
+	 * Set whether or not to clear an inventory when giving this loadout
+	 * 
+	 * @param clear
+	 */
 	public void setClear(boolean clear) {
 		this.clear = clear;
 	}
 
+	/**
+	 * Get whether or not the loadout clears the inventory
+	 * 
+	 * @return
+	 */
 	public boolean doesClear() {
 		return clear;
 	}
 
+	/**
+	 * Set whether or not the loadout equips using the SmartEquip method (config)
+	 * 
+	 * @param value
+	 */
 	public void setSmartEquip(boolean value) {
 		this.smartEquip = value;
 	}
 
+	/**
+	 * Get whether or not the loadout uses SmartEquip
+	 * 
+	 * @return
+	 */
 	public boolean smartEquips() {
 		return smartEquip;
 	}
 
+	/**
+	 * Gets all items
+	 * 
+	 * @return
+	 */
 	public ItemStack[] getItems() {
 		return items;
 	}
 
+	/**
+	 * Handles clearing and smart equipping, wraps holder into a
+	 * {@link DynamicHolder}
+	 * 
+	 * @param holder
+	 */
 	public void give(Entity holder) {
 		if ((!(holder instanceof InventoryHolder)) && !(holder instanceof LivingEntity))
 			return;
@@ -142,6 +200,11 @@ public class Loadout implements ConfigurationSerializable {
 			dyn.addItem(leftOver);
 	}
 
+	/**
+	 * Returns the list of items in a human readable format
+	 * 
+	 * @return
+	 */
 	public String humanReadable() {
 		if (name != null)
 			return name;
@@ -157,6 +220,11 @@ public class Loadout implements ConfigurationSerializable {
 		return builder.toString().substring(0, builder.length() - 2);
 	}
 
+	/**
+	 * Returns the list of items formatted conveninently for a lore/list
+	 * 
+	 * @return
+	 */
 	public String loreReadable() {
 		StringBuilder builder = new StringBuilder();
 		for (ItemStack item : items) {
@@ -211,6 +279,7 @@ public class Loadout implements ConfigurationSerializable {
 		return false;
 	}
 
+	@Deprecated
 	private EquipmentSlot getSlot(Material mat) {
 		if (isHelmet(mat))
 			return EquipmentSlot.HEAD;

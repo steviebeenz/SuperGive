@@ -24,6 +24,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 import xyz.msws.supergive.SuperGive;
 import xyz.msws.supergive.loadout.Loadout;
 import xyz.msws.supergive.loadout.LoadoutManager;
+import xyz.msws.supergive.utils.Lang;
 import xyz.msws.supergive.utils.MSG;
 
 public class LoadoutCommand extends BukkitCommand {
@@ -50,17 +51,17 @@ public class LoadoutCommand extends BukkitCommand {
 			return true;
 		if (args.length == 0) {
 			if (!(sender instanceof Player)) {
-				MSG.tell(sender, "SuperGive", "Please specify a sub-command.");
+				Lang.MISSING_ARGUMENT.send(sender);
 				return true;
 			}
 			Player player = (Player) sender;
 
 			if (lm.getLoadouts().isEmpty()) {
-				MSG.tell(sender, "SuperGive", "There are no loadouts set yet, create one with &e/loadout create&7.");
+				Lang.NO_LOADOUTS.send(sender);
 				return true;
 			}
 			MSG.tell(sender, " ");
-			MSG.tell(sender, "SuperGive", "Listing all loadouts available.");
+			Lang.LOADOUTS_PREFIX.send(sender);
 
 			for (String load : lm.getLoadouts()) {
 				Loadout l = lm.getLoadout(load);
@@ -92,30 +93,29 @@ public class LoadoutCommand extends BukkitCommand {
 		switch (args[0].toLowerCase()) {
 			case "create":
 				if (!sender.hasPermission("supergive.command.loadout.create")) {
-					MSG.tell(sender, "SuperGive", "You do not have the valid permissions to create a loadout.");
+					Lang.NO_PERMISSION.send(sender, "supergive.command.loadout.create");
 					return true;
 				}
 				if (!(sender instanceof Player)) {
-					MSG.tell(sender, "SuperGive", "You must be a player to create a loadout.");
+					Lang.MUST_BE_PLAYER.send(sender);
 					return true;
 				}
 				player = (Player) sender;
 				if (args.length <= 1) {
-					MSG.tell(sender, "SuperGive", "You must specify a name for the loadout.");
+					Lang.SPECIFY_NAME.send(sender);
 					return true;
 				}
 
 				name = String.join(" ", (String[]) ArrayUtils.subarray(args, 1, args.length));
 				if (lm.getLoadout(MSG.normalize(name)) != null) {
-					MSG.tell(sender, "SuperGive", "That loadout already exists.");
+					Lang.LOADOUT_EXISTS.send(sender, name);
 					return true;
 				}
 
 				Loadout loadout = new Loadout(player.getInventory().getContents());
 				loadout.setName(name);
 				lm.addLoadout(MSG.normalize(name), loadout);
-				MSG.tell(sender, "SuperGive",
-						"Successfully created the " + MSG.FORMAT_INFO + name + MSG.DEFAULT + " loadout:");
+				Lang.LOADOUT_CREATED.send(sender, name);
 				for (ItemStack item : loadout.getItems()) {
 					if (item == null || item.getType() == Material.AIR)
 						continue;
@@ -124,11 +124,11 @@ public class LoadoutCommand extends BukkitCommand {
 				return true;
 			case "edit":
 				if (!sender.hasPermission("supergive.command.loadout.edit")) {
-					MSG.tell(sender, "SuperGive", "You do not have the valid permissions to edit any loadouts.");
+					Lang.NO_PERMISSION.send(sender, "supergive.command.loadout.edit");
 					return true;
 				}
 				if (!(sender instanceof Player)) {
-					MSG.tell(sender, "SuperGive", "You must be a player to edit a loadout.");
+					Lang.MUST_BE_PLAYER.send(sender);
 					return true;
 				}
 				player = (Player) sender;
@@ -148,13 +148,12 @@ public class LoadoutCommand extends BukkitCommand {
 						loadouts.remove(player.getUniqueId());
 						return true;
 					}
-					MSG.tell(sender, "SuperGive", "You must specify a name for the loadout.");
+					Lang.SPECIFY_NAME.send(sender);
 					return true;
 				}
 
 				if (loadouts.containsKey(player.getUniqueId())) {
-					MSG.tell(sender, "SuperGive", "You are already currently editing the " + MSG.FORMAT_INFO
-							+ loadouts.get(player.getUniqueId()) + MSG.DEFAULT + " loadout.");
+					Lang.LOADOUT_ALREADY_EDITING.send(sender, loadouts.get(player.getUniqueId()));
 					return true;
 				}
 
@@ -162,73 +161,67 @@ public class LoadoutCommand extends BukkitCommand {
 
 				Loadout load = lm.getLoadout(name);
 				if (load == null) {
-					MSG.tell(sender, "SuperGive", "Unknown loadout.");
+					Lang.UNKNOWN_LOADOUT.send(sender, name);
 					return true;
 				}
 				if (!sender.hasPermission("supergive.command.loadout.edit." + name)) {
-					MSG.tell(sender, "SuperGive",
-							"You do not have the valid permissions to edit the &e" + name + "&7 loadout.");
+					Lang.NO_PERMISSION.send(sender, "supergive.command.loadout.edit." + name);
 					return true;
 				}
 
 				items.put(player.getUniqueId(), player.getInventory().getContents());
 				player.getInventory().clear();
 				load.give(player);
-
-				MSG.tell(sender, "SuperGive",
-						"You are now editing the " + MSG.FORMAT_INFO + name + " " + MSG.DEFAULT + "loadout.");
-				MSG.tell(sender, "SuperGive", "To edit the loadout, simply &lmodify your own inventory&7.");
-				MSG.tell(sender, "SuperGive", "Type &e/" + commandLabel + " edit &7to save the loadout, or &e/"
-						+ commandLabel + " cancel &7to cancel editing.");
+				Lang.LOADOUT_EDITING.send(sender, name);
 				loadouts.put(player.getUniqueId(), name);
 				break;
 			case "delete":
 				if (!sender.hasPermission("supergive.command.loadout.delete")) {
-					MSG.tell(sender, "SuperGive", "You do not have the valid permissions to delete any loadouts.");
+					Lang.NO_PERMISSION.send(sender, "supergive.command.loadout.delete");
 					return true;
 				}
 				if (!(sender instanceof Player)) {
-					MSG.tell(sender, "SuperGive", "You must be a player to create a loadout.");
+					Lang.MUST_BE_PLAYER.send(sender);
 					return true;
 				}
 				player = (Player) sender;
 				if (args.length <= 1) {
-					MSG.tell(sender, "SuperGive", "You must specify a name for the loadout.");
+					Lang.SPECIFY_NAME.send(sender);
 					return true;
 				}
 
 				name = String.join(" ", (String[]) ArrayUtils.subarray(args, 1, args.length));
 
 				if (lm.getLoadout(name) == null) {
-					MSG.tell(sender, "SuperGive", "Unknown loadout name.");
+					Lang.UNKNOWN_LOADOUT.send(sender, name);
 					return true;
 				}
 				if (!sender.hasPermission("supergive.command.loadout.delete." + name)) {
-					MSG.tell(sender, "SuperGive",
-							"You do not have the valid permissions to delete the &e" + name + "&7loadout.");
+					Lang.NO_PERMISSION.send(sender, "supergive.command.loadout.delete." + name);
 					return true;
 				}
 				lm.deleteLoadout(name);
-				MSG.tell(sender, "SuperGive",
-						"Successfully deleted the " + MSG.FORMAT_INFO + name + " " + MSG.DEFAULT + "loadout.");
+				Lang.LOADOUT_DELETED.send(sender, name);
 				break;
 			case "cancel":
 				if (!(sender instanceof Player)) {
-					MSG.tell(sender, "SuperGive", "You are not editing a loadout (better not be >:c).");
+					Lang.MUST_BE_PLAYER.send(sender);
 					return true;
 				}
 				player = (Player) sender;
 				if (!(loadouts.containsKey(player.getUniqueId()))) {
-					MSG.tell(sender, "SuperGive", "You are not editing a loadout.");
+					Lang.LOADOUT_NOT_EDITING.send(sender);
 					return true;
 				}
-				MSG.tell(sender, "SuperGive", "You cancelled and reverted all changes to " + MSG.FORMAT_INFO
-						+ loadouts.get(player.getUniqueId()) + MSG.DEFAULT + ".");
+				Lang.LOADOUT_CANCELLED.send(sender, loadouts.get(player.getUniqueId()));
 				loadouts.remove(player.getUniqueId());
 				player.getInventory().setContents(items.get(player.getUniqueId()));
 				break;
+			default:
+				Lang.INVALID_ARGUMENT.send(sender);
+				break;
 		}
-		return false;
+		return true;
 	}
 
 	@Override

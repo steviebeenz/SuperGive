@@ -1,5 +1,7 @@
 package xyz.msws.supergive.modules.commands;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -10,6 +12,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.Container;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.defaults.BukkitCommand;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -21,6 +24,7 @@ import xyz.msws.supergive.items.ItemBuilder;
 import xyz.msws.supergive.loadout.Loadout;
 import xyz.msws.supergive.loadout.LoadoutManager;
 import xyz.msws.supergive.selectors.Selector;
+import xyz.msws.supergive.utils.Lang;
 import xyz.msws.supergive.utils.MSG;
 import xyz.msws.supergive.utils.Sounds;
 import xyz.msws.supergive.utils.Utils;
@@ -62,21 +66,49 @@ public class GiveCommand extends BukkitCommand {
 	public boolean execute(CommandSender sender, String commandLabel, String[] args) {
 		if (!testPermission(sender))
 			return true;
+
+		if (args.length == 0) {
+			Lang.MISSING_ARGUMENT.send(sender);
+			return true;
+		}
+
+		if (args[0].equalsIgnoreCase("reset")) {
+			if (!sender.hasPermission("supergive.command.reset")) {
+				Lang.NO_PERMISSION.send(sender, "supergive.command.reset");
+				return true;
+			}
+			YamlConfiguration c = new YamlConfiguration();
+			for (Lang l : Lang.values())
+				c.set(l.getKey(), l.getValue());
+			plugin.saveResource("config.yml", true);
+			try {
+				c.save(new File(plugin.getDataFolder(), "lang.yml"));
+			} catch (IOException e) {
+				MSG.tell(sender, "SuperGive",
+						"An error occured when resetting the lang file, please check the console.");
+				e.printStackTrace();
+				return true;
+			}
+			Lang.load(c);
+			MSG.tell(sender, "SuperGive", "Successfully reset the config and lang file.");
+			return true;
+		}
+
 		if (args.length < 2) {
-			MSG.tell(sender, "SuperGive",
-					args.length == 0 ? "You must specify a &etarget &7and &aitem&7." : "You must specify an &aitem&7.");
+			if (args.length == 0)
+				Lang.SPECIFY_TARGET.send(sender);
+			Lang.SPECIFY_ITEM.send(sender);
 			return true;
 		}
 
 		List<Entity> targets = selector.getEntities(args[0], sender);
 		if (targets == null) {
-			MSG.tell(sender, "SuperGive",
-					"An invalid target was specified, please ensure you have typed it correctly.");
+			Lang.INVALID_TARGET.send(sender, args[0]);
 			return true;
 		}
 
 		if (targets.isEmpty()) {
-			MSG.tell(sender, "SuperGive", "No entities matched the specified criteria.");
+			Lang.TARGET_MISSING.send(sender, args[0]);
 			return true;
 		}
 
@@ -86,7 +118,7 @@ public class GiveCommand extends BukkitCommand {
 		switch (args[1].toLowerCase()) {
 			case "@hand":
 				if (!sender.hasPermission("supergive.command.give.hand")) {
-					MSG.tell(sender, "SuperGive", "You do not have the proper permission to give this item.");
+					Lang.NO_PERMISSION.send(sender, "supergive.command.give.hand");
 					return true;
 				}
 				if (sender instanceof Player) {
@@ -96,22 +128,22 @@ public class GiveCommand extends BukkitCommand {
 				break;
 			case "@inventory":
 				if (!sender.hasPermission("supergive.command.give.inventory")) {
-					MSG.tell(sender, "SuperGive", "You do not have the proper permission to give this loadout.");
+					Lang.NO_PERMISSION.send(sender, "supergive.command.give.inventory");
 					return true;
 				}
 				if (!(sender instanceof Player)) {
-					MSG.tell(sender, "SuperGive", "You have too many items in your non-existent inventory.");
+					Lang.MUST_BE_PLAYER.send(sender);
 					return true;
 				}
 				loadout = new Loadout(((Player) sender).getInventory().getContents());
 				break;
 			case "@block":
 				if (!sender.hasPermission("supergive.command.give.block")) {
-					MSG.tell(sender, "SuperGive", "You do not have the proper permission to give this loadout.");
+					Lang.NO_PERMISSION.send(sender, "supergive.command.give.block");
 					return true;
 				}
 				if (!(sender instanceof Player)) {
-					MSG.tell(sender, "SuperGive", "Huh... not sure what you want me to do here.");
+					Lang.MUST_BE_PLAYER.send(sender);
 					return true;
 				}
 				RayTraceResult result = ((Player) sender).rayTraceBlocks(20);
@@ -121,11 +153,9 @@ public class GiveCommand extends BukkitCommand {
 				}
 				Block target = result.getHitBlock();
 				if (!(target.getState() instanceof Container)) {
-					MSG.tell(sender, "SuperGive",
-							"&e" + MSG.camelCase(target.getType().toString()) + "s&7 cannot hold items.");
+					Lang.INVALID_BLOCK.send(sender, MSG.camelCase(target.getType().toString()));
 					return true;
 				}
-
 				loadout = new Loadout(((Container) target.getState()).getInventory().getContents());
 				break;
 			default:
@@ -136,36 +166,36 @@ public class GiveCommand extends BukkitCommand {
 						return true;
 					}
 					if (!sender.hasPermission("supergive.command.give.loadout." + args[1].substring(1))) {
-						MSG.tell(sender, "SuperGive", "You do not have the proper permissions to give that loadout.");
+						Lang.NO_PERMISSION.send(sender, "supergive.command.give.loadout" + args[1].substring(1));
 						return true;
 					}
 					break;
 				}
 				if (item == null) {
-					MSG.tell(sender, "SuperGive", "Unknown item specified.");
+					Lang.INVALID_ITEM.send(sender, args[1]);
 					return true;
 				}
 				loadout = new Loadout(item);
 		}
 
 		if (loadout == null) {
-			MSG.tell(sender, "SuperGive", "Unable to parse item.");
+			Lang.INVALID_ITEM.send(sender, args[1]);
 			return true;
 		}
 
 		if (item != null && item.getType() == Material.AIR) {
-			MSG.tell(sender, "SuperGive", "You successfully did nothing.");
+			Lang.NO_RESULT.send(sender);
 			return true;
 		}
 
 		if (item != null) {
 			if (!sender.hasPermission("supergive.command.give." + MSG.normalize(item.getType().toString()))) {
-				MSG.tell(sender, "SuperGive", "You do not have the proper permission to give this item.");
+				Lang.NO_PERMISSION.send(sender, "supergive.command.give." + MSG.normalize(item.getType().toString()));
 				return true;
 			}
 			if (!sender.hasPermission("supergive.command.give.unsafeenchants")
 					&& Utils.containsUnsafeEnchantments(item)) {
-				MSG.tell(sender, "SuperGive", "You do not have the proper permission to give this item.");
+				Lang.NO_PERMISSION.send(sender, "supergive.command.give.unsafeenchants");
 				return true;
 			}
 		}
@@ -174,13 +204,11 @@ public class GiveCommand extends BukkitCommand {
 			if (ent instanceof Player)
 				((Player) ent).playSound(((Player) ent).getLocation(), Sounds.ITEM_PICKUP.bukkitSound(), 2, 1);
 			if (ent instanceof CommandSender)
-				MSG.tell(((CommandSender) ent), "SuperGive", MSG.STAFF + sender.getName() + " " + MSG.DEFAULT
-						+ "has given you " + MSG.FORMAT_INFO + loadout.humanReadable() + MSG.DEFAULT + ".");
+				Lang.GIVE_RECEIVER.send((CommandSender) ent, sender.getName(), loadout.humanReadable());
 			loadout.give(ent);
 		}
 
-		MSG.tell(sender, "SuperGive", "successfully gave " + MSG.SUBJECT + selector.getDescriptor(args[0], sender)
-				+ MSG.FORMAT_INFO + " " + loadout.humanReadable() + MSG.DEFAULT + ".");
+		Lang.GIVE_SENDER.send(sender, selector.getDescriptor(args[0], sender), loadout.humanReadable());
 		return true;
 	}
 
@@ -190,42 +218,11 @@ public class GiveCommand extends BukkitCommand {
 		if (!(sender.hasPermission(this.getPermission())))
 			return result;
 
-		if (args.length > 2)
-			for (ItemAttribute attr : plugin.getBuilder().getAttributes()) {
-				List<String> add = attr.tabComplete(args[args.length - 1], args, sender);
-				if (add == null || add.isEmpty())
-					continue;
-				result.addAll(add);
-			}
+		if (args.length == 1 && sender.hasPermission("supergive.command.reset"))
+			result.add("reset");
 
-		if (args.length == 1) {
+		if (args.length == 1)
 			result.addAll(plugin.getSelector().tabComplete(args[0]));
-			/*
-			 * for (Player p : Bukkit.getOnlinePlayers()) { if
-			 * (p.getName().toLowerCase().startsWith(args[0].toLowerCase()))
-			 * result.add(p.getName()); }
-			 * 
-			 * String current = args[0].split(",")[args[0].split(",").length - 1]; String
-			 * prev = ""; if (args[0].split(",").length > 1) { prev = String.join(",",
-			 * args).substring(0, String.join(",", args).lastIndexOf(",") + 1); }
-			 * 
-			 * if (current.startsWith("@")) for (String s : new String[] { "players",
-			 * "everyone", "me", "world", "worldplayers", "all", "survival", "creative",
-			 * "adventure", "spectator", "worldsurvival", "worldcreative", "worldadventure",
-			 * "worldspectator" }) { if (("@" +
-			 * s).toLowerCase().startsWith(current.toLowerCase())) result.add(prev + "@" +
-			 * s); }
-			 * 
-			 * for (String s : new String[] { "radius:", "world:", "perm:", "@" }) { if
-			 * (s.toLowerCase().startsWith(current.toLowerCase())) result.add(prev + s); }
-			 * if (current.length() > 3) { for (EntityType type : EntityType.values()) {
-			 * String t = MSG.normalize(type.toString()); if (("@" + t).startsWith(current))
-			 * { if (sender instanceof Player) { if (((Player)
-			 * sender).getWorld().getEntities().stream() .anyMatch(e -> e.getType() == type
-			 * && e instanceof InventoryHolder || e instanceof LivingEntity)) {
-			 * result.add(prev + "@" + t); } } else { result.add(prev + "@" + t); } } } }
-			 */
-		}
 
 		if (args.length == 2) {
 			for (Material mat : Material.values()) {
@@ -249,6 +246,15 @@ public class GiveCommand extends BukkitCommand {
 				}
 			}
 		}
+		if (args.length > 2) {
+			for (ItemAttribute attr : plugin.getBuilder().getAttributes()) {
+				List<String> add = attr.tabComplete(args[args.length - 1], args, sender);
+				if (add == null || add.isEmpty())
+					continue;
+				result.addAll(add);
+			}
+		}
+
 		return result;
 	}
 

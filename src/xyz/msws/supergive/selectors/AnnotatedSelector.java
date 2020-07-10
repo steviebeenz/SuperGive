@@ -147,6 +147,12 @@ public class AnnotatedSelector implements Selector {
 			if (("@" + s).toLowerCase().startsWith(current.toLowerCase()))
 				result.add(prev + "@" + s);
 		}
+		for (EntityType type : EntityType.values()) {
+			String t = MSG.normalize(type.toString());
+			if (t.startsWith(MSG.normalize(current))) {
+				result.add("@" + t);
+			}
+		}
 		return result;
 	}
 

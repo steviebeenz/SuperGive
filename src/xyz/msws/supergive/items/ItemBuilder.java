@@ -1,7 +1,5 @@
 package xyz.msws.supergive.items;
 
-import static org.junit.Assert.assertTrue;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,7 +7,6 @@ import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
-import org.junit.Test;
 
 import xyz.msws.supergive.utils.MSG;
 
@@ -136,35 +133,5 @@ public class ItemBuilder {
 				return true;
 		}
 		return false;
-	}
-
-	@Test
-	public void testItemMaterial() {
-		assertTrue(build("diamond").getType() == Material.DIAMOND);
-	}
-
-	@Test
-	public void testMaterialBeginning() {
-		assertTrue(build("diamond_chest").getType() == Material.DIAMOND_CHESTPLATE);
-	}
-
-	@Test
-	public void testMaterialMiddle() {
-		assertTrue(build("amond").getType() == Material.DIAMOND);
-	}
-
-	@Test
-	public void testItemAmount() {
-		assertTrue(build("stone 64").getAmount() == 64);
-	}
-
-	@Test
-	public void testNull() {
-		assertTrue(build("invaliditem") == null);
-	}
-
-	@Test
-	public void testInvalidAmount() {
-		assertTrue(build("stone a").getAmount() == 1);
 	}
 }

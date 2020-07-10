@@ -35,9 +35,9 @@ Loadouts:
     - 'cookedmutton 64'
     - 'enchantedgoldenapple 64'
     - 'pumpkinpie 64'
-  argsLoadout:
+  FullLoadout:
     ==: xyz.msws.supergive.loadout.Loadout
-    Name: 'args Loadout'
+    Name: 'Full Loadout'
     Clear: true
     Items:
     - 'diamondhelmet diamondhelmet aqua:1 mending:1 protection:4 respiration:3 thorns:3 unbreaking:3'

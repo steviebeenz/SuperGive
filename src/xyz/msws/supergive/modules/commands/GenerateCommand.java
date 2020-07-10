@@ -14,6 +14,7 @@ import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import xyz.msws.supergive.SuperGive;
+import xyz.msws.supergive.utils.Lang;
 import xyz.msws.supergive.utils.MSG;
 
 public class GenerateCommand extends BukkitCommand {
@@ -31,18 +32,21 @@ public class GenerateCommand extends BukkitCommand {
 		if (!testPermission(sender))
 			return true;
 		if (!(sender instanceof Player)) {
-			MSG.tell(sender, "SuperGive", "You must be a player to use this command.");
+//			MSG.tell(sender, "SuperGive", "You must be a player to use this command.");
+			Lang.MUST_BE_PLAYER.send(sender);
 			return true;
 		}
 		Player player = (Player) sender;
 		ItemStack item = player.getInventory().getItemInMainHand();
 		if (item == null || item.getType() == Material.AIR) {
-			MSG.tell(sender, "SuperGive", "You must have an item in your hand to generate the command for it.");
+//			MSG.tell(sender, "SuperGive", "You must have an item in your hand to generate the command for it.");
+			Lang.MUST_HAVE_ITEM.send(sender);
 			return true;
 		}
 		String str = "&7/give @self &e" + plugin.getBuilder().toString(item);
 
-		MSG.tell(sender, "SuperGive", "The item in your hand can be generated with:");
+//		MSG.tell(sender, "SuperGive", "The item in your hand can be generated with:");
+		Lang.GENERATE_PREFIX.send(sender);
 		BaseComponent[] result = null;
 		if (ChatColor.stripColor(MSG.color(str)).length() > 256) {
 			result = new ComponentBuilder(MSG.color("&7/give @self &e[Click to copy...]"))

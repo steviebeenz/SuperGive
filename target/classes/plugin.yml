@@ -12,12 +12,14 @@ permissions:
       supergive.command.give: true
       supergive.command.give.*: true
       supergive.command.generate: true
+      supergive.command.reset: true
   supergive.command.give:
     description: Access to the /give command
     children:
       supergive.command.give.hand: true
       supergive.command.give.inventory: true
       supergive.command.give.unsafeenchants: true
+      supergive.command.give.*: true
   supergive.command.loadout:
     description: Access to the /loadout command
     children:
@@ -27,3 +29,5 @@ permissions:
   supergive.command.generate:
     description: Access to the /generate command
     default: true
+  supergive.command.reset:
+    description: Access to reset config and lang files
