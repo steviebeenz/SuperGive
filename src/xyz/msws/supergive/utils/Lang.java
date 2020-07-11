@@ -32,8 +32,9 @@ public enum Lang {
 			"%prefix% You are now editing the &e%s&7 loadout.\nTo edit the loadout, simply &lmodify your own inventory&7.\nType &e/loadout edit&7 to save the changes, or &c/loadout cancel&7 to cancel them."),
 	LOADOUT_DELETED("Command.Loadouts.Deleted", "%prefix% Successfully deleted the &c%s&7 loadout."),
 	LOADOUT_NOT_EDITING("Command.Loadouts.NotEditing", "%prefix% You are not editing a loadout."),
-	LOADOUT_CANCELLED("Command.Loadouts.Cancelled", "%prefix% You cancelled and reverted all changes to &e%s&7."),
-	INVALID_ARGUMENT("Command.Argument.Invalid.Generic", "A specified argument was invalid.");
+	LOADOUT_CANCELED("Command.Loadouts.Canceled", "%prefix% You canceled and reverted all changes to &e%s&7."),
+	INVALID_ARGUMENT("Command.Argument.Invalid.Generic", "A specified argument was invalid."),
+	NOTALL_SELECTOR("Command.Result.WarnPerm", "%prefix% You do not have access to all selectors, this may or not be intended.");
 
 	private String key;
 	private Object value, def;

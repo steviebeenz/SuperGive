@@ -7,6 +7,8 @@ import java.util.stream.Collectors;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 
+import xyz.msws.supergive.SuperGive;
+
 /**
  * Combines all current selectors into one
  * 
@@ -17,9 +19,9 @@ public class NativeSelector implements Selector {
 
 	private List<Selector> selectors = new ArrayList<>(); // List to keep order
 
-	public NativeSelector() {
+	public NativeSelector(SuperGive plugin) {
 		selectors.add(new VanillaSelector());
-		selectors.add(new AnnotatedSelector());
+		selectors.add(new AnnotatedSelector(plugin));
 		selectors.add(new PermissionSelector());
 		selectors.add(new NameSelector());
 		selectors.add(new RadiusSelector());
@@ -81,13 +83,11 @@ public class NativeSelector implements Selector {
 	@Override
 	public List<String> tabComplete(String current) {
 		List<String> result = new ArrayList<>();
-		for (String string : current.split(",")) {
-			for (Selector sel : selectors) {
-				List<String> r = sel.tabComplete(string);
-				if (r == null || r.isEmpty())
-					continue;
-				result.addAll(r);
-			}
+		for (Selector sel : selectors) {
+			List<String> l = sel.tabComplete(current);
+			if (l == null || l.isEmpty())
+				continue;
+			result.addAll(sel.tabComplete(current));
 		}
 		return result;
 	}

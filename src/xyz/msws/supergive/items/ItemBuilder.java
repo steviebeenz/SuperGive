@@ -8,13 +8,14 @@ import org.apache.commons.lang.StringUtils;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
+import xyz.msws.supergive.SuperGive;
 import xyz.msws.supergive.utils.MSG;
 
 public class ItemBuilder {
 
 	private List<ItemAttribute> attr = new ArrayList<>();
 
-	public ItemBuilder() {
+	public ItemBuilder(SuperGive plugin) {
 		attr.add(new NameAttribute());
 		attr.add(new UnbreakableAttribute());
 		attr.add(new EnchantmentAttribute());
@@ -27,6 +28,7 @@ public class ItemBuilder {
 		attr.add(new StoredEnchantmentAttribute());
 		attr.add(new EntityAttribute());
 		attr.add(new FireworkAttribute());
+		attr.add(new ContentsAttribute(plugin));
 	}
 
 	public void addAttribute(ItemAttribute attr) {

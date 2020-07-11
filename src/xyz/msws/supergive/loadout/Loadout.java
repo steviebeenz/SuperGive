@@ -11,7 +11,6 @@ import java.util.Map;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.InventoryHolder;
@@ -170,10 +169,7 @@ public class Loadout implements ConfigurationSerializable {
 	 * 
 	 * @param holder
 	 */
-	public void give(Entity holder) {
-		if ((!(holder instanceof InventoryHolder)) && !(holder instanceof LivingEntity))
-			return;
-		DynamicHolder dyn = new DynamicHolder(holder);
+	public void give(DynamicHolder dyn) {
 		if (clear)
 			dyn.clearInventory();
 
@@ -187,7 +183,7 @@ public class Loadout implements ConfigurationSerializable {
 		Iterator<ItemStack> it = items.iterator();
 		while (it.hasNext()) {
 			ItemStack item = it.next();
-			ItemStack result = giveSmartEquipSlot(holder, item);
+			ItemStack result = giveSmartEquipSlot(dyn, item);
 			if (result == null)
 				continue;
 			it.remove();
@@ -198,6 +194,14 @@ public class Loadout implements ConfigurationSerializable {
 
 		for (ItemStack leftOver : toAdd)
 			dyn.addItem(leftOver);
+	}
+
+	public void give(InventoryHolder holder) {
+		give(new DynamicHolder(holder));
+	}
+
+	public void give(LivingEntity living) {
+		give(new DynamicHolder(living));
 	}
 
 	/**
@@ -295,11 +299,11 @@ public class Loadout implements ConfigurationSerializable {
 	/**
 	 * Should return the item that was previously in the slot
 	 * 
-	 * @param entity
+	 * @param dyn
 	 * @param item
 	 * @return
 	 */
-	public ItemStack giveSmartEquipSlot(Entity entity, ItemStack item) {
+	public ItemStack giveSmartEquipSlot(DynamicHolder dyn, ItemStack item) {
 		ConfigurationSection section = SuperGive.getPlugin().getConfig().getConfigurationSection("SmartEquip");
 		if (section == null)
 			return null;
@@ -314,7 +318,7 @@ public class Loadout implements ConfigurationSerializable {
 		}
 		for (int i = 0; i < options.size(); i++) {
 			String option = options.get(i);
-			if (entity instanceof LivingEntity) {
+			if (dyn instanceof LivingEntity) {
 				EquipmentSlot slot;
 				try {
 					slot = EquipmentSlot.valueOf(option.toUpperCase());
@@ -322,27 +326,26 @@ public class Loadout implements ConfigurationSerializable {
 					slot = getSlot(item.getType());
 				}
 				if (slot != null) {
-					ItemStack old = ((LivingEntity) entity).getEquipment().getItem(slot);
-					((LivingEntity) entity).getEquipment().setItem(slot, item);
+					ItemStack old = ((LivingEntity) dyn).getEquipment().getItem(slot);
+					((LivingEntity) dyn).getEquipment().setItem(slot, item);
 					return old == null ? new ItemStack(Material.AIR) : old;
 				}
 			}
 
-			if (entity instanceof InventoryHolder) {
-				try {
-					InventoryHolder holder = (InventoryHolder) entity;
-					int slot = Integer.parseInt(option);
-					if (slot >= holder.getInventory().getSize())
-						return null;
-					ItemStack old = ((InventoryHolder) entity).getInventory().getItem(slot);
-					if (old != null && old.getType() != Material.AIR) {
-						if (i < options.size() - 1)
-							continue;
-					}
-					((InventoryHolder) entity).getInventory().setItem(slot, item);
-					return old == null ? new ItemStack(Material.AIR) : old;
-				} catch (NumberFormatException e) {
+			if (!dyn.hasInventory())
+				continue;
+			try {
+				int slot = Integer.parseInt(option);
+				if (slot >= dyn.getInventory().getSize())
+					return null;
+				ItemStack old = dyn.getInventory().getItem(slot);
+				if (old != null && old.getType() != Material.AIR) {
+					if (i < options.size() - 1)
+						continue;
 				}
+				dyn.getInventory().setItem(slot, item);
+				return old == null ? new ItemStack(Material.AIR) : old;
+			} catch (NumberFormatException e) {
 			}
 		}
 		return null;

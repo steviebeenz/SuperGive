@@ -28,13 +28,13 @@ public class SuperGive extends JavaPlugin {
 
 	private ItemBuilder builder;
 	private Selector selector;
-	private YamlConfiguration lang;
-
+	private YamlConfiguration lang, config;
 	private static SuperGive instance;
 
 	@Override
 	public void onEnable() {
 		instance = this;
+
 		File conf = new File(this.getDataFolder(), "config.yml");
 		if (!conf.exists())
 			saveResource("config.yml", false);
@@ -51,25 +51,27 @@ public class SuperGive extends JavaPlugin {
 				e.printStackTrace();
 			}
 		}
-		lang = YamlConfiguration.loadConfiguration(langFile);
-		Lang.load(lang);
 
+		ConfigurationSerialization.registerClass(Loadout.class, "Loadout");
+		this.builder = new ItemBuilder(this);
+		this.selector = new NativeSelector(this);
 		modules.add(new CommandModule(this));
 		modules.add(new LoadoutManager(this));
 
-		this.builder = new ItemBuilder();
-		this.selector = new NativeSelector();
+		lang = YamlConfiguration.loadConfiguration(langFile);
+		config = YamlConfiguration.loadConfiguration(conf);
 
-		ConfigurationSerialization.registerClass(Loadout.class, "Loadout");
 		enableModules();
-	}
 
-	public YamlConfiguration getLang() {
-		return lang;
+		Lang.load(lang);
 	}
 
 	public static SuperGive getPlugin() {
 		return instance;
+	}
+
+	public YamlConfiguration getLang() {
+		return lang;
 	}
 
 	public ItemBuilder getBuilder() {
@@ -83,6 +85,10 @@ public class SuperGive extends JavaPlugin {
 	@Override
 	public void onDisable() {
 		disableModules();
+	}
+
+	public YamlConfiguration getConfig() {
+		return config;
 	}
 
 	private void enableModules() {

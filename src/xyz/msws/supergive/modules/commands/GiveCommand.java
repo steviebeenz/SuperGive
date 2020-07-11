@@ -14,13 +14,16 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.defaults.BukkitCommand;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.RayTraceResult;
 
 import xyz.msws.supergive.SuperGive;
 import xyz.msws.supergive.items.ItemAttribute;
 import xyz.msws.supergive.items.ItemBuilder;
+import xyz.msws.supergive.loadout.DynamicHolder;
 import xyz.msws.supergive.loadout.Loadout;
 import xyz.msws.supergive.loadout.LoadoutManager;
 import xyz.msws.supergive.selectors.Selector;
@@ -67,12 +70,7 @@ public class GiveCommand extends BukkitCommand {
 		if (!testPermission(sender))
 			return true;
 
-		if (args.length == 0) {
-			Lang.MISSING_ARGUMENT.send(sender);
-			return true;
-		}
-
-		if (args[0].equalsIgnoreCase("reset")) {
+		if (args.length >= 1 && args[0].equalsIgnoreCase("reset")) {
 			if (!sender.hasPermission("supergive.command.reset")) {
 				Lang.NO_PERMISSION.send(sender, "supergive.command.reset");
 				return true;
@@ -109,6 +107,8 @@ public class GiveCommand extends BukkitCommand {
 
 		if (targets.isEmpty()) {
 			Lang.TARGET_MISSING.send(sender, args[0]);
+			if (!sender.hasPermission("supergive.selector.all"))
+				Lang.NOTALL_SELECTOR.send(sender);
 			return true;
 		}
 
@@ -148,7 +148,7 @@ public class GiveCommand extends BukkitCommand {
 				}
 				RayTraceResult result = ((Player) sender).rayTraceBlocks(20);
 				if (result == null || result.getHitBlock() == null) {
-					MSG.tell(sender, "SuperGive", "Please look at a block that can hold items.");
+					Lang.INVALID_BLOCK.send(sender, "Air");
 					return true;
 				}
 				Block target = result.getHitBlock();
@@ -205,7 +205,11 @@ public class GiveCommand extends BukkitCommand {
 				((Player) ent).playSound(((Player) ent).getLocation(), Sounds.ITEM_PICKUP.bukkitSound(), 2, 1);
 			if (ent instanceof CommandSender)
 				Lang.GIVE_RECEIVER.send((CommandSender) ent, sender.getName(), loadout.humanReadable());
-			loadout.give(ent);
+			if (ent instanceof InventoryHolder) {
+				loadout.give(new DynamicHolder((InventoryHolder) ent));
+			} else if (ent instanceof LivingEntity) {
+				loadout.give(new DynamicHolder((LivingEntity) ent));
+			}
 		}
 
 		Lang.GIVE_SENDER.send(sender, selector.getDescriptor(args[0], sender), loadout.humanReadable());
@@ -218,11 +222,21 @@ public class GiveCommand extends BukkitCommand {
 		if (!(sender.hasPermission(this.getPermission())))
 			return result;
 
-		if (args.length == 1 && sender.hasPermission("supergive.command.reset"))
+		if (args.length == 1 && sender.hasPermission("supergive.command.reset")
+				&& "reset".startsWith(args[0].toLowerCase()))
 			result.add("reset");
 
-		if (args.length == 1)
-			result.addAll(plugin.getSelector().tabComplete(args[0]));
+		if (args.length == 1) {
+			String current = args[0].split(",")[args[0].split(",").length - 1];
+			String prev = "";
+			if (args[0].split(",").length > 1) {
+				prev = String.join(",", args).substring(0, String.join(",", args).lastIndexOf(",") + 1);
+			}
+			for (String s : plugin.getSelector().tabComplete(current)) {
+				result.add(prev + s);
+			}
+//			result.addAll(plugin.getSelector().tabComplete(args[0]));
+		}
 
 		if (args.length == 2) {
 			for (Material mat : Material.values()) {
@@ -238,7 +252,7 @@ public class GiveCommand extends BukkitCommand {
 			if ("#".toLowerCase().startsWith(args[1].toLowerCase()))
 				result.add("#");
 			if (args[1].startsWith("#")) {
-				for (String s : plugin.getModule(LoadoutManager.class).getLoadouts()) {
+				for (String s : plugin.getModule(LoadoutManager.class).getLoadoutNames()) {
 					if (!sender.hasPermission("supergive.command.give.loadout." + s))
 						continue;
 					if (("#" + s).toLowerCase().startsWith(args[1].toLowerCase()))

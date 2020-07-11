@@ -1,5 +1,6 @@
 package xyz.msws.supergive.loadout;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -14,7 +15,7 @@ import xyz.msws.supergive.utils.MSG;
 
 public class LoadoutManager extends AbstractModule {
 
-	private Map<String, Loadout> loads = new HashMap<>();;
+	private Map<String, Loadout> loads = new HashMap<>();
 
 	public LoadoutManager(SuperGive plugin) {
 		super(plugin);
@@ -24,7 +25,6 @@ public class LoadoutManager extends AbstractModule {
 	@Override
 	public void initialize() {
 		loads.clear();
-
 		ConfigurationSection section = plugin.getConfig().getConfigurationSection("Loadouts");
 		if (section == null)
 			return;
@@ -37,6 +37,12 @@ public class LoadoutManager extends AbstractModule {
 		}
 	}
 
+	/**
+	 * Returns the loadout assigned with this key, null if none are
+	 * 
+	 * @param key
+	 * @return The loadout or null
+	 */
 	public Loadout getLoadout(String key) {
 		return loads.getOrDefault(key, null);
 	}
@@ -77,8 +83,16 @@ public class LoadoutManager extends AbstractModule {
 		plugin.saveConfig();
 	}
 
-	public Set<String> getLoadouts() {
+	public Set<String> getLoadoutNames() {
 		return loads.keySet();
+	}
+
+	public Collection<Loadout> getLoadouts() {
+		return loads.values();
+	}
+
+	public Map<String, Loadout> getLoadoutMap() {
+		return loads;
 	}
 
 	@Override

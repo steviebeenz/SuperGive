@@ -1,12 +1,11 @@
 package xyz.msws.supergive.loadout;
 
 import org.bukkit.Material;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.inventory.EntityEquipment;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
-
-import com.google.common.base.Preconditions;
 
 /**
  * @author imodm A simple wrapper to allow for simple giving of items to both
@@ -14,37 +13,59 @@ import com.google.common.base.Preconditions;
  *
  */
 public class DynamicHolder {
-	private Entity ent;
+	private InventoryHolder holder;
+	private LivingEntity living;
 
-	public DynamicHolder(Entity ent) {
-		Preconditions.checkArgument(ent instanceof InventoryHolder || ent instanceof LivingEntity);
-		this.ent = ent;
+	public DynamicHolder(InventoryHolder holder) {
+		this.holder = holder;
+		this.living = null;
+	}
+
+	public DynamicHolder(LivingEntity living) {
+		this.holder = null;
+		this.living = living;
+	}
+
+	public boolean isLivingEntity() {
+		return living != null;
+	}
+
+	public LivingEntity getLiving() {
+		return living;
+	}
+
+	public InventoryHolder getHolder() {
+		return holder;
+	}
+
+	public boolean hasInventory() {
+		return holder != null;
+	}
+
+	public Inventory getInventory() {
+		return holder == null ? null : holder.getInventory();
 	}
 
 	public void clearInventory() {
-		if (ent instanceof LivingEntity) {
-			((LivingEntity) ent).getEquipment().clear();
-			return;
-		}
-
-		if (ent instanceof InventoryHolder) {
-			((InventoryHolder) ent).getInventory().clear();
-			return;
-		}
+		if (holder != null)
+			holder.getInventory().clear();
+		if (living != null)
+			living.getEquipment().clear();
 	}
 
 	public void addItem(ItemStack item) {
 		if (item == null || item.getType() == Material.AIR)
 			return;
-		if (ent instanceof InventoryHolder) {
-			((InventoryHolder) ent).getInventory().addItem(item);
-			return;
+		if (holder != null)
+			holder.getInventory().addItem(item);
+		if (living != null) {
+			EntityEquipment eq = living.getEquipment();
+			if (eq.getItemInMainHand() == null || eq.getItemInMainHand().getType() == Material.AIR) {
+				eq.setItemInMainHand(item);
+			} else {
+				eq.setItemInOffHand(item);
+			}
 		}
-		if (ent instanceof LivingEntity) {
-			((LivingEntity) ent).getEquipment().setItemInMainHand(item);
-			return;
-		}
-
 	}
 
 	public void addItem(ItemStack[] items) {

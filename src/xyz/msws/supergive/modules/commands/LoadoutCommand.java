@@ -12,6 +12,7 @@ import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.defaults.BukkitCommand;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 
 import net.md_5.bungee.api.ChatColor;
@@ -22,6 +23,7 @@ import net.md_5.bungee.api.chat.ComponentBuilder.FormatRetention;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import xyz.msws.supergive.SuperGive;
+import xyz.msws.supergive.loadout.DynamicHolder;
 import xyz.msws.supergive.loadout.Loadout;
 import xyz.msws.supergive.loadout.LoadoutManager;
 import xyz.msws.supergive.utils.Lang;
@@ -56,14 +58,14 @@ public class LoadoutCommand extends BukkitCommand {
 			}
 			Player player = (Player) sender;
 
-			if (lm.getLoadouts().isEmpty()) {
+			if (lm.getLoadoutNames().isEmpty()) {
 				Lang.NO_LOADOUTS.send(sender);
 				return true;
 			}
 			MSG.tell(sender, " ");
 			Lang.LOADOUTS_PREFIX.send(sender);
 
-			for (String load : lm.getLoadouts()) {
+			for (String load : lm.getLoadoutNames()) {
 				Loadout l = lm.getLoadout(load);
 
 				ComponentBuilder give = new ComponentBuilder();
@@ -171,7 +173,7 @@ public class LoadoutCommand extends BukkitCommand {
 
 				items.put(player.getUniqueId(), player.getInventory().getContents());
 				player.getInventory().clear();
-				load.give(player);
+				load.give(new DynamicHolder((InventoryHolder) player));
 				Lang.LOADOUT_EDITING.send(sender, name);
 				loadouts.put(player.getUniqueId(), name);
 				break;
@@ -213,7 +215,7 @@ public class LoadoutCommand extends BukkitCommand {
 					Lang.LOADOUT_NOT_EDITING.send(sender);
 					return true;
 				}
-				Lang.LOADOUT_CANCELLED.send(sender, loadouts.get(player.getUniqueId()));
+				Lang.LOADOUT_CANCELED.send(sender, loadouts.get(player.getUniqueId()));
 				loadouts.remove(player.getUniqueId());
 				player.getInventory().setContents(items.get(player.getUniqueId()));
 				break;
@@ -238,7 +240,7 @@ public class LoadoutCommand extends BukkitCommand {
 			}
 		}
 		if (args.length == 2 && (args[0].equalsIgnoreCase("edit") || args[0].equalsIgnoreCase("delete"))) {
-			for (String s : lm.getLoadouts()) {
+			for (String s : lm.getLoadoutNames()) {
 				if (s.toLowerCase().startsWith(args[1].toLowerCase()))
 					result.add(s);
 			}

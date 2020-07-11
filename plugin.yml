@@ -20,6 +20,22 @@ permissions:
       supergive.command.give.inventory: true
       supergive.command.give.unsafeenchants: true
       supergive.command.give.*: true
+  supergive.selector.*:
+    descriptor: Access to all selectors
+    children:
+      supergive.selector.annotated.world: true
+      supergive.selector.annotated.worldplayers: true
+      supergive.selector.annotated.all: true
+      supergive.selector.annotated.players: true
+      supergive.selector.annotated.self: true
+      supergive.selector.annotated.gamemode: true
+      supergive.selector.annotated.entitytype: true
+      supergive.selector.permission: true
+      supergive.selector.radius: true
+      supergive.selector.vanilla: true
+      supergive.selector.world: true
+      supergive.selector.world.*: true
+  
   supergive.command.loadout:
     description: Access to the /loadout command
     children:

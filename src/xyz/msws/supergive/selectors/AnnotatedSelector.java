@@ -19,6 +19,12 @@ import xyz.msws.supergive.utils.Utils;
 
 public class AnnotatedSelector implements Selector {
 
+	private SuperGive plugin;
+
+	public AnnotatedSelector(SuperGive plugin) {
+		this.plugin = plugin;
+	}
+
 	@Override
 	public List<Entity> getEntities(String arg, CommandSender sender) {
 		if (!arg.startsWith("@"))
@@ -45,7 +51,7 @@ public class AnnotatedSelector implements Selector {
 				for (World w : Bukkit.getWorlds()) {
 					result.addAll(w.getEntities());
 				}
-				if (SuperGive.getPlugin().getConfig().getBoolean("AllSelectorWarning")) {
+				if (plugin.getConfig().getBoolean("AllSelectorWarning")) {
 					MSG.tell(sender, "&4&lSuperGive", MSG.BOLD + "&cThe &4@all &cSelector - &6Precaution");
 					MSG.tell(sender, "", "It is not recommended to use the &8@all&7 selector as it can");
 					MSG.tell(sender, "", "result in unintended consequences. &8@all &7targets ALL entities");
