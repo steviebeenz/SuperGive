@@ -46,8 +46,10 @@ public class PotionAttribute implements ItemAttribute {
 		PotionMeta potion = (PotionMeta) meta;
 		StringBuilder result = new StringBuilder();
 		for (PotionEffect effect : potion.getCustomEffects()) {
-			result.append(effect.getType().getName()).append(":").append(effect.getDuration()).append(":")
-					.append(effect.getAmplifier()).append(" ");
+			result.append(effect.getType().getName()).append(":").append(effect.getDuration());
+			if (effect.getAmplifier() != 0)
+				result.append(":").append(effect.getAmplifier());
+			result.append(" ");
 		}
 		return result.toString().trim();
 	}

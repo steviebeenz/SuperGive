@@ -53,7 +53,8 @@ public class Utils {
 	}
 
 	public static PotionEffectType getPotionEffect(String type) {
-		String result = getOption(type, PotionEffectType.values());
+		String result = getOption(type, Arrays.asList(PotionEffectType.values()).stream()
+				.map(potion -> potion.getName()).collect(Collectors.toList()));
 		return result == null ? null : PotionEffectType.getByName(result);
 	}
 
