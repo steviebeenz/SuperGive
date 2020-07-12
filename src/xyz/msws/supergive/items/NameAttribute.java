@@ -10,6 +10,12 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import xyz.msws.supergive.utils.MSG;
 
+/**
+ * Adds support for specifying the display name for an itemstack.
+ * 
+ * @author imodm
+ *
+ */
 public class NameAttribute implements ItemAttribute {
 
 	@Override
@@ -43,6 +49,11 @@ public class NameAttribute implements ItemAttribute {
 			return null;
 		}
 		return null;
+	}
+
+	@Override
+	public String getPermission() {
+		return "supergive.attribute.name";
 	}
 
 }

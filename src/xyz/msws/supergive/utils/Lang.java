@@ -3,6 +3,12 @@ package xyz.msws.supergive.utils;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 
+/**
+ * An enum to keep track of messages in messages.
+ * 
+ * @author imodm
+ *
+ */
 public enum Lang {
 	PREFIX("Prefix", "&9SuperGive>&7"),
 	MUST_BE_PLAYER("Command.Result.MustBePlayer", "%prefix% You must be a player to run this command."),
@@ -34,7 +40,8 @@ public enum Lang {
 	LOADOUT_NOT_EDITING("Command.Loadouts.NotEditing", "%prefix% You are not editing a loadout."),
 	LOADOUT_CANCELED("Command.Loadouts.Canceled", "%prefix% You canceled and reverted all changes to &e%s&7."),
 	INVALID_ARGUMENT("Command.Argument.Invalid.Generic", "A specified argument was invalid."),
-	NOTALL_SELECTOR("Command.Result.WarnPerm", "%prefix% You do not have access to all selectors, this may or not be intended.");
+	NOTALL_SELECTOR("Command.Result.WarnPerm",
+			"%prefix% You do not have access to all selectors, this may or not be intended.");
 
 	private String key;
 	private Object value, def;
@@ -61,6 +68,11 @@ public enum Lang {
 		return key;
 	}
 
+	/**
+	 * Overrides all current values from the specified config
+	 * 
+	 * @param lang
+	 */
 	public static void load(YamlConfiguration lang) {
 		for (Lang l : Lang.values()) {
 			l.setValue(lang.get(l.getKey(), l.getValue()));
@@ -71,6 +83,13 @@ public enum Lang {
 		MSG.tell(sender, value.toString().replace("%prefix%", PREFIX.getValue().toString()));
 	}
 
+	/**
+	 * Sends the message to the {@link CommandSender}, if there are placeholders
+	 * they will be formatted via {@link String#formatted(Object...)}.
+	 * 
+	 * @param sender
+	 * @param params
+	 */
 	public void send(CommandSender sender, Object... params) {
 		MSG.tell(sender, String.format(value.toString().replace("%prefix%", PREFIX.getValue().toString()), params));
 	}

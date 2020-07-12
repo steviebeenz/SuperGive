@@ -9,6 +9,12 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
+/**
+ * Used to allow more lenient name searching.
+ * 
+ * @author imodm
+ *
+ */
 public class NameSelector implements Selector {
 
 	@Override

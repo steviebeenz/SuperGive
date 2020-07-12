@@ -17,6 +17,13 @@ import xyz.msws.supergive.loadout.Loadout;
 import xyz.msws.supergive.loadout.LoadoutManager;
 import xyz.msws.supergive.utils.MSG;
 
+/**
+ * Adds support for specifying the contents of {@link Container} such as chests,
+ * droppers, hoppers, etc.
+ * 
+ * @author imodm
+ *
+ */
 public class ContentsAttribute implements ItemAttribute {
 
 	private SuperGive plugin;
@@ -107,6 +114,11 @@ public class ContentsAttribute implements ItemAttribute {
 				result.add("contents:#" + load);
 		}
 		return result;
+	}
+
+	@Override
+	public String getPermission() {
+		return "nope.attribute.contents";
 	}
 
 }

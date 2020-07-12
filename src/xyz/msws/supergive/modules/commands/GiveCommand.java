@@ -158,6 +158,17 @@ public class GiveCommand extends BukkitCommand {
 				}
 				loadout = new Loadout(((Container) target.getState()).getInventory().getContents());
 				break;
+			case "@enderchest":
+				if (!sender.hasPermission("supergive.command.give.enderchest")) {
+					Lang.NO_PERMISSION.send(sender, "supergive.command.give.enderchest");
+					return true;
+				}
+				if (!(sender instanceof Player)) {
+					Lang.MUST_BE_PLAYER.send(sender);
+					return true;
+				}
+				loadout = new Loadout(((Player) sender).getEnderChest().getContents());
+				break;
 			default:
 				if (args[1].startsWith("#")) {
 					loadout = plugin.getModule(LoadoutManager.class).matchLoadout(args[1].substring(1));
@@ -235,7 +246,6 @@ public class GiveCommand extends BukkitCommand {
 			for (String s : plugin.getSelector().tabComplete(current)) {
 				result.add(prev + s);
 			}
-//			result.addAll(plugin.getSelector().tabComplete(args[0]));
 		}
 
 		if (args.length == 2) {
@@ -244,7 +254,7 @@ public class GiveCommand extends BukkitCommand {
 					result.add(MSG.normalize(mat.getKey().getKey()));
 				}
 			}
-			for (String s : new String[] { "@hand", "@inventory", "@block" }) {
+			for (String s : new String[] { "@hand", "@inventory", "@block", "@enderchest" }) {
 				if (s.toLowerCase().startsWith(args[1].toLowerCase())) {
 					result.add(s);
 				}
@@ -262,6 +272,8 @@ public class GiveCommand extends BukkitCommand {
 		}
 		if (args.length > 2) {
 			for (ItemAttribute attr : plugin.getBuilder().getAttributes()) {
+				if (!sender.hasPermission(attr.getPermission()))
+					continue;
 				List<String> add = attr.tabComplete(args[args.length - 1], args, sender);
 				if (add == null || add.isEmpty())
 					continue;

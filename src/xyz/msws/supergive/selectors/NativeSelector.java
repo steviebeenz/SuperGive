@@ -8,6 +8,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 
 import xyz.msws.supergive.SuperGive;
+import xyz.msws.supergive.modules.AbstractModule;
+import xyz.msws.supergive.modules.ModulePriority;
 
 /**
  * Combines all current selectors into one
@@ -15,17 +17,12 @@ import xyz.msws.supergive.SuperGive;
  * @author imodm
  *
  */
-public class NativeSelector implements Selector {
+public class NativeSelector extends AbstractModule implements Selector {
 
 	private List<Selector> selectors = new ArrayList<>(); // List to keep order
 
 	public NativeSelector(SuperGive plugin) {
-		selectors.add(new VanillaSelector());
-		selectors.add(new AnnotatedSelector(plugin));
-		selectors.add(new PermissionSelector());
-		selectors.add(new NameSelector());
-		selectors.add(new RadiusSelector());
-		selectors.add(new WorldSelector());
+		super(plugin);
 	}
 
 	@Override
@@ -90,6 +87,26 @@ public class NativeSelector implements Selector {
 			result.addAll(sel.tabComplete(current));
 		}
 		return result;
+	}
+
+	@Override
+	public void initialize() {
+		selectors.add(new VanillaSelector());
+		selectors.add(new AnnotatedSelector(plugin));
+		selectors.add(new PermissionSelector());
+		selectors.add(new NameSelector());
+		selectors.add(new RadiusSelector());
+		selectors.add(new WorldSelector());
+	}
+
+	@Override
+	public void disable() {
+		selectors.clear();
+	}
+
+	@Override
+	public ModulePriority getPriority() {
+		return ModulePriority.MEDIUM;
 	}
 
 }

@@ -24,17 +24,37 @@ import xyz.msws.supergive.selectors.Selector;
 import xyz.msws.supergive.utils.Lang;
 
 public class SuperGive extends JavaPlugin {
-	private Set<AbstractModule> modules = new HashSet<>();
 
-	private ItemBuilder builder;
-	private Selector selector;
-	private YamlConfiguration lang, config;
+	private Set<AbstractModule> modules = new HashSet<>();
+	private YamlConfiguration lang;
 	private static SuperGive instance;
 
 	@Override
 	public void onEnable() {
 		instance = this;
 
+		prepareFiles();
+
+		ConfigurationSerialization.registerClass(Loadout.class, "Loadout");
+		modules.add(new ItemBuilder(this));
+		modules.add(new NativeSelector(this));
+		modules.add(new CommandModule(this));
+		modules.add(new LoadoutManager(this));
+
+		enableModules();
+
+		Lang.load(lang);
+	}
+
+	@Deprecated
+	public static SuperGive getPlugin() {
+		return instance;
+	}
+
+	/**
+	 * Ensure config and lang files exist
+	 */
+	private void prepareFiles() {
 		File conf = new File(this.getDataFolder(), "config.yml");
 		if (!conf.exists())
 			saveResource("config.yml", false);
@@ -51,44 +71,43 @@ public class SuperGive extends JavaPlugin {
 				e.printStackTrace();
 			}
 		}
-
-		ConfigurationSerialization.registerClass(Loadout.class, "Loadout");
-		this.builder = new ItemBuilder(this);
-		this.selector = new NativeSelector(this);
-		modules.add(new CommandModule(this));
-		modules.add(new LoadoutManager(this));
-
 		lang = YamlConfiguration.loadConfiguration(langFile);
-		config = YamlConfiguration.loadConfiguration(conf);
-
-		enableModules();
-
-		Lang.load(lang);
 	}
 
-	public static SuperGive getPlugin() {
-		return instance;
-	}
-
+	/**
+	 * Gets the language config, ideally should never have to be used. Use
+	 * {@link Lang} for future general access.
+	 * 
+	 * @return
+	 */
 	public YamlConfiguration getLang() {
 		return lang;
 	}
 
+	/**
+	 * Gets the plugin's item builder, this should generally be unmodified unless
+	 * affected by third-party plugins.
+	 * 
+	 * @return
+	 */
 	public ItemBuilder getBuilder() {
-		return builder;
+//		return builder;
+		return getModule(ItemBuilder.class);
 	}
 
+	/**
+	 * Gets the {@link NativeSelector} by default. This can also be overriden by
+	 * third-party plugins.
+	 * 
+	 * @return
+	 */
 	public Selector getSelector() {
-		return selector;
+		return getModule(NativeSelector.class);
 	}
 
 	@Override
 	public void onDisable() {
 		disableModules();
-	}
-
-	public YamlConfiguration getConfig() {
-		return config;
 	}
 
 	private void enableModules() {

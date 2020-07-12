@@ -5,30 +5,22 @@ import java.util.List;
 
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
 
 import xyz.msws.supergive.SuperGive;
+import xyz.msws.supergive.modules.AbstractModule;
+import xyz.msws.supergive.modules.ModulePriority;
 import xyz.msws.supergive.utils.MSG;
 
-public class ItemBuilder {
+public class ItemBuilder extends AbstractModule {
 
 	private List<ItemAttribute> attr = new ArrayList<>();
 
 	public ItemBuilder(SuperGive plugin) {
-		attr.add(new NameAttribute());
-		attr.add(new UnbreakableAttribute());
-		attr.add(new EnchantmentAttribute());
-		attr.add(new DamageAttribute());
-		attr.add(new OwnerAttribute());
-		attr.add(new LoreAttribute());
-		attr.add(new ItemFlagAttribute());
-		attr.add(new PotionAttribute());
-		attr.add(new PatternAttribute());
-		attr.add(new StoredEnchantmentAttribute());
-		attr.add(new EntityAttribute());
-		attr.add(new FireworkAttribute());
-		attr.add(new ContentsAttribute(plugin));
+		super(plugin);
 	}
 
 	public void addAttribute(ItemAttribute attr) {
@@ -40,13 +32,17 @@ public class ItemBuilder {
 	}
 
 	public ItemStack build(String args) {
+		return build(args, Bukkit.getConsoleSender());
+	}
+
+	public ItemStack build(String args, CommandSender sender) {
 		ItemStack base = null;
 		Material mat = null;
 
 		String matName = args.split(" ")[0];
 		int amo = 1;
 
-		List<String> attribuites = new ArrayList<>();
+		List<String> attributes = new ArrayList<>();
 
 		boolean amoSpecified = args.split(" ").length >= 2 && StringUtils.isNumeric(args.split(" ")[1]);
 
@@ -58,14 +54,14 @@ public class ItemBuilder {
 		for (String arg : (String[]) ArrayUtils.subarray(args.split(" "), amoSpecified ? 2 : 1,
 				args.split(" ").length)) {
 			if (!last.isEmpty() && arg.contains(":")) {
-				attribuites.add(last.trim());
+				attributes.add(last.trim());
 				last = arg + " ";
 				continue;
 			}
 			last += arg + " ";
 		}
 		if (last.contains(":"))
-			attribuites.add(last.trim());
+			attributes.add(last.trim());
 
 		// Reverse order
 		for (Material m : Material.values()) { // Check incomplete middles
@@ -92,9 +88,13 @@ public class ItemBuilder {
 
 		base = new ItemStack(mat, amo);
 
-		for (ItemAttribute at : attr)
-			for (String s : attribuites)
+		for (ItemAttribute at : attr) {
+			if (sender != null && !sender.hasPermission(at.getPermission()))
+				continue;
+			for (String s : attributes) {
 				base = at.modify(s, base);
+			}
+		}
 
 		return base;
 	}
@@ -144,5 +144,33 @@ public class ItemBuilder {
 				return true;
 		}
 		return false;
+	}
+
+	@Override
+	public void initialize() {
+		attr.add(new NameAttribute());
+		attr.add(new UnbreakableAttribute());
+		attr.add(new EnchantmentAttribute());
+		attr.add(new DamageAttribute());
+		attr.add(new OwnerAttribute());
+		attr.add(new LoreAttribute());
+		attr.add(new ItemFlagAttribute());
+		attr.add(new PotionAttribute());
+		attr.add(new PatternAttribute());
+		attr.add(new StoredEnchantmentAttribute());
+		attr.add(new EntityAttribute());
+		attr.add(new FireworkAttribute());
+		attr.add(new ContentsAttribute(plugin));
+		attr.add(new CommandAttribute());
+	}
+
+	@Override
+	public void disable() {
+		attr.clear();
+	}
+
+	@Override
+	public ModulePriority getPriority() {
+		return ModulePriority.HIGH;
 	}
 }

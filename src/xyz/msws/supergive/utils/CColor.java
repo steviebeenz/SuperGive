@@ -2,6 +2,12 @@ package xyz.msws.supergive.utils;
 
 import org.bukkit.Color;
 
+/**
+ * A wrapper to easily get {@link Color} from strings.
+ * 
+ * @author imodm
+ *
+ */
 public enum CColor {
 	AQUA(Color.AQUA), BLACK(Color.BLACK), BLUE(Color.BLUE), FUCHSIA(Color.FUCHSIA), GRAY(Color.GRAY),
 	GREEN(Color.GREEN), LIME(Color.LIME), MAROON(Color.MAROON), NAVY(Color.NAVY), OLIVE(Color.OLIVE),

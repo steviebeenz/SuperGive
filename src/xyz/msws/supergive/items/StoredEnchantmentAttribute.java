@@ -13,6 +13,12 @@ import org.bukkit.inventory.meta.ItemMeta;
 import xyz.msws.supergive.utils.MSG;
 import xyz.msws.supergive.utils.Utils;
 
+/**
+ * Adds support for adding enchantments to enchantedbooks.
+ * 
+ * @author imodm
+ *
+ */
 public class StoredEnchantmentAttribute implements ItemAttribute {
 
 	@Override
@@ -71,6 +77,11 @@ public class StoredEnchantmentAttribute implements ItemAttribute {
 			}
 		}
 		return result;
+	}
+
+	@Override
+	public String getPermission() {
+		return "supergive.attribute.stored";
 	}
 
 }

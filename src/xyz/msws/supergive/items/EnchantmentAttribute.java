@@ -12,6 +12,12 @@ import org.bukkit.inventory.ItemStack;
 import xyz.msws.supergive.utils.MSG;
 import xyz.msws.supergive.utils.Utils;
 
+/**
+ * Adds support on adding enchantments to all itemstacks.
+ * 
+ * @author imodm
+ *
+ */
 public class EnchantmentAttribute implements ItemAttribute {
 
 	@Override
@@ -43,7 +49,7 @@ public class EnchantmentAttribute implements ItemAttribute {
 
 	@Override
 	public List<String> tabComplete(String current, String[] args, CommandSender sender) {
-		if (current.length() < 3)
+		if (current.length() < 3) // Don't spam tab completions
 			return null;
 		List<String> result = new ArrayList<>();
 		for (Enchantment ench : Enchantment.values()) {
@@ -52,6 +58,11 @@ public class EnchantmentAttribute implements ItemAttribute {
 				result.add(MSG.normalize(n) + ":");
 		}
 		return result;
+	}
+
+	@Override
+	public String getPermission() {
+		return "supergive.attribute.enchantment";
 	}
 
 }

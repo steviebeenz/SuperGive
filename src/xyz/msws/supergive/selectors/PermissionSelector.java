@@ -8,6 +8,12 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 
+/**
+ * Used to filter the current players by the fact that they have a permission.
+ * 
+ * @author imodm
+ *
+ */
 public class PermissionSelector implements Selector {
 
 	@Override

@@ -8,6 +8,12 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+/**
+ * Adds support for making items unbreakable.
+ * 
+ * @author imodm
+ *
+ */
 public class UnbreakableAttribute implements ItemAttribute {
 
 	@Override
@@ -38,6 +44,11 @@ public class UnbreakableAttribute implements ItemAttribute {
 			return null;
 		}
 		return null;
+	}
+
+	@Override
+	public String getPermission() {
+		return "supergive.attribute.unbreakable";
 	}
 
 }

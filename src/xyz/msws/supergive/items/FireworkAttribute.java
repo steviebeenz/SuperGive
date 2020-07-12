@@ -15,6 +15,13 @@ import org.bukkit.inventory.meta.ItemMeta;
 import xyz.msws.supergive.utils.CColor;
 import xyz.msws.supergive.utils.MSG;
 
+/**
+ * Adds support for adding custom firework explosions. Proper format is
+ * firework:[color],[color],[flicker],[trail]
+ * 
+ * @author imodm
+ *
+ */
 public class FireworkAttribute implements ItemAttribute {
 
 	@Override
@@ -178,6 +185,11 @@ public class FireworkAttribute implements ItemAttribute {
 		}
 
 		return result;
+	}
+
+	@Override
+	public String getPermission() {
+		return "supergive.attribute.firework";
 	}
 
 }

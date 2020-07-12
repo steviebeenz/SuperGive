@@ -9,6 +9,12 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
+/**
+ * Allows for the vanilla selector.
+ * 
+ * @author imodm
+ *
+ */
 public class VanillaSelector implements Selector {
 
 	@Override

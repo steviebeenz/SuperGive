@@ -11,6 +11,13 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BannerMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 
+/**
+ * Adds support for customizing banners with patterns. Format:
+ * [patterntype]:[color]
+ * 
+ * @author imodm
+ *
+ */
 public class PatternAttribute implements ItemAttribute {
 
 	@Override
@@ -84,6 +91,11 @@ public class PatternAttribute implements ItemAttribute {
 			}
 		}
 		return result;
+	}
+
+	@Override
+	public String getPermission() {
+		return "supergive.attribute.pattern";
 	}
 
 }

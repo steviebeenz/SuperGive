@@ -10,6 +10,12 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
+/**
+ * Adds support for specifying the owner of a playerhead.
+ * 
+ * @author imodm
+ *
+ */
 public class OwnerAttribute implements ItemAttribute {
 
 	@SuppressWarnings("deprecation")
@@ -48,6 +54,11 @@ public class OwnerAttribute implements ItemAttribute {
 			return null;
 		}
 		return null;
+	}
+
+	@Override
+	public String getPermission() {
+		return "supergive.attribute.owner";
 	}
 
 }

@@ -13,6 +13,12 @@ import xyz.msws.supergive.modules.AbstractModule;
 import xyz.msws.supergive.modules.ModulePriority;
 import xyz.msws.supergive.utils.MSG;
 
+/**
+ * Managers and keeps track of {@link Loadout}.
+ * 
+ * @author imodm
+ *
+ */
 public class LoadoutManager extends AbstractModule {
 
 	private Map<String, Loadout> loads = new HashMap<>();

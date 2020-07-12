@@ -17,6 +17,12 @@ import xyz.msws.supergive.SuperGive;
 import xyz.msws.supergive.utils.MSG;
 import xyz.msws.supergive.utils.Utils;
 
+/**
+ * Used to select a specific entity group.
+ * 
+ * @author imodm
+ *
+ */
 public class AnnotatedSelector implements Selector {
 
 	private SuperGive plugin;

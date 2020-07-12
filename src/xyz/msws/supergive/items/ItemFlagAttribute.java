@@ -13,6 +13,12 @@ import org.bukkit.inventory.meta.ItemMeta;
 import xyz.msws.supergive.utils.MSG;
 import xyz.msws.supergive.utils.Utils;
 
+/**
+ * Adds support for adding item flags to all itemstacks.
+ * 
+ * @author imodm
+ *
+ */
 public class ItemFlagAttribute implements ItemAttribute {
 
 	@Override
@@ -57,6 +63,11 @@ public class ItemFlagAttribute implements ItemAttribute {
 		}
 
 		return result;
+	}
+
+	@Override
+	public String getPermission() {
+		return "supergive.attribute.itemflag";
 	}
 
 }

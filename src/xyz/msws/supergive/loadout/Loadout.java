@@ -23,8 +23,9 @@ import xyz.msws.supergive.utils.MSG;
  * Represents a loadout that contains numerous items
  * 
  * @author imodm
- *
+ * 
  */
+@SuppressWarnings("deprecation")
 public class Loadout implements ConfigurationSerializable {
 	private ItemStack[] items = null;
 	private boolean clear = false, smartEquip = true;

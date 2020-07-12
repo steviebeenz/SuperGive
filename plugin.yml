@@ -13,6 +13,7 @@ permissions:
       supergive.command.give.*: true
       supergive.command.generate: true
       supergive.command.reset: true
+      supergive.attribute.*: true
   supergive.command.give:
     description: Access to the /give command
     children:
@@ -35,7 +36,21 @@ permissions:
       supergive.selector.vanilla: true
       supergive.selector.world: true
       supergive.selector.world.*: true
-  
+  supergive.attribute.*:
+    descriptor: Access to all attributes
+    children:
+      supergive.attribute.contents: true
+      supergive.attribute.damage: true
+      supergive.attribute.enchantment: true
+      supergive.attribute.entity: true
+      supergive.attribute.itemflag: true
+      supergive.attribute.lore: true
+      supergive.attribute.name: true
+      supergive.attribute.owner: true
+      supergive.attribute.pattern: true
+      supergive.attribute.potion: true
+      supergive.attribute.stored: true
+      supergive.attribute.unbreakable: true
   supergive.command.loadout:
     description: Access to the /loadout command
     children:

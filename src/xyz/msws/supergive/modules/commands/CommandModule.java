@@ -21,7 +21,7 @@ import xyz.msws.supergive.modules.ModulePriority;
 import xyz.msws.supergive.utils.MSG;
 
 /**
- * Module that manages all commands, use to enable/disable commands specifically
+ * Module that manages all commands, use to enable/disable specific commands.
  * 
  * @author imodm
  *

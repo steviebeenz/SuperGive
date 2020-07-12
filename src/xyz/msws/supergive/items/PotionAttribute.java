@@ -13,6 +13,13 @@ import org.bukkit.potion.PotionEffectType;
 import xyz.msws.supergive.utils.MSG;
 import xyz.msws.supergive.utils.Utils;
 
+/**
+ * Adds support for specifying custom potion effects on a
+ * potion/splashpotion/lingeringpotion.
+ * 
+ * @author imodm
+ *
+ */
 public class PotionAttribute implements ItemAttribute {
 
 	@Override
@@ -66,6 +73,11 @@ public class PotionAttribute implements ItemAttribute {
 				result.add(MSG.normalize(type.getName()) + ":");
 		}
 		return result;
+	}
+
+	@Override
+	public String getPermission() {
+		return "supergive.attribute.potion";
 	}
 
 }

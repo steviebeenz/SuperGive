@@ -9,6 +9,12 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
+/**
+ * Filters out the entities selected via radius.
+ * 
+ * @author imodm
+ *
+ */
 public class RadiusSelector implements Selector {
 
 	@Override

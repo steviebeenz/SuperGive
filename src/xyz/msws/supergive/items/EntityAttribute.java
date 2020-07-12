@@ -14,6 +14,12 @@ import org.bukkit.inventory.meta.ItemMeta;
 import xyz.msws.supergive.utils.MSG;
 import xyz.msws.supergive.utils.Utils;
 
+/**
+ * Adds support for specifying the entity that a spawner spawns.
+ * 
+ * @author imodm
+ *
+ */
 public class EntityAttribute implements ItemAttribute {
 
 	@Override
@@ -72,6 +78,11 @@ public class EntityAttribute implements ItemAttribute {
 			}
 			return result;
 		}
+	}
+
+	@Override
+	public String getPermission() {
+		return "supergive.attribute.entity";
 	}
 
 }

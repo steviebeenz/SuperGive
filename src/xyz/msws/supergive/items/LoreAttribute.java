@@ -11,6 +11,12 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import xyz.msws.supergive.utils.MSG;
 
+/**
+ * Adds support for giving itemstacks lores.
+ * 
+ * @author imodm
+ *
+ */
 public class LoreAttribute implements ItemAttribute {
 
 	@Override
@@ -45,5 +51,10 @@ public class LoreAttribute implements ItemAttribute {
 			return null;
 		}
 		return null;
+	}
+
+	@Override
+	public String getPermission() {
+		return "supergive.attribute.lore";
 	}
 }

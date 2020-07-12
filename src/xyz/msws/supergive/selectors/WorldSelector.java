@@ -13,6 +13,12 @@ import org.bukkit.entity.Entity;
 import xyz.msws.supergive.utils.MSG;
 import xyz.msws.supergive.utils.Utils;
 
+/**
+ * Selects entities within a specific world.
+ * 
+ * @author imodm
+ *
+ */
 public class WorldSelector implements Selector {
 
 	@Override

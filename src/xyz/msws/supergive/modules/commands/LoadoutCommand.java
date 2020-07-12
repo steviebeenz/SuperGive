@@ -57,7 +57,6 @@ public class LoadoutCommand extends BukkitCommand {
 				return true;
 			}
 			Player player = (Player) sender;
-
 			if (lm.getLoadoutNames().isEmpty()) {
 				Lang.NO_LOADOUTS.send(sender);
 				return true;

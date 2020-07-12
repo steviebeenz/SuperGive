@@ -9,6 +9,12 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 
+/**
+ * Adds support for specifying damage on {@link Damageable} items.
+ * 
+ * @author imodm
+ *
+ */
 public class DamageAttribute implements ItemAttribute {
 
 	@Override
@@ -40,9 +46,14 @@ public class DamageAttribute implements ItemAttribute {
 
 	@Override
 	public List<String> tabComplete(String current, String[] args, CommandSender sender) {
-		if(!"damage:".startsWith(current.toLowerCase()))
+		if (!"damage:".startsWith(current.toLowerCase()))
 			return null;
 		return Arrays.asList("damage:");
+	}
+
+	@Override
+	public String getPermission() {
+		return "supergive.attribute.damage";
 	}
 
 }
