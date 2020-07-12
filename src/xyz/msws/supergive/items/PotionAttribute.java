@@ -52,6 +52,7 @@ public class PotionAttribute implements ItemAttribute {
 			return null;
 		PotionMeta potion = (PotionMeta) meta;
 		StringBuilder result = new StringBuilder();
+
 		for (PotionEffect effect : potion.getCustomEffects()) {
 			result.append(effect.getType().getName()).append(":").append(effect.getDuration());
 			if (effect.getAmplifier() != 0)
@@ -65,7 +66,7 @@ public class PotionAttribute implements ItemAttribute {
 	public List<String> tabComplete(String current, String[] args, CommandSender sender) {
 		if (args.length < 2)
 			return null;
-		if (!args[1].toLowerCase().contains("potion"))
+		if (!args[1].toLowerCase().contains("potion") && !args[1].toLowerCase().contains("arrow"))
 			return null;
 		List<String> result = new ArrayList<>();
 		for (PotionEffectType type : PotionEffectType.values()) {

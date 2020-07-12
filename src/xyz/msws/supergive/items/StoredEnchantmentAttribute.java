@@ -40,7 +40,7 @@ public class StoredEnchantmentAttribute implements ItemAttribute {
 		} catch (NumberFormatException e) {
 			MSG.warn("Invalid enchantment level for " + line);
 		}
-		book.addEnchant(ench, level, true);
+		book.addStoredEnchant(ench, level, true);
 		item.setItemMeta(book);
 		return item;
 	}
@@ -52,9 +52,11 @@ public class StoredEnchantmentAttribute implements ItemAttribute {
 			return null;
 		EnchantmentStorageMeta book = (EnchantmentStorageMeta) meta;
 		StringBuilder builder = new StringBuilder();
-		for (Entry<Enchantment, Integer> entry : book.getEnchants().entrySet()) {
-			builder.append("stored:" + MSG.normalize(entry.getKey().getKey().getKey())).append(":")
-					.append(entry.getValue()).append(" ");
+		for (Entry<Enchantment, Integer> entry : book.getStoredEnchants().entrySet()) {
+			builder.append("stored:" + MSG.normalize(entry.getKey().getKey().getKey()));
+			if (entry.getValue() != 1)
+				builder.append(":").append(entry.getValue());
+			builder.append(" ");
 		}
 		return builder.toString().trim();
 	}
@@ -69,10 +71,9 @@ public class StoredEnchantmentAttribute implements ItemAttribute {
 
 		if ("stored:".startsWith(current))
 			result.add("stored:");
-		if (args[args.length - 1].startsWith("stored:")) {
+		if (current.startsWith("stored:")) {
 			for (Enchantment ench : Enchantment.values()) {
-				if (("stored:" + MSG.normalize(ench.getKey().getKey()))
-						.startsWith(MSG.normalize(args[args.length - 1])))
+				if (("stored" + MSG.normalize(ench.getKey().getKey())).startsWith(MSG.normalize(current)))
 					result.add("stored:" + MSG.normalize(ench.getKey().getKey()) + ":");
 			}
 		}
