@@ -17,6 +17,12 @@ import xyz.msws.supergive.SuperGive;
 import xyz.msws.supergive.utils.Lang;
 import xyz.msws.supergive.utils.MSG;
 
+/**
+ * Tells the player the appropriate command to generate an item in their hand.
+ * 
+ * @author imodm
+ *
+ */
 public class GenerateCommand extends BukkitCommand {
 
 	private SuperGive plugin;

@@ -13,6 +13,12 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
 
+/**
+ * Global utility class for commonly used methods
+ * 
+ * @author imodm
+ *
+ */
 public class Utils {
 
 	public static GameMode getGameMode(String mode) {

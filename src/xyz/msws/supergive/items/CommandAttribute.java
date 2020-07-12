@@ -9,6 +9,12 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BlockStateMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 
+/**
+ * Adds ability to specify a command for commandblocks.
+ * 
+ * @author imodm
+ *
+ */
 public class CommandAttribute implements ItemAttribute {
 
 	@Override
@@ -47,6 +53,8 @@ public class CommandAttribute implements ItemAttribute {
 	@Override
 	public List<String> tabComplete(String current, String[] args, CommandSender sender) {
 		if (args.length < 2)
+			return null;
+		if (!args[1].toLowerCase().contains("command"))
 			return null;
 		if (!current.toLowerCase().startsWith("command:")) {
 			if ("command:".startsWith(current.toLowerCase()))

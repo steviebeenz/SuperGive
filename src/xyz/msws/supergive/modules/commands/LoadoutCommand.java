@@ -32,6 +32,12 @@ import xyz.msws.supergive.loadout.LoadoutManager;
 import xyz.msws.supergive.utils.Lang;
 import xyz.msws.supergive.utils.MSG;
 
+/**
+ * A command to allow for ingame modification of {@link Loadout}.
+ * 
+ * @author imodm
+ *
+ */
 public class LoadoutCommand extends BukkitCommand {
 
 	private SuperGive plugin;

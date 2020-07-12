@@ -100,6 +100,31 @@ Loadouts:
       firework:30|27|27 40|118|151 67|67|67 195|84|205,179|49|44 59|81|26 81|48|26
       195|84|205 235|136|68 240|240|240,CREEPER,flicker,trail,power3'
     Name: Fireworks
+  potions:
+    ==: xyz.msws.supergive.loadout.Loadout
+    Items:
+    - potion 1 name:&6&lSpeedy &e&lBoi soul_speed:20000 SPEED:20000:2 JUMP:40000:1
+      SLOW_FALLING:10000:4
+    - potion 1 name:&7&lMiner &8&lBoi FAST_DIGGING:50000 NIGHT_VISION:40000 SATURATION:60000
+      SLOW_FALLING:40000
+    - potion 1 name:&c&lFighty &4&lBoi soul_speed:60000 SPEED:60000:1 REGENERATION:80000:1
+      INCREASE_DAMAGE:160000:2 ABSORPTION:75000:3
+    - potion 1 name:&c&lFighty &4&lBoi soul_speed:60000 SPEED:60000:1 REGENERATION:80000:1
+      INCREASE_DAMAGE:160000:2 ABSORPTION:75000:3
+    Name: Potions
+  all:
+    ==: xyz.msws.supergive.loadout.Loadout
+    Items:
+    - 'diamondsword name:Cool Sword sharpness:1 flag:hideenchants unbreakable: lore:Dis is cool sword'
+    - 'fireworkrocket 1 firework:30|27|27 59|81|26,179|49|44 222|207|42 235|136|68,CREEPER,flicker,trail,power2'
+    - 'spawner entity:arrow'
+    - 'enchantedbook stored:sharpness:5 name:Cool Sharpness Book'
+    - 'GREEN_BANNER 1 bricks:cyan gradient_up:magenta globe:black'
+    - 'commandblock command:say I did it guys'
+    - 'potion 1 name:&6&lSpeedy &e&lBoi soul_speed:20000 SPEED:20000:2 JUMP:40000:1
+      SLOW_FALLING:10000:4'
+    - 'playerhead owner:MSWS name:Da Owner'
+    Name: All Example
 # SmartEquip is used by SuperGive to conveniently give items to players in the proper
 # equipment slot, or by preference. An item will try to go top down and if not found
 # it will replace the last slot. For exaple a bow will try to go in the 1 slot if it

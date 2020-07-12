@@ -9,6 +9,12 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
+/**
+ * Useful utility class for messages
+ * 
+ * @author imodm
+ *
+ */
 public class MSG {
 	public static ChatColor ALL = ChatColor.WHITE;
 	public static ChatColor PLAYER = ChatColor.YELLOW;
