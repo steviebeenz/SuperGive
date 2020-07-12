@@ -1,6 +1,7 @@
 package xyz.msws.supergive.items;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import org.apache.commons.lang.ArrayUtils;
@@ -10,9 +11,12 @@ import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
 
+import com.google.common.collect.Sets;
+
 import xyz.msws.supergive.SuperGive;
 import xyz.msws.supergive.modules.AbstractModule;
 import xyz.msws.supergive.modules.ModulePriority;
+import xyz.msws.supergive.utils.Lang;
 import xyz.msws.supergive.utils.MSG;
 
 public class ItemBuilder extends AbstractModule {
@@ -88,13 +92,25 @@ public class ItemBuilder extends AbstractModule {
 
 		base = new ItemStack(mat, amo);
 
+		List<String> unallowed = new ArrayList<>();
+
 		for (ItemAttribute at : attr) {
-			if (sender != null && !sender.hasPermission(at.getPermission()))
+			if (sender != null && !sender.hasPermission(at.getPermission())) {
+				for (String s : attributes) {
+					if (!base.equals(at.modify(s, base.clone()))) {
+						unallowed.add("&b" + s);
+						break;
+					}
+				}
 				continue;
+			}
 			for (String s : attributes) {
 				base = at.modify(s, base);
 			}
 		}
+
+		if (!unallowed.isEmpty())
+			Lang.NOTALL_BUILDER.send(sender, String.join("&3, ", unallowed));
 
 		return base;
 	}
@@ -138,12 +154,10 @@ public class ItemBuilder extends AbstractModule {
 		return result.toString().trim();
 	}
 
+	private static final HashSet<Character> vowels = Sets.newHashSet('a', 'e', 'i', 'o', 'u', 'A', 'E', 'I', 'O', 'U');
+
 	private boolean isVowel(char c) {
-		for (char v : new char[] { 'a', 'e', 'i', 'o', 'u', 'A', 'E', 'I', 'O', 'U' }) {
-			if (v == c)
-				return true;
-		}
-		return false;
+		return vowels.contains(c);
 	}
 
 	@Override

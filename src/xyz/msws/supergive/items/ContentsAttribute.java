@@ -118,7 +118,7 @@ public class ContentsAttribute implements ItemAttribute {
 
 	@Override
 	public String getPermission() {
-		return "nope.attribute.contents";
+		return "supergive.attribute.contents";
 	}
 
 }

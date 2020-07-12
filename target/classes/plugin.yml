@@ -51,6 +51,8 @@ permissions:
       supergive.attribute.potion: true
       supergive.attribute.stored: true
       supergive.attribute.unbreakable: true
+      supergive.attribute.contents: true
+      supergive.attribute.command: true
   supergive.command.loadout:
     description: Access to the /loadout command
     children:

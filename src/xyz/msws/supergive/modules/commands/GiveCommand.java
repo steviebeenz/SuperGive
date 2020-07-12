@@ -79,7 +79,7 @@ public class GiveCommand extends BukkitCommand {
 			}
 			YamlConfiguration c = new YamlConfiguration();
 			for (Lang l : Lang.values())
-				c.set(l.getKey(), l.getValue());
+				c.set(l.getKey(), l.getDefault());
 			plugin.saveResource("config.yml", true);
 			try {
 				c.save(new File(plugin.getDataFolder(), "lang.yml"));
@@ -95,8 +95,10 @@ public class GiveCommand extends BukkitCommand {
 		}
 
 		if (args.length < 2) {
-			if (args.length == 0)
+			if (args.length == 0) {
+				Lang.HELP_MESSAGE.send(sender);
 				Lang.SPECIFY_TARGET.send(sender);
+			}
 			Lang.SPECIFY_ITEM.send(sender);
 			return true;
 		}
@@ -114,7 +116,7 @@ public class GiveCommand extends BukkitCommand {
 			return true;
 		}
 
-		ItemStack item = builder.build(String.join(" ", (String[]) ArrayUtils.subarray(args, 1, args.length)));
+		ItemStack item = builder.build(String.join(" ", (String[]) ArrayUtils.subarray(args, 1, args.length)), sender);
 
 		Loadout loadout = null;
 		switch (args[1].toLowerCase()) {
@@ -280,7 +282,7 @@ public class GiveCommand extends BukkitCommand {
 		}
 		if (args.length > 2) {
 			for (ItemAttribute attr : plugin.getBuilder().getAttributes()) {
-				if (!sender.hasPermission(attr.getPermission()))
+				if (attr.getPermission() != null && !sender.hasPermission(attr.getPermission()))
 					continue;
 				List<String> add = attr.tabComplete(args[args.length - 1], args, sender);
 				if (add == null || add.isEmpty())
