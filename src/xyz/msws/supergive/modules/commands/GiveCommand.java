@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.lang.ArrayUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Container;
@@ -21,6 +22,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.RayTraceResult;
 
 import xyz.msws.supergive.SuperGive;
+import xyz.msws.supergive.events.CommandGiveItemEvent;
 import xyz.msws.supergive.items.ItemAttribute;
 import xyz.msws.supergive.items.ItemBuilder;
 import xyz.msws.supergive.loadout.DynamicHolder;
@@ -209,6 +211,12 @@ public class GiveCommand extends BukkitCommand {
 				Lang.NO_PERMISSION.send(sender, "supergive.command.give.unsafeenchants");
 				return true;
 			}
+		}
+
+		if (sender instanceof Player) {
+			CommandGiveItemEvent event = new CommandGiveItemEvent((Player) sender, targets, loadout);
+			Bukkit.getPluginManager().callEvent(event);
+			targets = event.getReceivers();
 		}
 
 		for (Entity ent : targets) {

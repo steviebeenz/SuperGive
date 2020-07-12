@@ -6,9 +6,12 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 
 import xyz.msws.supergive.SuperGive;
+import xyz.msws.supergive.events.LoadoutDeleteEvent;
+import xyz.msws.supergive.events.LoadoutLoadEvent;
 import xyz.msws.supergive.modules.AbstractModule;
 import xyz.msws.supergive.modules.ModulePriority;
 import xyz.msws.supergive.utils.MSG;
@@ -70,6 +73,9 @@ public class LoadoutManager extends AbstractModule {
 	}
 
 	public void addLoadout(String key, Loadout loadout) {
+		LoadoutLoadEvent event = new LoadoutLoadEvent(loadout);
+		Bukkit.getPluginManager().callEvent(event);
+		loadout = event.getLoadout();
 		loads.put(key, loadout);
 		ConfigurationSection section = plugin.getConfig().getConfigurationSection("Loadouts");
 		if (section == null) {
@@ -80,13 +86,21 @@ public class LoadoutManager extends AbstractModule {
 		plugin.saveConfig();
 	}
 
-	public void deleteLoadout(String key) {
+	public boolean deleteLoadout(String key) {
+		Loadout loadout = getLoadout(key);
+		if (loadout == null)
+			return false;
+		LoadoutDeleteEvent delete = new LoadoutDeleteEvent(loadout);
+		Bukkit.getPluginManager().callEvent(delete);
+		if (delete.isCancelled())
+			return false;
 		ConfigurationSection section = plugin.getConfig().getConfigurationSection("Loadouts");
 		if (section == null)
-			return;
+			return false;
 		section.set(key, null);
 		loads.remove(key);
 		plugin.saveConfig();
+		return true;
 	}
 
 	public Set<String> getLoadoutNames() {

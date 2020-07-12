@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.apache.commons.lang.ArrayUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.defaults.BukkitCommand;
@@ -23,6 +24,8 @@ import net.md_5.bungee.api.chat.ComponentBuilder.FormatRetention;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import xyz.msws.supergive.SuperGive;
+import xyz.msws.supergive.events.LoadoutCreateEvent;
+import xyz.msws.supergive.events.LoadoutEditEvent;
 import xyz.msws.supergive.loadout.DynamicHolder;
 import xyz.msws.supergive.loadout.Loadout;
 import xyz.msws.supergive.loadout.LoadoutManager;
@@ -115,6 +118,11 @@ public class LoadoutCommand extends BukkitCommand {
 
 				Loadout loadout = new Loadout(player.getInventory().getContents());
 				loadout.setName(name);
+
+				LoadoutCreateEvent event = new LoadoutCreateEvent(player, loadout);
+				Bukkit.getPluginManager().callEvent(event);
+				loadout = event.getLoadout();
+
 				lm.addLoadout(MSG.normalize(name), loadout);
 				Lang.LOADOUT_CREATED.send(sender, name);
 				for (ItemStack item : loadout.getItems()) {
@@ -141,7 +149,13 @@ public class LoadoutCommand extends BukkitCommand {
 						}
 						// End editing of loadout
 						Loadout newLoad = new Loadout(player.getInventory().getContents());
-						newLoad.setName(lm.getLoadout(loadouts.get(player.getUniqueId())).getName());
+						Loadout old = lm.getLoadout(loadouts.get(player.getUniqueId()));
+						newLoad.setName(old.getName());
+
+						LoadoutEditEvent editEvent = new LoadoutEditEvent(player, old, newLoad);
+						Bukkit.getPluginManager().callEvent(editEvent);
+						newLoad = editEvent.getLoadout();
+
 						lm.addLoadout(loadouts.get(player.getUniqueId()), newLoad);
 						player.getInventory().clear();
 						player.getInventory().setContents(items.get(player.getUniqueId()));
@@ -201,8 +215,11 @@ public class LoadoutCommand extends BukkitCommand {
 					Lang.NO_PERMISSION.send(sender, "supergive.command.loadout.delete." + name);
 					return true;
 				}
-				lm.deleteLoadout(name);
-				Lang.LOADOUT_DELETED.send(sender, name);
+				if (lm.deleteLoadout(name)) {
+					Lang.LOADOUT_DELETED.send(sender, name);
+				} else {
+					Lang.LOADOUT_NOT_DELETED.send(sender, name);
+				}
 				break;
 			case "cancel":
 				if (!(sender instanceof Player)) {

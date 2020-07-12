@@ -37,6 +37,7 @@ public enum Lang {
 	LOADOUT_EDITING("Command.Loadouts.NowEditing",
 			"%prefix% You are now editing the &e%s&7 loadout.\nTo edit the loadout, simply &lmodify your own inventory&7.\nType &e/loadout edit&7 to save the changes, or &c/loadout cancel&7 to cancel them."),
 	LOADOUT_DELETED("Command.Loadouts.Deleted", "%prefix% Successfully deleted the &c%s&7 loadout."),
+	LOADOUT_NOT_DELETED("command.Loadouts.NotDeleted", "%prefix% Unable to delete the &c%s&7 loadout."),
 	LOADOUT_NOT_EDITING("Command.Loadouts.NotEditing", "%prefix% You are not editing a loadout."),
 	LOADOUT_CANCELED("Command.Loadouts.Canceled", "%prefix% You canceled and reverted all changes to &e%s&7."),
 	INVALID_ARGUMENT("Command.Argument.Invalid.Generic", "A specified argument was invalid."),
