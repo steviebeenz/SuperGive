@@ -15,7 +15,7 @@ public class LoadoutDeleteEvent extends LoadoutEvent implements Cancellable {
 	private static final HandlerList handlers = new HandlerList();
 
 	private boolean cancel = false;
-	
+
 	public LoadoutDeleteEvent(Loadout loadout) {
 		super(loadout);
 	}

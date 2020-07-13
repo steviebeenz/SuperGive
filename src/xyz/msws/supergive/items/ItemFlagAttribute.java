@@ -55,7 +55,6 @@ public class ItemFlagAttribute implements ItemAttribute {
 			return null;
 		}
 		List<String> result = new ArrayList<>();
-
 		for (ItemFlag flag : ItemFlag.values()) {
 			String fs = MSG.normalize(flag.toString());
 			if (MSG.normalize(("flag:" + fs)).toLowerCase().startsWith(MSG.normalize(current))) {

@@ -140,7 +140,7 @@ public class ItemBuilder extends AbstractModule {
 			String mod = attr.get(i).humanReadable(item);
 			if (mod == null || mod.isEmpty())
 				continue;
-			
+
 			result.append(MSG.theme()).append(mod).append(" ");
 		}
 		return result.toString().trim();

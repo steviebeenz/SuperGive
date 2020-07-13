@@ -16,7 +16,7 @@ import org.bukkit.entity.Player;
  *
  */
 public class NameSelector implements Selector {
-	
+
 	@Override
 	public List<Entity> getEntities(String arg, CommandSender sender) {
 		try {

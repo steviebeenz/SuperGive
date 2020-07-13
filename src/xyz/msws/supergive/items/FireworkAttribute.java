@@ -117,8 +117,6 @@ public class FireworkAttribute implements ItemAttribute {
 				result.append(",trail");
 			result.append((i == fire.getEffectsSize() - 1) ? ",power" + fire.getPower() : " ");
 		}
-//		result.append("power").append(fire.getPower());
-
 		return result.toString();
 	}
 
@@ -131,7 +129,7 @@ public class FireworkAttribute implements ItemAttribute {
 
 		List<String> result = new ArrayList<>();
 
-		String c = current.split(",")[current.split(",").length - 1];
+		String c = current.split(",")[current.split(",").length - 1].trim();
 		String prev = current.substring(0, current.lastIndexOf(",") + 1);
 
 		boolean specified = false;

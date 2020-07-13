@@ -101,13 +101,13 @@ public class EnchantmentAttribute implements ItemAttribute {
 		try {
 			for (Entry<Enchantment, Integer> ench : item.getEnchantments().entrySet()) {
 				enchantments.add(MSG.theme() + ench.getKey().getKey().getKey()
-						+ (ench.getValue() == 1 ? "" : " "+ench.getValue()));
+						+ (ench.getValue() == 1 ? "" : " " + ench.getValue()));
 			}
 		} catch (NoSuchMethodError e) {
 			// 1.8 Compatibility
 			for (Entry<Enchantment, Integer> ench : item.getEnchantments().entrySet()) {
 				enchantments.add(
-						MSG.theme() + ench.getKey().getName() + (ench.getValue() == 1 ? "" : " "+ench.getValue()));
+						MSG.theme() + ench.getKey().getName() + (ench.getValue() == 1 ? "" : " " + ench.getValue()));
 			}
 		}
 
