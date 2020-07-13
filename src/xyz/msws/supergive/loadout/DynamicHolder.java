@@ -10,7 +10,8 @@ import org.bukkit.inventory.ItemStack;
 /**
  * @author imodm A simple wrapper to allow for simple giving of items to both
  *         {@link InventoryHolder} and {@link LivingEntity} in one class
- *
+ * 
+ * @deprecated Poorly handled.
  */
 public class DynamicHolder {
 	private InventoryHolder holder;
@@ -53,20 +54,21 @@ public class DynamicHolder {
 			living.getEquipment().clear();
 	}
 
-	@SuppressWarnings("deprecation")
 	public void addItem(ItemStack item) {
 		if (item == null || item.getType() == Material.AIR)
 			return;
-		if (holder != null)
-			holder.getInventory().addItem(item);
-		if (living != null) {
+		if (living != null) { // This is pretty messy however needed to account for players
+			if (living instanceof InventoryHolder) {
+				((InventoryHolder) living).getInventory().addItem(item);
+				return;
+			}
 			EntityEquipment eq = living.getEquipment();
 			if (eq.getItemInHand() == null || eq.getItemInHand().getType() == Material.AIR) {
-				eq.setItemInMainHand(item);
-			} else {
-				eq.setItemInOffHand(item);
+				eq.setItemInHand(item);
 			}
 		}
+		if (holder != null)
+			holder.getInventory().addItem(item);
 	}
 
 	public void addItem(ItemStack[] items) {

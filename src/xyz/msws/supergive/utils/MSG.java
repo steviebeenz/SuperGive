@@ -48,6 +48,16 @@ public class MSG {
 	public static ChatColor STRIKE = ChatColor.STRIKETHROUGH;
 	public static ChatColor RESET = ChatColor.RESET;
 
+	private static int index = 0;
+
+	private static ChatColor[] theme = new ChatColor[] { ChatColor.GREEN, ChatColor.DARK_GREEN, ChatColor.YELLOW,
+			ChatColor.GOLD, ChatColor.AQUA, ChatColor.BLUE };
+
+	public static ChatColor theme() {
+		index = (index + 1) % theme.length;
+		return theme[index];
+	}
+
 	public static void log(String message) {
 		Bukkit.getLogger().log(Level.INFO, message);
 	}

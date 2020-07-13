@@ -54,7 +54,7 @@ public class PotionAttribute implements ItemAttribute {
 		StringBuilder result = new StringBuilder();
 
 		for (PotionEffect effect : potion.getCustomEffects()) {
-			result.append(effect.getType().getName()).append(":").append(effect.getDuration());
+			result.append(MSG.normalize(effect.getType().getName())).append(":").append(effect.getDuration());
 			if (effect.getAmplifier() != 0)
 				result.append(":").append(effect.getAmplifier());
 			result.append(" ");
@@ -83,7 +83,22 @@ public class PotionAttribute implements ItemAttribute {
 
 	@Override
 	public String humanReadable(ItemStack item) {
-		return getModification(item);
+		ItemMeta meta = item.getItemMeta();
+		if (!(meta instanceof PotionMeta))
+			return null;
+		PotionMeta potion = (PotionMeta) meta;
+		if (!potion.hasCustomEffects() || potion.getCustomEffects().isEmpty())
+			return null;
+		StringBuilder result = new StringBuilder("with ");
+		for (PotionEffect effect : potion.getCustomEffects()) {
+			result.append(MSG.theme());
+			result.append(MSG.camelCase(effect.getType().getName())).append(" which lasts ")
+					.append(MSG.getTime(effect.getDuration() * 50));
+			if (effect.getAmplifier() != 0)
+				result.append(" ").append(effect.getAmplifier());
+			result.append(", ");
+		}
+		return result.toString().substring(0, result.length() - 2).trim();
 	}
 
 }

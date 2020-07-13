@@ -185,6 +185,8 @@ public class Loadout implements ConfigurationSerializable {
 		Iterator<ItemStack> it = items.iterator();
 		while (it.hasNext()) {
 			ItemStack item = it.next();
+			if (item == null || item.getType() == Material.AIR)
+				continue;
 			ItemStack result = giveSmartEquipSlot(dyn, item);
 			if (result == null)
 				continue;
@@ -243,43 +245,6 @@ public class Loadout implements ConfigurationSerializable {
 		return builder.toString().substring(0, builder.length() - 1);
 	}
 
-	private boolean isHelmet(Material mat) {
-		if (mat.toString().endsWith("_HELMET"))
-			return true;
-		return false;
-	}
-
-	private boolean isChestplate(Material mat) {
-		if (mat.toString().endsWith("_CHESTPLATE"))
-			return true;
-		return false;
-	}
-
-	private boolean isLegging(Material mat) {
-		if (mat.toString().endsWith("_LEGGINGS"))
-			return true;
-		return false;
-	}
-
-	private boolean isBoot(Material mat) {
-		if (mat.toString().endsWith("_BOOTS"))
-			return true;
-		return false;
-	}
-
-	@Deprecated
-	private EquipmentSlot getSlot(Material mat) {
-		if (isHelmet(mat))
-			return EquipmentSlot.HEAD;
-		if (isChestplate(mat))
-			return EquipmentSlot.CHEST;
-		if (isLegging(mat))
-			return EquipmentSlot.LEGS;
-		if (isBoot(mat))
-			return EquipmentSlot.FEET;
-		return null;
-	}
-
 	/**
 	 * Should return the item that was previously in the slot
 	 * 
@@ -302,22 +267,22 @@ public class Loadout implements ConfigurationSerializable {
 		}
 		for (int i = 0; i < options.size(); i++) {
 			String option = options.get(i);
-			if (dyn instanceof LivingEntity) {
-				EquipmentSlot slot;
+			if (dyn.isLivingEntity()) {
+				EquipmentSlot slot = null;
 				try {
 					slot = EquipmentSlot.valueOf(option.toUpperCase());
 				} catch (IllegalArgumentException e) {
-					slot = getSlot(item.getType());
 				}
 				if (slot != null) {
-					ItemStack old = ((LivingEntity) dyn).getEquipment().getItem(slot);
-					((LivingEntity) dyn).getEquipment().setItem(slot, item);
-					return old == null ? new ItemStack(Material.AIR) : old;
+					ItemStack old = dyn.getLiving().getEquipment().getItem(slot);
+					dyn.getLiving().getEquipment().setItem(slot, item);
+					return (old == null || old.getType() == Material.AIR) ? new ItemStack(Material.AIR) : old;
 				}
 			}
 
 			if (!dyn.hasInventory())
 				continue;
+
 			try {
 				int slot = Integer.parseInt(option);
 				if (slot >= dyn.getInventory().getSize())
@@ -328,7 +293,7 @@ public class Loadout implements ConfigurationSerializable {
 						continue;
 				}
 				dyn.getInventory().setItem(slot, item);
-				return old == null ? new ItemStack(Material.AIR) : old;
+				return (old == null || old.getType() == Material.AIR) ? new ItemStack(Material.AIR) : old;
 			} catch (NumberFormatException e) {
 			}
 		}

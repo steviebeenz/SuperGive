@@ -28,13 +28,21 @@ public interface ItemAttribute {
 	 * @return
 	 */
 	String getModification(ItemStack item);
-	
+
+	/**
+	 * Returns a string with similar purpose to
+	 * {@link ItemAttribute#getModification(ItemStack)} however should be more
+	 * user-friendly.
+	 * 
+	 * @param item
+	 * @return
+	 */
 	String humanReadable(ItemStack item);
 
 	/**
 	 * Returns the permission needed to use this attribute.
 	 * 
-	 * @return
+	 * @return The permission, may be null.
 	 */
 	String getPermission();
 

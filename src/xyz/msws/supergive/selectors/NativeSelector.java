@@ -10,6 +10,7 @@ import org.bukkit.entity.Entity;
 import xyz.msws.supergive.SuperGive;
 import xyz.msws.supergive.modules.AbstractModule;
 import xyz.msws.supergive.modules.ModulePriority;
+import xyz.msws.supergive.utils.MSG;
 
 /**
  * Combines all current selectors into one
@@ -66,11 +67,11 @@ public class NativeSelector extends AbstractModule implements Selector {
 					continue;
 				if (result.isEmpty()) {
 					result = res;
-					msg.append(sel.getDescriptor(string, sender));
+					msg.append(MSG.theme() + sel.getDescriptor(string, sender));
 				} else {
 					// Filter entities that aren't included
 					result = result.stream().filter(re -> res.contains(re)).collect(Collectors.toList());
-					msg.append(" that are ").append(sel.getDescriptor(string, sender));
+					msg.append(" &7that are ").append(MSG.theme() + sel.getDescriptor(string, sender));
 				}
 			}
 		}

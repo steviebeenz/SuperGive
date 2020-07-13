@@ -50,6 +50,7 @@ import xyz.msws.supergive.utils.Utils;
  * @author imodm
  *
  */
+@SuppressWarnings("deprecation")
 public class GiveCommand extends BukkitCommand {
 
 	private Selector selector;
@@ -67,7 +68,6 @@ public class GiveCommand extends BukkitCommand {
 		builder = plugin.getBuilder();
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public boolean execute(CommandSender sender, String commandLabel, String[] args) {
 		if (!testPermission(sender))
@@ -227,10 +227,10 @@ public class GiveCommand extends BukkitCommand {
 				((Player) ent).playSound(((Player) ent).getLocation(), Sounds.ITEM_PICKUP.bukkitSound(), 2, 1);
 			if (ent instanceof CommandSender)
 				Lang.GIVE_RECEIVER.send((CommandSender) ent, sender.getName(), loadout.humanReadable());
-			if (ent instanceof InventoryHolder) {
-				loadout.give(new DynamicHolder((InventoryHolder) ent));
-			} else if (ent instanceof LivingEntity) {
+			if (ent instanceof LivingEntity) {
 				loadout.give(new DynamicHolder((LivingEntity) ent));
+			} else if (ent instanceof InventoryHolder) {
+				loadout.give(new DynamicHolder((InventoryHolder) ent));
 			}
 		}
 

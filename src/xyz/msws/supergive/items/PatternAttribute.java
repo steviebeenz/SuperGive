@@ -1,5 +1,6 @@
 package xyz.msws.supergive.items;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,6 +11,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BannerMeta;
 import org.bukkit.inventory.meta.ItemMeta;
+
+import xyz.msws.supergive.utils.MSG;
+import xyz.msws.supergive.utils.Utils;
 
 /**
  * Adds support for customizing banners with patterns. Format:
@@ -42,7 +46,12 @@ public class PatternAttribute implements ItemAttribute {
 		try {
 			color = DyeColor.valueOf(line.split(":")[1].toUpperCase());
 		} catch (IllegalArgumentException e) {
-			return item;
+			org.bukkit.Color c = Utils.getColor(line.split(":")[1]);
+			if (c == null)
+				return item;
+			color = DyeColor.getByColor(c);
+			if (color == null)
+				return item;
 		}
 
 		Pattern pattern = new Pattern(color, type);
@@ -67,9 +76,8 @@ public class PatternAttribute implements ItemAttribute {
 
 	@Override
 	public List<String> tabComplete(String current, String[] args, CommandSender sender) {
-		if (args.length < 2) {
+		if (args.length < 2)
 			return null;
-		}
 
 		if (!args[1].toLowerCase().contains("banner"))
 			return null;
@@ -100,7 +108,24 @@ public class PatternAttribute implements ItemAttribute {
 
 	@Override
 	public String humanReadable(ItemStack item) {
-		return getModification(item);
+		ItemMeta meta = item.getItemMeta();
+		if (!(meta instanceof BannerMeta))
+			return null;
+		BannerMeta banner = (BannerMeta) meta;
+		StringBuilder result = new StringBuilder();
+		try {
+			for (Pattern patt : banner.getPatterns()) {
+				result.append(net.md_5.bungee.api.ChatColor.of(new Color(patt.getColor().getColor().asRGB()))
+						+ patt.getPattern().toString().toLowerCase()).append(" ");
+			}
+		} catch (NoSuchMethodError e) {
+			for (Pattern patt : banner.getPatterns()) {
+				result.append(MSG.theme() + patt.getPattern().toString().toLowerCase()).append(":")
+						.append(patt.getColor().toString().toLowerCase()).append(" ");
+			}
+		}
+
+		return result.toString().trim();
 	}
 
 }

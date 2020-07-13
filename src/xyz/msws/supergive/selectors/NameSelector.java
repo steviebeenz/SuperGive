@@ -16,12 +16,21 @@ import org.bukkit.entity.Player;
  *
  */
 public class NameSelector implements Selector {
-
+	
 	@Override
 	public List<Entity> getEntities(String arg, CommandSender sender) {
-		for (Player p : Bukkit.getOnlinePlayers()) { // Avoid clashing with VanillaSelector
-			if (p.getName().equalsIgnoreCase(arg))
-				return Arrays.asList(p);
+		try {
+			Bukkit.class.getMethod("selectEntities", CommandSender.class, String.class);
+			for (Player p : Bukkit.getOnlinePlayers()) {
+				if (p.getName().equalsIgnoreCase(arg))
+					return null; // Avoid clashing with VanillaSelector to prevent duplicate "that are"
+			}
+		} catch (NoSuchMethodError | NoSuchMethodException | SecurityException e) {
+			// 1.8 Compatibility
+			for (Player p : Bukkit.getOnlinePlayers()) {
+				if (p.getName().equalsIgnoreCase(arg))
+					return Arrays.asList(p); // VanillaSelector doesn't work so we can add it
+			}
 		}
 
 		for (Player p : Bukkit.getOnlinePlayers()) {

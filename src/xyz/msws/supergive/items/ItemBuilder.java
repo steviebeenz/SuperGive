@@ -141,7 +141,7 @@ public class ItemBuilder extends AbstractModule {
 			if (mod == null || mod.isEmpty())
 				continue;
 			
-			result.append(i % 3 == 0 ? "&b" : i % 3 == 1 ? "&a" : "&9").append(mod).append(" ");
+			result.append(MSG.theme()).append(mod).append(" ");
 		}
 		return result.toString().trim();
 	}
@@ -168,6 +168,7 @@ public class ItemBuilder extends AbstractModule {
 		attr.add(new FireworkAttribute());
 		attr.add(new ContentsAttribute(plugin));
 		attr.add(new CommandAttribute());
+		attr.add(new VanillaAttribute());
 	}
 
 	@Override

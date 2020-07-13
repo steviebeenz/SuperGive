@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
+import org.bukkit.Color;
 import org.bukkit.GameMode;
 import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
@@ -20,6 +21,27 @@ import org.bukkit.potion.PotionEffectType;
  *
  */
 public class Utils {
+
+	public static Color getColor(String line) {
+		if (!line.contains("|")) {
+			try {
+				CColor custom = null;
+				custom = CColor.valueOf(line.toUpperCase());
+				return custom.bukkit();
+			} catch (IllegalArgumentException e) {
+			}
+
+		}
+		try {
+			String rs = line.split("\\|")[0];
+			String gs = line.split("\\|")[1];
+			String bs = line.split("\\|")[2];
+			return Color.fromRGB(Integer.parseInt(rs), Integer.parseInt(gs), Integer.parseInt(bs));
+		} catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
+			return null;
+		}
+
+	}
 
 	public static GameMode getGameMode(String mode) {
 		String result = getOption(mode, GameMode.values());
@@ -45,15 +67,15 @@ public class Utils {
 	public static String getOption(String key, List<? extends Object> options) {
 		List<String> values = options.stream().map(m -> m.toString()).collect(Collectors.toList());
 		for (String s : values) {
-			if (MSG.normalize(key).equals(MSG.normalize(s)))
+			if (MSG.normalize(s).equals(MSG.normalize(key)))
 				return s;
 		}
 		for (String s : values) {
-			if (MSG.normalize(key).startsWith(MSG.normalize(s)))
+			if (MSG.normalize(s).startsWith(MSG.normalize(key)))
 				return s;
 		}
 		for (String s : values) {
-			if (MSG.normalize(key).contains(MSG.normalize(s)))
+			if (MSG.normalize(s).contains(MSG.normalize(key)))
 				return s;
 		}
 		return null;

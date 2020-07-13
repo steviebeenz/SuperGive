@@ -24,6 +24,8 @@ public class EnchantmentAttribute implements ItemAttribute {
 	public ItemStack modify(String line, ItemStack item) {
 		if (!line.contains(":"))
 			return item;
+		if (line.split(":")[0].equalsIgnoreCase("speed"))
+			return item;
 		Enchantment ench = Utils.getEnchantment(line.split(":")[0]);
 		if (ench == null) {
 			return item;
@@ -90,26 +92,26 @@ public class EnchantmentAttribute implements ItemAttribute {
 	@SuppressWarnings("deprecation")
 	@Override
 	public String humanReadable(ItemStack item) {
-		// TODO Auto-generated method stub
 		if (item == null || item.getType() == Material.AIR)
 			return null;
 		if (item.getEnchantments().isEmpty())
 			return null;
 		List<String> enchantments = new ArrayList<>();
-		String result = "&6enchanted with &a";
+		String result = "&6enchanted with ";
 		try {
 			for (Entry<Enchantment, Integer> ench : item.getEnchantments().entrySet()) {
-//				result.append(ench.getKey().getKey().getKey()).append(" ").append(ench.getValue()).append(", ");
-				enchantments.add(ench.getKey().getKey().getKey() + (ench.getValue() == 1 ? "" : ench.getValue() + ""));
+				enchantments.add(MSG.theme() + ench.getKey().getKey().getKey()
+						+ (ench.getValue() == 1 ? "" : " "+ench.getValue()));
 			}
 		} catch (NoSuchMethodError e) {
 			// 1.8 Compatibility
 			for (Entry<Enchantment, Integer> ench : item.getEnchantments().entrySet()) {
-				enchantments.add(ench.getKey().getName() + (ench.getValue() == 1 ? "" : ench.getValue() + ""));
+				enchantments.add(
+						MSG.theme() + ench.getKey().getName() + (ench.getValue() == 1 ? "" : " "+ench.getValue()));
 			}
 		}
 
-		result = result + String.join(" &7and &a", enchantments);
+		result = result + String.join(" &7and ", enchantments);
 		return result;
 	}
 

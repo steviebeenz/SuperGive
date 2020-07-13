@@ -14,6 +14,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import xyz.msws.supergive.utils.CColor;
 import xyz.msws.supergive.utils.MSG;
+import xyz.msws.supergive.utils.Utils;
 
 /**
  * Adds support for adding custom firework explosions. Proper format is
@@ -38,18 +39,18 @@ public class FireworkAttribute implements ItemAttribute {
 
 		List<Color> colors = new ArrayList<>();
 		for (String c : cString.split(" ")) {
-			Color col = getColor(c);
+			Color col = Utils.getColor(c);
 			if (col != null)
-				colors.add(getColor(c));
+				colors.add(Utils.getColor(c));
 		}
 
 		FireworkEffect.Builder effect = FireworkEffect.builder().withColor(colors);
 		if (fString != null) {
 			colors = new ArrayList<>();
 			for (String c : fString.split(" ")) {
-				Color col = getColor(c);
+				Color col = Utils.getColor(c);
 				if (col != null)
-					colors.add(getColor(c));
+					colors.add(Utils.getColor(c));
 			}
 			effect.withFade(colors);
 		}
@@ -81,27 +82,6 @@ public class FireworkAttribute implements ItemAttribute {
 		fire.addEffect(effect.build());
 		item.setItemMeta(fire);
 		return item;
-	}
-
-	private Color getColor(String line) {
-		if (!line.contains("|")) {
-			try {
-				CColor custom = null;
-				custom = CColor.valueOf(line.toUpperCase());
-				return custom.bukkit();
-			} catch (IllegalArgumentException e) {
-			}
-
-		}
-		try {
-			String rs = line.split("\\|")[0];
-			String gs = line.split("\\|")[1];
-			String bs = line.split("\\|")[2];
-			return Color.fromRGB(Integer.parseInt(rs), Integer.parseInt(gs), Integer.parseInt(bs));
-		} catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
-			return null;
-		}
-
 	}
 
 	private String colorToString(Color c) {
