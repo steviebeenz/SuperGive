@@ -41,11 +41,11 @@ public enum Lang {
 	LOADOUT_NOT_EDITING("Command.Loadouts.NotEditing", "%prefix% You are not editing a loadout."),
 	LOADOUT_CANCELED("Command.Loadouts.Canceled", "%prefix% You canceled and reverted all changes to &e%s&7."),
 	INVALID_ARGUMENT("Command.Argument.Invalid.Generic", "A specified argument was invalid."),
-	NOTALL_SELECTOR("Command.Result.WarnPerm",
+	NOTALL_SELECTOR("Command.Result.Warn.SelectorPerms",
 			"%prefix% You do not have access to all selectors, this may or may not be intended."),
 	HELP_MESSAGE("Command.Help",
 			"%prefix% &7SuperGive &7Format: &6/give &e[target] &a[item] &3<modifiers>\n&eTab Completion &7is a very useful function, it will show the possibilities for each item.\nA few possible valid commands would be:\n&6/give &a@self &ediamondsword\n&6/give &a@players &estone 32\n&6/give &a@zombie &estick &3knockback:3\n&6/give &a@world,perm:rank.staff &efireworkrocket &3firework:red,blue,flicker"),
-	NOTALL_BUILDER("Command.Result.WarnAttribute",
+	NOTALL_BUILDER("Command.Result.Warn.AttributePerms",
 			"%prefix% &cYou lacked permissions for these modifications: &b%s&7.");
 
 	private String key;

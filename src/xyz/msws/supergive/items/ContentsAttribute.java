@@ -2,7 +2,10 @@ package xyz.msws.supergive.items;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.bukkit.block.BlockState;
@@ -50,6 +53,10 @@ public class ContentsAttribute implements ItemAttribute {
 			MSG.warn("Unknown loadout: " + line.substring("contents:#".length()).replace(" ", ""));
 			return item;
 		}
+
+		if (ld.getItems().length > container.getInventory().getSize())
+			return item;
+
 		container.getInventory().setContents(ld.getItems());
 
 		((BlockStateMeta) meta).setBlockState(container);
@@ -95,9 +102,29 @@ public class ContentsAttribute implements ItemAttribute {
 		return true;
 	}
 
+	private static Set<String> allowed = new HashSet<>(
+			Arrays.asList(new String[] { "chest", "opper", "dispenser", "furnace", "box", "barrel" }));
+
+	private static Map<String, Boolean> cache = new HashMap<>();
+
+	private static boolean allow(String key) {
+		if (cache.containsKey(key))
+			return cache.get(key);
+		for (String s : allowed) {
+			if (MSG.normalize(key.toString()).contains(s)) {
+				cache.put(key, true);
+				return true;
+			}
+		}
+		cache.put(key, false);
+		return false;
+	}
+
 	@Override
 	public List<String> tabComplete(String current, String[] args, CommandSender sender) {
 		if (args.length < 2)
+			return null;
+		if (!allow(args[1]))
 			return null;
 		if (!current.toLowerCase().startsWith("contents:#")) {
 			if ("contents:#".startsWith(current.toLowerCase()))
