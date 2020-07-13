@@ -25,6 +25,8 @@ public class VanillaSelector implements Selector {
 			return Bukkit.selectEntities(sender, arg);
 		} catch (IllegalArgumentException e) {
 			return null;
+		} catch (NoSuchMethodError e) {
+			return null;
 		}
 	}
 

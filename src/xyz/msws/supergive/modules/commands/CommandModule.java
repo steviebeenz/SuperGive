@@ -76,14 +76,17 @@ public class CommandModule extends AbstractModule implements Listener {
 
 	public void enableCommands(List<Command> commands) {
 		commands.forEach(c -> enableCommand(c));
-
 	}
 
 	public void enableCommand(Command command) {
 		map.register(plugin.getName(), command);
 		commands.put(command, true);
-		for (Player p : Bukkit.getOnlinePlayers()) {
-			p.updateCommands();
+		try {
+			for (Player p : Bukkit.getOnlinePlayers()) {
+				p.updateCommands();
+			}
+		} catch (NoSuchMethodError e) {
+
 		}
 	}
 
@@ -102,8 +105,12 @@ public class CommandModule extends AbstractModule implements Listener {
 		}
 
 		commands.put(cmd, false);
-		for (Player p : Bukkit.getOnlinePlayers()) {
-			p.updateCommands();
+		try {
+			for (Player p : Bukkit.getOnlinePlayers()) {
+				p.updateCommands();
+			}
+		} catch (NoSuchMethodError e) {
+
 		}
 	}
 

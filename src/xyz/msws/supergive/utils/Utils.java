@@ -32,7 +32,7 @@ public class Utils {
 	}
 
 	public static PotionEffectType getPotionEffect(String type) {
-		String result = getOption(type, Arrays.asList(PotionEffectType.values()).stream()
+		String result = getOption(type, Arrays.asList(PotionEffectType.values()).stream().filter(p -> p != null)
 				.map(potion -> potion.getName()).collect(Collectors.toList()));
 		return result == null ? null : PotionEffectType.getByName(result);
 	}
@@ -42,7 +42,7 @@ public class Utils {
 		return result == null ? null : ItemFlag.valueOf(result);
 	}
 
-	public static String getOption(String key, List<Object> options) {
+	public static String getOption(String key, List<? extends Object> options) {
 		List<String> values = options.stream().map(m -> m.toString()).collect(Collectors.toList());
 		for (String s : values) {
 			if (MSG.normalize(key).equals(MSG.normalize(s)))
@@ -63,6 +63,7 @@ public class Utils {
 		return getOption(key, Arrays.asList(options));
 	}
 
+	@SuppressWarnings("deprecation")
 	public static Enchantment getEnchantment(String ench) {
 		try {
 			return Enchantment.getByKey(NamespacedKey.minecraft(ench.toUpperCase()));
@@ -77,6 +78,19 @@ public class Utils {
 			}
 			for (Enchantment en : Enchantment.values()) {
 				if (MSG.normalize(en.getKey().getKey()).contains(MSG.normalize(ench)))
+					return en;
+			}
+		} catch (NoClassDefFoundError e) {
+			for (Enchantment en : Enchantment.values()) {
+				if (MSG.normalize(en.getName()).equalsIgnoreCase(MSG.normalize(ench)))
+					return en;
+			}
+			for (Enchantment en : Enchantment.values()) {
+				if (MSG.normalize(en.getName()).startsWith(MSG.normalize(ench)))
+					return en;
+			}
+			for (Enchantment en : Enchantment.values()) {
+				if (MSG.normalize(en.getName()).contains(MSG.normalize(ench)))
 					return en;
 			}
 		}

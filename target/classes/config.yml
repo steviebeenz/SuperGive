@@ -57,15 +57,15 @@ Loadouts:
   banners:
     ==: Loadout
     Items:
-    - 'WHITE_BANNER 1 triangle_bottom:black triangles_bottom:white triangle_top:black triangles_top:white rhombus_middle:black circle_middle:light_blue'
-    - 'LIGHT_BLUE_BANNER 1 triangle_top:black rhombus_middle:black triangle_bottom:black curly_border:black flower:light_blue circle_middle:blue'
-    - 'GREEN_BANNER 1 bricks:cyan gradient_up:magenta globe:black'
-    - 'BLACK_BANNER 1 gradient_up:cyan rhombus_middle:black curly_border:black border:black'
-    - 'BLACK_BANNER 1 stripe_middle:white stripe_center:white border:white triangles_top:white triangles_bottom:white straight_cross:black'
-    - 'PURPLE_BANNER 1 stripe_small:magenta bricks:purple curly_border:magenta border:black'
-    - 'YELLOW_BANNER 1 rhombus_middle:green mojang:light_blue border:black stripe_bottom:black stripe_top:black gradient_up:black'
-    - 'WHITE_BANNER 1 stripe_small:purple stripe_left:black stripe_right:black square_bottom_left:black square_bottom_right:black triangles_bottom:black'
-    - 'BLUE_BANNER 1 mojang:light_gray gradient_up:light_blue gradient:black triangles_bottom:black circle_middle:white square_bottom_left:black'
+    - 'banner base:white triangle_bottom:black triangles_bottom:white triangle_top:black triangles_top:white rhombus_middle:black circle_middle:light_blue'
+    - 'banner base:lightblue triangle_top:black rhombus_middle:black triangle_bottom:black curly_border:black flower:light_blue circle_middle:blue'
+    - 'banner banner:green bricks:cyan gradient_up:magenta globe:black'
+    - 'banner base:black gradient_up:cyan rhombus_middle:black curly_border:black border:black'
+    - 'banner base:black stripe_middle:white stripe_center:white border:white triangles_top:white triangles_bottom:white straight_cross:black'
+    - 'banner base:purple stripe_small:magenta bricks:purple curly_border:magenta border:black'
+    - 'banner base:yellow rhombus_middle:green mojang:light_blue border:black stripe_bottom:black stripe_top:black gradient_up:black'
+    - 'banner base:white stripe_small:purple stripe_left:black stripe_right:black square_bottom_left:black square_bottom_right:black triangles_bottom:black'
+    - 'banner base:blue mojang:light_gray gradient_up:light_blue gradient:black triangles_bottom:black circle_middle:white square_bottom_left:black'
     Name: 'Banners'
   spawners:
     ==: Loadout
@@ -83,16 +83,16 @@ Loadouts:
   fireworks:
     ==: Loadout
     Items:
-    - 'fireworkrocket 1 firework:179|49|44 240|240|240,102|137|211,BALL_LARGE,flicker,trail
+    - 'firework 1 firework:179|49|44 240|240|240,102|137|211,BALL_LARGE,flicker,trail
       firework:222|207|42 240|240|240,30|27|27 37|49|146,BALL,flicker,trail firework:179|49|44
       59|81|26 222|207|42 235|136|68,37|49|146 216|129|152 102|137|211 195|84|205,STAR,power3'
-    - 'fireworkrocket 1 firework:30|27|27 171|171|171,179|49|44 37|49|146 240|240|240,BALL,flicker,trail
+    - 'firework 1 firework:30|27|27 171|171|171,179|49|44 37|49|146 240|240|240,BALL,flicker,trail
       firework:222|207|42 235|136|68,179|49|44 102|137|211 240|240|240,BURST,flicker,trail,power1'
-    - 'fireworkrocket 1 firework:30|27|27 59|81|26,179|49|44 222|207|42 235|136|68,CREEPER,flicker,trail,power2'
-    - 'fireworkrocket 1 firework:30|27|27 171|171|171 240|240|240,222|207|42 102|137|211
+    - 'firework 1 firework:30|27|27 59|81|26,179|49|44 222|207|42 235|136|68,CREEPER,flicker,trail,power2'
+    - 'firework 1 firework:30|27|27 171|171|171 240|240|240,222|207|42 102|137|211
       235|136|68,BURST,flicker,trail firework:179|49|44 102|137|211 240|240|240,37|49|146
       171|171|171 67|67|67,BURST,power3'
-    - 'fireworkrocket 1 firework:179|49|44 81|48|26 171|171|171 67|67|67 216|129|152
+    - 'firework 1 firework:179|49|44 81|48|26 171|171|171 67|67|67 216|129|152
       240|240|240,37|49|146 40|118|151 67|67|67 222|207|42 102|137|211,BALL_LARGE,flicker,trail
       firework:37|49|146 171|171|171 222|207|42 102|137|211,30|27|27 59|81|26 81|48|26
       216|129|152 65|205|52 195|84|205 240|240|240,BALL,flicker,trail firework:37|49|146
@@ -109,14 +109,12 @@ Loadouts:
       SLOW_FALLING:40000
     - potion 1 name:&c&lFighty &4&lBoi soul_speed:60000 SPEED:60000:1 REGENERATION:80000:1
       INCREASE_DAMAGE:160000:2 ABSORPTION:75000:3
-    - potion 1 name:&c&lFighty &4&lBoi soul_speed:60000 SPEED:60000:1 REGENERATION:80000:1
-      INCREASE_DAMAGE:160000:2 ABSORPTION:75000:3
     Name: Potions
   all:
     ==: Loadout
     Items:
     - 'diamondsword name:Cool Sword sharpness:1 flag:hideenchants unbreakable: lore:Dis is cool sword'
-    - 'fireworkrocket 1 firework:30|27|27 59|81|26,179|49|44 222|207|42 235|136|68,CREEPER,flicker,trail,power2'
+    - 'firework 1 firework:30|27|27 59|81|26,179|49|44 222|207|42 235|136|68,CREEPER,flicker,trail,power2'
     - 'spawner entity:arrow'
     - 'enchantedbook stored:sharpness:5 name:Cool Sharpness Book'
     - 'GREEN_BANNER 1 bricks:cyan gradient_up:magenta globe:black'

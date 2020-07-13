@@ -67,6 +67,7 @@ public class GiveCommand extends BukkitCommand {
 		builder = plugin.getBuilder();
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public boolean execute(CommandSender sender, String commandLabel, String[] args) {
 		if (!testPermission(sender))
@@ -126,8 +127,8 @@ public class GiveCommand extends BukkitCommand {
 					return true;
 				}
 				if (sender instanceof Player) {
-					loadout = new Loadout(((Player) sender).getInventory().getItemInMainHand());
-					item = ((Player) sender).getInventory().getItemInMainHand();
+					loadout = new Loadout(((Player) sender).getInventory().getItemInHand());
+					item = ((Player) sender).getInventory().getItemInHand();
 				}
 				break;
 			case "@inventory":
@@ -259,11 +260,20 @@ public class GiveCommand extends BukkitCommand {
 		}
 
 		if (args.length == 2) {
-			for (Material mat : Material.values()) {
-				if (MSG.normalize(mat.getKey().getKey()).startsWith(args[1].toLowerCase())) {
-					result.add(MSG.normalize(mat.getKey().getKey()));
+			try {
+				for (Material mat : Material.values()) {
+					if (MSG.normalize(mat.getKey().getKey()).startsWith(args[1].toLowerCase())) {
+						result.add(MSG.normalize(mat.getKey().getKey()));
+					}
+				}
+			} catch (NoSuchMethodError e) {
+				for (Material mat : Material.values()) {
+					if (MSG.normalize(mat.toString()).startsWith(args[1].toLowerCase())) {
+						result.add(MSG.normalize(mat.toString()));
+					}
 				}
 			}
+
 			for (String s : new String[] { "@hand", "@inventory", "@block", "@enderchest" }) {
 				if (s.toLowerCase().startsWith(args[1].toLowerCase())) {
 					result.add(s);
@@ -280,7 +290,9 @@ public class GiveCommand extends BukkitCommand {
 				}
 			}
 		}
-		if (args.length > 2) {
+		if (args.length > 2)
+
+		{
 			for (ItemAttribute attr : plugin.getBuilder().getAttributes()) {
 				if (attr.getPermission() != null && !sender.hasPermission(attr.getPermission()))
 					continue;

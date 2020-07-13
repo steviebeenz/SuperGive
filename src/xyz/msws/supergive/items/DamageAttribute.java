@@ -9,6 +9,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import xyz.msws.supergive.utils.MSG;
+
 /**
  * Adds support for specifying damage on {@link Damageable} items.
  * 
@@ -17,31 +19,50 @@ import org.bukkit.inventory.meta.ItemMeta;
  */
 public class DamageAttribute implements ItemAttribute {
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public ItemStack modify(String line, ItemStack item) {
 		if (!line.startsWith("damage:"))
 			return item;
 		ItemMeta meta = item.getItemMeta();
-		if (!(meta instanceof Damageable))
-			return item;
 		try {
-			((Damageable) meta).setDamage(Integer.parseInt(line.substring("damage:".length())));
-		} catch (NumberFormatException e) {
+			Class.forName("org.bukkit.inventory.meta.Damageable");
+			if (!(meta instanceof Damageable))
+				return item;
+			try {
+				((Damageable) meta).setDamage(Integer.parseInt(line.substring("damage:".length())));
+			} catch (NumberFormatException e) {
+				MSG.warn("Invalid number for damage: " + line.substring("damage:".length()));
+			}
+			item.setItemMeta(meta);
+			return item;
+		} catch (ClassNotFoundException e) {
+			try {
+				item.setDurability(Short.parseShort(line.substring("damage:".length())));
+			} catch (NumberFormatException e1) {
+				MSG.warn("Invalid number for damage: " + line.substring("damage:".length()));
+			}
+			return item;
 		}
-		item.setItemMeta(meta);
-		return item;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public String getModification(ItemStack item) {
 		if (item == null || item.getType() == Material.AIR)
 			return null;
 		ItemMeta meta = item.getItemMeta();
-		if (!(meta instanceof Damageable))
-			return null;
-		if (((Damageable) meta).getDamage() == 0)
-			return null;
-		return "damage:" + ((Damageable) meta).getDamage();
+		int durability = 0;
+		try {
+			Class.forName("org.bukkit.inventory.meta.Damageable");
+			if (!(meta instanceof Damageable))
+				return null;
+			durability = ((Damageable) meta).getDamage();
+		} catch (ClassNotFoundException e) {
+			durability = ((Number) item.getDurability()).intValue();
+		}
+
+		return durability == 0 ? null : "damage:" + durability;
 	}
 
 	@Override

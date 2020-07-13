@@ -2,7 +2,6 @@ package xyz.msws.supergive.loadout;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -244,43 +243,25 @@ public class Loadout implements ConfigurationSerializable {
 		return builder.toString().substring(0, builder.length() - 1);
 	}
 
-	private static final EnumSet<Material> helmets = EnumSet.of(Material.CHAINMAIL_HELMET, Material.DIAMOND_HELMET,
-			Material.GOLDEN_HELMET, Material.IRON_HELMET, Material.LEATHER_HELMET, Material.TURTLE_HELMET);
-	private static final EnumSet<Material> chests = EnumSet.of(Material.CHAINMAIL_CHESTPLATE,
-			Material.DIAMOND_CHESTPLATE, Material.GOLDEN_CHESTPLATE, Material.IRON_CHESTPLATE,
-			Material.LEATHER_CHESTPLATE);
-	private static final EnumSet<Material> legs = EnumSet.of(Material.CHAINMAIL_LEGGINGS, Material.DIAMOND_LEGGINGS,
-			Material.GOLDEN_LEGGINGS, Material.IRON_LEGGINGS, Material.LEATHER_LEGGINGS);
-	private static final EnumSet<Material> boots = EnumSet.of(Material.CHAINMAIL_BOOTS, Material.DIAMOND_BOOTS,
-			Material.GOLDEN_BOOTS, Material.IRON_BOOTS, Material.LEATHER_BOOTS);
-
 	private boolean isHelmet(Material mat) {
-		if (helmets.contains(mat))
-			return true;
 		if (mat.toString().endsWith("_HELMET"))
 			return true;
 		return false;
 	}
 
 	private boolean isChestplate(Material mat) {
-		if (chests.contains(mat))
-			return true;
 		if (mat.toString().endsWith("_CHESTPLATE"))
 			return true;
 		return false;
 	}
 
 	private boolean isLegging(Material mat) {
-		if (legs.contains(mat))
-			return true;
 		if (mat.toString().endsWith("_LEGGINGS"))
 			return true;
 		return false;
 	}
 
 	private boolean isBoot(Material mat) {
-		if (boots.contains(mat))
-			return true;
 		if (mat.toString().endsWith("_BOOTS"))
 			return true;
 		return false;

@@ -2,7 +2,7 @@ main: xyz.msws.supergive.SuperGive
 name: SuperGive
 version: 1.0
 author: MSWS
-api-version: 1.16
+api-version: 1.13
 description: Improved give command
 permissions:
   supergive.*:

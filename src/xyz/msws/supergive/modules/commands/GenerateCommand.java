@@ -33,6 +33,7 @@ public class GenerateCommand extends BukkitCommand {
 		this.setPermission("supergive.command.generate");
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public boolean execute(CommandSender sender, String commandLabel, String[] args) {
 		if (!testPermission(sender))
@@ -42,7 +43,7 @@ public class GenerateCommand extends BukkitCommand {
 			return true;
 		}
 		Player player = (Player) sender;
-		ItemStack item = player.getInventory().getItemInMainHand();
+		ItemStack item = player.getInventory().getItemInHand();
 		if (item == null || item.getType() == Material.AIR) {
 			Lang.MUST_HAVE_ITEM.send(sender);
 			return true;

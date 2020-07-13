@@ -53,6 +53,7 @@ public class DynamicHolder {
 			living.getEquipment().clear();
 	}
 
+	@SuppressWarnings("deprecation")
 	public void addItem(ItemStack item) {
 		if (item == null || item.getType() == Material.AIR)
 			return;
@@ -60,7 +61,7 @@ public class DynamicHolder {
 			holder.getInventory().addItem(item);
 		if (living != null) {
 			EntityEquipment eq = living.getEquipment();
-			if (eq.getItemInMainHand() == null || eq.getItemInMainHand().getType() == Material.AIR) {
+			if (eq.getItemInHand() == null || eq.getItemInHand().getType() == Material.AIR) {
 				eq.setItemInMainHand(item);
 			} else {
 				eq.setItemInOffHand(item);

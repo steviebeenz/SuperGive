@@ -33,8 +33,8 @@ public class OwnerAttribute implements ItemAttribute {
 
 	@Override
 	public String getModification(ItemStack item) {
-		if (item == null || item.getType() != Material.PLAYER_HEAD)
-			return null;
+//		if (item == null || item.getType() != Material.PLAYER_HEAD)
+//			return null;
 		ItemMeta meta = item.getItemMeta();
 		if (!(meta instanceof SkullMeta))
 			return null;

@@ -21,7 +21,7 @@ public class NameSelector implements Selector {
 	public List<Entity> getEntities(String arg, CommandSender sender) {
 		for (Player p : Bukkit.getOnlinePlayers()) { // Avoid clashing with VanillaSelector
 			if (p.getName().equalsIgnoreCase(arg))
-				return null;
+				return Arrays.asList(p);
 		}
 
 		for (Player p : Bukkit.getOnlinePlayers()) {

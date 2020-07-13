@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.UUID;
 
 import org.apache.commons.lang.ArrayUtils;
@@ -72,30 +73,38 @@ public class LoadoutCommand extends BukkitCommand {
 			}
 			MSG.tell(sender, " ");
 			Lang.LOADOUTS_PREFIX.send(sender);
-
-			for (String load : lm.getLoadoutNames()) {
-				Loadout l = lm.getLoadout(load);
-
-				ComponentBuilder give = new ComponentBuilder();
-				give = give.append("GIVE").color(ChatColor.GOLD).bold(true)
-						.event(new ClickEvent(Action.RUN_COMMAND, "/give @me #" + load))
-						.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-								TextComponent.fromLegacyText(MSG.color("&7Click to run &e/give &b@me &a#" + load))));
-				give = give.append(" EDIT", FormatRetention.NONE).color(ChatColor.GREEN).bold(true)
-						.event(new ClickEvent(Action.RUN_COMMAND, "/loadout edit " + load))
-						.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-								TextComponent.fromLegacyText(MSG.color("&7Click to run &e/loadout &6edit &a" + load))));
-				give = give.append(" ", FormatRetention.NONE).append("DELETE").color(ChatColor.RED).bold(true)
-						.event(new ClickEvent(Action.RUN_COMMAND, "/loadout delete " + load))
-						.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, TextComponent
-								.fromLegacyText(MSG.color("&7Click to run &e/loadout &cdelete &a" + load))));
-				give = give.append(" - ", FormatRetention.NONE).color(ChatColor.GRAY).append(load, FormatRetention.NONE)
-						.color(ChatColor.YELLOW).append(" (" + l.getItems().length + " items)", FormatRetention.NONE)
-						.color(ChatColor.GRAY)
-						.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, TextComponent.fromLegacyText(
-								MSG.color(MSG.FORMAT_INFO + load + " contains:\n" + l.loreReadable()))));
-				player.spigot().sendMessage(give.create());
+			try {
+				for (Entry<String, Loadout> entry : lm.getLoadoutMap().entrySet()) {
+					ComponentBuilder give = new ComponentBuilder();
+					give = give.append("GIVE").color(ChatColor.GOLD).bold(true)
+							.event(new ClickEvent(Action.RUN_COMMAND, "/give @me #" + entry.getKey()))
+							.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, TextComponent
+									.fromLegacyText(MSG.color("&7Click to run &e/give &b@me &a#" + entry.getKey()))));
+					give = give.append(" EDIT", FormatRetention.NONE).color(ChatColor.GREEN).bold(true)
+							.event(new ClickEvent(Action.RUN_COMMAND, "/loadout edit " + entry.getKey()))
+							.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, TextComponent.fromLegacyText(
+									MSG.color("&7Click to run &e/loadout &6edit &a" + entry.getKey()))));
+					give = give.append(" ", FormatRetention.NONE).append("DELETE").color(ChatColor.RED).bold(true)
+							.event(new ClickEvent(Action.RUN_COMMAND, "/loadout delete " + entry.getKey()))
+							.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, TextComponent.fromLegacyText(
+									MSG.color("&7Click to run &e/loadout &cdelete &a" + entry.getKey()))));
+					give = give.append(" - ", FormatRetention.NONE).color(ChatColor.GRAY)
+							.append(entry.getKey(), FormatRetention.NONE).color(ChatColor.YELLOW)
+							.append(" (" + entry.getValue().getItems().length + " items)", FormatRetention.NONE)
+							.color(ChatColor.GRAY)
+							.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+									TextComponent.fromLegacyText(MSG.color(MSG.FORMAT_INFO + entry.getKey()
+											+ " contains:\n" + entry.getValue().loreReadable()))));
+					player.spigot().sendMessage(give.create());
+				}
+			} catch (NoSuchMethodError e) {
+				// 1.8 Compatability
+				for (Entry<String, Loadout> entry : lm.getLoadoutMap().entrySet()) {
+					MSG.tell(sender,
+							"&a" + entry.getKey() + "&7 - &8(&9" + entry.getValue().getItems().length + "&b items&8)");
+				}
 			}
+
 			return true;
 		}
 		Player player;
