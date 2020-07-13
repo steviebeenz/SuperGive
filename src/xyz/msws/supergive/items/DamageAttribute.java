@@ -40,6 +40,7 @@ public class DamageAttribute implements ItemAttribute {
 			try {
 				item.setDurability(Short.parseShort(line.substring("damage:".length())));
 			} catch (NumberFormatException e1) {
+				// 1.8 Compatibility
 				MSG.warn("Invalid number for damage: " + line.substring("damage:".length()));
 			}
 			return item;
@@ -59,6 +60,7 @@ public class DamageAttribute implements ItemAttribute {
 				return null;
 			durability = ((Damageable) meta).getDamage();
 		} catch (ClassNotFoundException e) {
+			// 1.8 Compatibility
 			durability = ((Number) item.getDurability()).intValue();
 		}
 

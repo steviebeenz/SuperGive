@@ -31,6 +31,7 @@ public class UnbreakableAttribute implements ItemAttribute {
 		try {
 			meta.setUnbreakable(val);
 		} catch (NoSuchMethodError e) {
+			// 1.8 Compatibility
 			try {
 				if (spigot == null) {
 					spigot = meta.getClass().getMethod("spigot");
@@ -59,6 +60,7 @@ public class UnbreakableAttribute implements ItemAttribute {
 		try {
 			return meta.isUnbreakable() ? "unbreakable:true" : null;
 		} catch (NoSuchMethodError e) {
+			// 1.8 Compatibility
 			try {
 				if (spigot == null) {
 					spigot = meta.getClass().getMethod("spigot");

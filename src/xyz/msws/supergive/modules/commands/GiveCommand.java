@@ -267,6 +267,7 @@ public class GiveCommand extends BukkitCommand {
 					}
 				}
 			} catch (NoSuchMethodError e) {
+				// 1.8 Compatibility
 				for (Material mat : Material.values()) {
 					if (MSG.normalize(mat.toString()).startsWith(args[1].toLowerCase())) {
 						result.add(MSG.normalize(mat.toString()));
@@ -290,9 +291,7 @@ public class GiveCommand extends BukkitCommand {
 				}
 			}
 		}
-		if (args.length > 2)
-
-		{
+		if (args.length > 2) {
 			for (ItemAttribute attr : plugin.getBuilder().getAttributes()) {
 				if (attr.getPermission() != null && !sender.hasPermission(attr.getPermission()))
 					continue;

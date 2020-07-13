@@ -57,6 +57,7 @@ public class LoadoutCommand extends BukkitCommand {
 	private Map<UUID, String> loadouts = new HashMap<>();
 	private Map<UUID, ItemStack[]> items = new HashMap<>();
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public boolean execute(CommandSender sender, String commandLabel, String[] args) {
 		if (!testPermission(sender))

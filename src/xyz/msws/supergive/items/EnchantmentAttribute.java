@@ -31,6 +31,7 @@ public class EnchantmentAttribute implements ItemAttribute {
 		try {
 			item.addUnsafeEnchantment(ench, Integer.parseInt(line.split(":")[1]));
 		} catch (NumberFormatException e) {
+			MSG.warn("Invalid number format: " + line);
 		}
 		return item;
 	}
@@ -48,6 +49,7 @@ public class EnchantmentAttribute implements ItemAttribute {
 				result.append(ench.getKey().getKey().getKey()).append(":").append(ench.getValue()).append(" ");
 			}
 		} catch (NoSuchMethodError e) {
+			// 1.8 Compatibility
 			for (Entry<Enchantment, Integer> ench : item.getEnchantments().entrySet()) {
 				result.append(ench.getKey().getName()).append(":").append(ench.getValue()).append(" ");
 			}
@@ -69,6 +71,7 @@ public class EnchantmentAttribute implements ItemAttribute {
 					result.add(MSG.normalize(n) + ":");
 			}
 		} catch (NoSuchMethodError e) {
+			// 1.8 Compatibility
 			for (Enchantment ench : Enchantment.values()) {
 				String n = ench.getName();
 				if (MSG.normalize(n).startsWith(MSG.normalize(current)))

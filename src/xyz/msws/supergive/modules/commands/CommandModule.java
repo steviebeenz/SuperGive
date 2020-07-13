@@ -43,9 +43,10 @@ public class CommandModule extends AbstractModule implements Listener {
 		commands = new HashMap<>();
 
 		try {
-			map = (CommandMap) Bukkit.class.getMethod("getCommandMap").invoke(null);
+			map = (CommandMap) Bukkit.class.getMethod("getCommandMap").invoke(null); // Paper
 		} catch (NoSuchMethodError | IllegalAccessException | IllegalArgumentException | InvocationTargetException
 				| NoSuchMethodException | SecurityException e) {
+			// Spigot
 			try {
 				final Field bukkitCommandMap = Bukkit.getServer().getClass().getDeclaredField("commandMap");
 				bukkitCommandMap.setAccessible(true);
