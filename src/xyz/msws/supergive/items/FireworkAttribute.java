@@ -192,4 +192,12 @@ public class FireworkAttribute implements ItemAttribute {
 		return "supergive.attribute.firework";
 	}
 
+	@Override
+	public String humanReadable(ItemStack item) {
+		String result = getModification(item);
+		if (result == null || result.length() < "firework:".length())
+			return result;
+		return result.substring("firework:".length());
+	}
+
 }

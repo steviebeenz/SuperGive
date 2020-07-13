@@ -99,4 +99,35 @@ public class UnbreakableAttribute implements ItemAttribute {
 		return "supergive.attribute.unbreakable";
 	}
 
+	@Override
+	public String humanReadable(ItemStack item) {
+		if (item == null || item.getType() == Material.AIR)
+			return null;
+		ItemMeta meta = item.getItemMeta();
+		try {
+			return meta.isUnbreakable() ? "that is unbreakable" : null;
+		} catch (NoSuchMethodError e) {
+			// 1.8 Compatibility
+			try {
+				if (spigot == null) {
+					spigot = meta.getClass().getMethod("spigot");
+					spigot.setAccessible(true);
+				}
+				Object c = spigot.invoke(meta);
+				if (isUnbreakable == null) {
+					isUnbreakable = c.getClass().getMethod("isUnbreakable");
+					isUnbreakable.setAccessible(true);
+				}
+				Object result = isUnbreakable.invoke(c);
+				if (!(result instanceof Boolean))
+					return null;
+				return ((Boolean) result) ? "that is unbreakable" : null;
+			} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException
+					| InvocationTargetException e1) {
+				e1.printStackTrace();
+			}
+		}
+		return null;
+	}
+
 }

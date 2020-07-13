@@ -3,6 +3,7 @@ package xyz.msws.supergive.items;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
@@ -68,6 +69,18 @@ public class ItemFlagAttribute implements ItemAttribute {
 	@Override
 	public String getPermission() {
 		return "supergive.attribute.itemflag";
+	}
+
+	@Override
+	public String humanReadable(ItemStack item) {
+		if (item == null || item.getType() == Material.AIR)
+			return null;
+		ItemMeta meta = item.getItemMeta();
+		if (meta.getItemFlags().isEmpty())
+			return null;
+		List<String> flags = new ArrayList<>();
+		flags.addAll(meta.getItemFlags().stream().map(f -> MSG.camelCase(f.toString())).collect(Collectors.toList()));
+		return "with the flag" + (flags.size() == 1 ? "" : "s") + ": &e" + String.join("&7, &e", flags);
 	}
 
 }

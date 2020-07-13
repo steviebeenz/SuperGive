@@ -45,6 +45,7 @@ public class StoredEnchantmentAttribute implements ItemAttribute {
 		return item;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public String getModification(ItemStack item) {
 		ItemMeta meta = item.getItemMeta();
@@ -52,15 +53,27 @@ public class StoredEnchantmentAttribute implements ItemAttribute {
 			return null;
 		EnchantmentStorageMeta book = (EnchantmentStorageMeta) meta;
 		StringBuilder builder = new StringBuilder();
-		for (Entry<Enchantment, Integer> entry : book.getStoredEnchants().entrySet()) {
-			builder.append("stored:" + MSG.normalize(entry.getKey().getKey().getKey()));
-			if (entry.getValue() != 1)
-				builder.append(":").append(entry.getValue());
-			builder.append(" ");
+		try {
+			for (Entry<Enchantment, Integer> entry : book.getStoredEnchants().entrySet()) {
+				builder.append("stored:" + MSG.normalize(entry.getKey().getKey().getKey()));
+				if (entry.getValue() != 1)
+					builder.append(":").append(entry.getValue());
+				builder.append(" ");
+			}
+		} catch (NoSuchMethodError e) {
+			// 1.8 Compatibility
+			for (Entry<Enchantment, Integer> entry : book.getStoredEnchants().entrySet()) {
+				builder.append("stored:" + MSG.normalize(entry.getKey().getName()));
+				if (entry.getValue() != 1)
+					builder.append(":").append(entry.getValue());
+				builder.append(" ");
+			}
 		}
+
 		return builder.toString().trim();
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public List<String> tabComplete(String current, String[] args, CommandSender sender) {
 		if (args.length < 2)
@@ -72,10 +85,19 @@ public class StoredEnchantmentAttribute implements ItemAttribute {
 		if ("stored:".startsWith(current))
 			result.add("stored:");
 		if (current.startsWith("stored:")) {
-			for (Enchantment ench : Enchantment.values()) {
-				if (("stored" + MSG.normalize(ench.getKey().getKey())).startsWith(MSG.normalize(current)))
-					result.add("stored:" + MSG.normalize(ench.getKey().getKey()) + ":");
+			try {
+				for (Enchantment ench : Enchantment.values()) {
+					if (("stored" + MSG.normalize(ench.getKey().getKey())).startsWith(MSG.normalize(current)))
+						result.add("stored:" + MSG.normalize(ench.getKey().getKey()) + ":");
+				}
+			} catch (NoSuchMethodError e) {
+				// 1.8 Compatibility
+				for (Enchantment ench : Enchantment.values()) {
+					if (("stored" + MSG.normalize(ench.getName())).startsWith(MSG.normalize(current)))
+						result.add("stored:" + MSG.normalize(ench.getKey().getKey()) + ":");
+				}
 			}
+
 		}
 		return result;
 	}
@@ -83,6 +105,31 @@ public class StoredEnchantmentAttribute implements ItemAttribute {
 	@Override
 	public String getPermission() {
 		return "supergive.attribute.stored";
+	}
+
+	@SuppressWarnings("deprecation")
+	@Override
+	public String humanReadable(ItemStack item) {
+		ItemMeta meta = item.getItemMeta();
+		if (!(meta instanceof EnchantmentStorageMeta))
+			return null;
+		EnchantmentStorageMeta book = (EnchantmentStorageMeta) meta;
+		List<String> enchantments = new ArrayList<>();
+
+		String result = "&6storing &a";
+		try {
+			for (Entry<Enchantment, Integer> ench : book.getStoredEnchants().entrySet()) {
+				enchantments.add(ench.getKey().getKey().getKey() + (ench.getValue() == 1 ? "" : ench.getValue() + ""));
+			}
+		} catch (NoSuchMethodError e) {
+			// 1.8 Compatibility
+			for (Entry<Enchantment, Integer> ench : book.getStoredEnchants().entrySet()) {
+				enchantments.add(ench.getKey().getName() + (ench.getValue() == 1 ? "" : ench.getValue() + ""));
+			}
+		}
+
+		result = result + String.join(" &7and &a", enchantments);
+		return result.trim();
 	}
 
 }

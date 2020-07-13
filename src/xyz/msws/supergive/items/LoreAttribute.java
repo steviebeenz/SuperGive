@@ -57,4 +57,14 @@ public class LoreAttribute implements ItemAttribute {
 	public String getPermission() {
 		return "supergive.attribute.lore";
 	}
+
+	@Override
+	public String humanReadable(ItemStack item) {
+		if (item == null || item.getType() == Material.AIR)
+			return null;
+		ItemMeta meta = item.getItemMeta();
+		if (!meta.hasLore())
+			return null;
+		return "with lore: " + String.join(",", meta.getLore());
+	}
 }

@@ -81,4 +81,9 @@ public class PotionAttribute implements ItemAttribute {
 		return "supergive.attribute.potion";
 	}
 
+	@Override
+	public String humanReadable(ItemStack item) {
+		return getModification(item);
+	}
+
 }

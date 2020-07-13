@@ -85,4 +85,16 @@ public class EntityAttribute implements ItemAttribute {
 		return "supergive.attribute.entity";
 	}
 
+	@Override
+	public String humanReadable(ItemStack item) {
+		ItemMeta meta = item.getItemMeta();
+		if (!(meta instanceof BlockStateMeta))
+			return null;
+		BlockStateMeta bsm = (BlockStateMeta) meta;
+		if (!(bsm.getBlockState() instanceof CreatureSpawner))
+			return null;
+		CreatureSpawner spawner = (CreatureSpawner) bsm.getBlockState();
+		return "that spawns " + MSG.camelCase(spawner.getSpawnedType().toString());
+	}
+
 }

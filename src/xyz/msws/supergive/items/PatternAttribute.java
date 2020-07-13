@@ -98,4 +98,9 @@ public class PatternAttribute implements ItemAttribute {
 		return "supergive.attribute.pattern";
 	}
 
+	@Override
+	public String humanReadable(ItemStack item) {
+		return getModification(item);
+	}
+
 }

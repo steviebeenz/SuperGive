@@ -56,4 +56,14 @@ public class NameAttribute implements ItemAttribute {
 		return "supergive.attribute.name";
 	}
 
+	@Override
+	public String humanReadable(ItemStack item) {
+		if (item == null || item.getType() == Material.AIR)
+			return null;
+		ItemMeta meta = item.getItemMeta();
+		if (!meta.hasDisplayName())
+			return null;
+		return "named " + meta.getDisplayName();
+	}
+
 }

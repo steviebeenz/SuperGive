@@ -33,8 +33,6 @@ public class OwnerAttribute implements ItemAttribute {
 
 	@Override
 	public String getModification(ItemStack item) {
-//		if (item == null || item.getType() != Material.PLAYER_HEAD)
-//			return null;
 		ItemMeta meta = item.getItemMeta();
 		if (!(meta instanceof SkullMeta))
 			return null;
@@ -59,6 +57,15 @@ public class OwnerAttribute implements ItemAttribute {
 	@Override
 	public String getPermission() {
 		return "supergive.attribute.owner";
+	}
+
+	@Override
+	public String humanReadable(ItemStack item) {
+		ItemMeta meta = item.getItemMeta();
+		if (!(meta instanceof SkullMeta))
+			return null;
+		SkullMeta skull = (SkullMeta) meta;
+		return "owned by " + skull.getOwningPlayer().getName();
 	}
 
 }

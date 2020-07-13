@@ -79,4 +79,24 @@ public class DamageAttribute implements ItemAttribute {
 		return "supergive.attribute.damage";
 	}
 
+	@SuppressWarnings("deprecation")
+	@Override
+	public String humanReadable(ItemStack item) {
+		if (item == null || item.getType() == Material.AIR)
+			return null;
+		ItemMeta meta = item.getItemMeta();
+		int durability = 0;
+		try {
+			Class.forName("org.bukkit.inventory.meta.Damageable");
+			if (!(meta instanceof Damageable))
+				return null;
+			durability = ((Damageable) meta).getDamage();
+		} catch (ClassNotFoundException e) {
+			// 1.8 Compatibility
+			durability = ((Number) item.getDurability()).intValue();
+		}
+
+		return durability == 0 ? null : "with " + durability + " damage";
+	}
+
 }

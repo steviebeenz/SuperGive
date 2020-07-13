@@ -71,31 +71,28 @@ public class ContentsAttribute implements ItemAttribute {
 				continue;
 			ItemStack[] cont = container.getInventory().getContents();
 
-			boolean loop = false;
-
-			for (int i = 0; i < Math.max(load.getItems().length, cont.length); i++) {
-				ItemStack a = load.getItems().length > i ? load.getItems()[i] : null;
-				ItemStack b = cont.length > i ? cont[i] : null;
-				if (a == b)
-					continue;
-				if (a == null && b != null) {
-					loop = true;
-					continue;
-				}
-				if (a != null && b == null) {
-					loop = true;
-					continue;
-				}
-				if (!a.equals(b)) {
-					loop = true;
-					continue;
-				}
-			}
-			if (loop)
+			if (!itemsEqual(cont, load.getItems()))
 				continue;
 			return "contents:#" + load.getName();
 		}
 		return null;
+	}
+
+	private boolean itemsEqual(ItemStack[] array1, ItemStack[] array2) {
+		for (int i = 0; i < Math.max(array1.length, array2.length); i++) {
+			// Check contents manually
+			ItemStack a = array1.length > i ? array1[i] : null;
+			ItemStack b = array2.length > i ? array2[i] : null;
+			if (a == b)
+				continue;
+			if (a == null && b != null)
+				return false;
+			if (a != null && b == null)
+				return false;
+			if (!a.equals(b))
+				return false;
+		}
+		return true;
 	}
 
 	@Override
@@ -119,6 +116,28 @@ public class ContentsAttribute implements ItemAttribute {
 	@Override
 	public String getPermission() {
 		return "supergive.attribute.contents";
+	}
+
+	@Override
+	public String humanReadable(ItemStack item) {
+		ItemMeta meta = item.getItemMeta();
+		if (!(meta instanceof BlockStateMeta))
+			return null;
+		BlockState bs = ((BlockStateMeta) meta).getBlockState();
+		if (!(bs instanceof Container))
+			return null;
+		Container container = (Container) bs;
+		for (Loadout load : plugin.getModule(LoadoutManager.class).getLoadouts()) {
+			if (load.getName() == null)
+				continue;
+			ItemStack[] cont = container.getInventory().getContents();
+
+			if (!itemsEqual(cont, load.getItems()))
+				continue;
+			return "with the " + load.getName() + " loadout";
+		}
+
+		return null;
 	}
 
 }

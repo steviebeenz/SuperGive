@@ -64,4 +64,15 @@ public class CommandAttribute implements ItemAttribute {
 		return null;
 	}
 
+	@Override
+	public String humanReadable(ItemStack item) {
+		ItemMeta meta = item.getItemMeta();
+		if (!(meta instanceof BlockStateMeta))
+			return null;
+		BlockStateMeta bsm = (BlockStateMeta) meta;
+		if (!(bsm.getBlockState() instanceof CommandBlock))
+			return null;
+		return "that runs " + ((CommandBlock) bsm.getBlockState()).getCommand();
+	}
+
 }

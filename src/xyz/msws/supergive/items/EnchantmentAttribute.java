@@ -87,4 +87,30 @@ public class EnchantmentAttribute implements ItemAttribute {
 		return "supergive.attribute.enchantment";
 	}
 
+	@SuppressWarnings("deprecation")
+	@Override
+	public String humanReadable(ItemStack item) {
+		// TODO Auto-generated method stub
+		if (item == null || item.getType() == Material.AIR)
+			return null;
+		if (item.getEnchantments().isEmpty())
+			return null;
+		List<String> enchantments = new ArrayList<>();
+		String result = "&6enchanted with &a";
+		try {
+			for (Entry<Enchantment, Integer> ench : item.getEnchantments().entrySet()) {
+//				result.append(ench.getKey().getKey().getKey()).append(" ").append(ench.getValue()).append(", ");
+				enchantments.add(ench.getKey().getKey().getKey() + (ench.getValue() == 1 ? "" : ench.getValue() + ""));
+			}
+		} catch (NoSuchMethodError e) {
+			// 1.8 Compatibility
+			for (Entry<Enchantment, Integer> ench : item.getEnchantments().entrySet()) {
+				enchantments.add(ench.getKey().getName() + (ench.getValue() == 1 ? "" : ench.getValue() + ""));
+			}
+		}
+
+		result = result + String.join(" &7and &a", enchantments);
+		return result;
+	}
+
 }

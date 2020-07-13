@@ -137,19 +137,11 @@ public class ItemBuilder extends AbstractModule {
 		result.append(MSG.camelCase(item.getType().toString()))
 				.append((item.getAmount() == 1 || item.getType().toString().toLowerCase().endsWith("s")) ? " " : "s ");
 		for (int i = 0; i < attr.size(); i++) {
-			String mod = attr.get(i).getModification(item);
+			String mod = attr.get(i).humanReadable(item);
 			if (mod == null || mod.isEmpty())
 				continue;
-
-			StringBuilder mr = new StringBuilder();
-			String[] split = mod.split(" ");
-			for (int x = 0; x < split.length; x++) {
-				mr.append(x % 3 == 0 ? "&2" : x % 3 == 1 ? "&a" : "&b").append(split[x]);
-				if (x < split.length - 1)
-					mr.append(" ");
-			}
-
-			result.append(i % 3 == 0 ? "&b" : i % 3 == 1 ? "&a" : "&9").append(mr).append(" ");
+			
+			result.append(i % 3 == 0 ? "&b" : i % 3 == 1 ? "&a" : "&9").append(mod).append(" ");
 		}
 		return result.toString().trim();
 	}

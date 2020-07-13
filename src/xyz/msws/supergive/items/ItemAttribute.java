@@ -28,6 +28,8 @@ public interface ItemAttribute {
 	 * @return
 	 */
 	String getModification(ItemStack item);
+	
+	String humanReadable(ItemStack item);
 
 	/**
 	 * Returns the permission needed to use this attribute.
