@@ -61,6 +61,7 @@ public class SuperGive extends JavaPlugin {
 		File langFile = new File(this.getDataFolder(), "lang.yml");
 		if (!langFile.exists()) {
 			try {
+				// Lang file doesn't exist, create and assign all the lang values
 				langFile.createNewFile();
 				YamlConfiguration c = new YamlConfiguration();
 				for (Lang l : Lang.values()) {

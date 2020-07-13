@@ -11,6 +11,7 @@ import java.util.Map;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
+import org.bukkit.configuration.serialization.SerializableAs;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.InventoryHolder;
@@ -26,6 +27,7 @@ import xyz.msws.supergive.utils.MSG;
  * 
  */
 @SuppressWarnings("deprecation")
+@SerializableAs("Loadout")
 public class Loadout implements ConfigurationSerializable {
 	private ItemStack[] items = null;
 	private boolean clear = false, smartEquip = true;

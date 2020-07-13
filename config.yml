@@ -1,7 +1,7 @@
 AllSelectorWarning: true
 Loadouts:
   DiamondArmor:
-    ==: xyz.msws.supergive.loadout.Loadout
+    ==: Loadout
     Name: 'Diamond Armor'
     Items:
     - 'diamondhelmet'
@@ -9,7 +9,7 @@ Loadouts:
     - 'diamondleggings'
     - 'diamondboots'
   BuildKit:
-    ==: xyz.msws.supergive.loadout.Loadout
+    ==: Loadout
     Name: 'Build Loadout'
     Clear: false
     Items:
@@ -23,7 +23,7 @@ Loadouts:
     - 'purplewool 64'
     - 'blackwool 64'
   Food:
-    ==: xyz.msws.supergive.loadout.Loadout
+    ==: Loadout
     Name: 'Food'
     Smart: true
     Items:
@@ -36,7 +36,7 @@ Loadouts:
     - 'enchantedgoldenapple 64'
     - 'pumpkinpie 64'
   FullLoadout:
-    ==: xyz.msws.supergive.loadout.Loadout
+    ==: Loadout
     Name: 'Full Loadout'
     Clear: true
     Items:
@@ -55,7 +55,7 @@ Loadouts:
     - 'cookedsteak 64'
     - 'goldencarrot 64'
   banners:
-    ==: xyz.msws.supergive.loadout.Loadout
+    ==: Loadout
     Items:
     - 'WHITE_BANNER 1 triangle_bottom:black triangles_bottom:white triangle_top:black triangles_top:white rhombus_middle:black circle_middle:light_blue'
     - 'LIGHT_BLUE_BANNER 1 triangle_top:black rhombus_middle:black triangle_bottom:black curly_border:black flower:light_blue circle_middle:blue'
@@ -68,7 +68,7 @@ Loadouts:
     - 'BLUE_BANNER 1 mojang:light_gray gradient_up:light_blue gradient:black triangles_bottom:black circle_middle:white square_bottom_left:black'
     Name: 'Banners'
   spawners:
-    ==: xyz.msws.supergive.loadout.Loadout
+    ==: Loadout
     Items:
     - 'SPAWNER 1 entity:pig name:Pig Spawner'
     - 'SPAWNER 1 entity:creeper name:Creeper Spawner'
@@ -81,7 +81,7 @@ Loadouts:
     - 'SPAWNER 1 entity:painting name:Painting Spawner'
     Name: 'Spawners'
   fireworks:
-    ==: xyz.msws.supergive.loadout.Loadout
+    ==: Loadout
     Items:
     - 'fireworkrocket 1 firework:179|49|44 240|240|240,102|137|211,BALL_LARGE,flicker,trail
       firework:222|207|42 240|240|240,30|27|27 37|49|146,BALL,flicker,trail firework:179|49|44
@@ -101,7 +101,7 @@ Loadouts:
       195|84|205 235|136|68 240|240|240,CREEPER,flicker,trail,power3'
     Name: Fireworks
   potions:
-    ==: xyz.msws.supergive.loadout.Loadout
+    ==: Loadout
     Items:
     - potion 1 name:&6&lSpeedy &e&lBoi soul_speed:20000 SPEED:20000:2 JUMP:40000:1
       SLOW_FALLING:10000:4
@@ -113,7 +113,7 @@ Loadouts:
       INCREASE_DAMAGE:160000:2 ABSORPTION:75000:3
     Name: Potions
   all:
-    ==: xyz.msws.supergive.loadout.Loadout
+    ==: Loadout
     Items:
     - 'diamondsword name:Cool Sword sharpness:1 flag:hideenchants unbreakable: lore:Dis is cool sword'
     - 'fireworkrocket 1 firework:30|27|27 59|81|26,179|49|44 222|207|42 235|136|68,CREEPER,flicker,trail,power2'

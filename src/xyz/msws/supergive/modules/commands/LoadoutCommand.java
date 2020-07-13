@@ -84,11 +84,11 @@ public class LoadoutCommand extends BukkitCommand {
 				give = give.append(" EDIT", FormatRetention.NONE).color(ChatColor.GREEN).bold(true)
 						.event(new ClickEvent(Action.RUN_COMMAND, "/loadout edit " + load))
 						.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-								TextComponent.fromLegacyText(MSG.color("&7Click to run &e/loadout edit " + load))));
+								TextComponent.fromLegacyText(MSG.color("&7Click to run &e/loadout &6edit &a" + load))));
 				give = give.append(" ", FormatRetention.NONE).append("DELETE").color(ChatColor.RED).bold(true)
 						.event(new ClickEvent(Action.RUN_COMMAND, "/loadout delete " + load))
 						.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, TextComponent
-								.fromLegacyText(MSG.color("&7Click to run &e/loadout &cdelete &e" + load))));
+								.fromLegacyText(MSG.color("&7Click to run &e/loadout &cdelete &a" + load))));
 				give = give.append(" - ", FormatRetention.NONE).color(ChatColor.GRAY).append(load, FormatRetention.NONE)
 						.color(ChatColor.YELLOW).append(" (" + l.getItems().length + " items)", FormatRetention.NONE)
 						.color(ChatColor.GRAY)
