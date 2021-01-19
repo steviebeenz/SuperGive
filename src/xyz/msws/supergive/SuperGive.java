@@ -30,12 +30,16 @@ public class SuperGive extends JavaPlugin {
 	private static SuperGive instance;
 
 	@Override
+	public void onLoad() {
+		ConfigurationSerialization.registerClass(Loadout.class, "Loadout");
+	}
+
+	@Override
 	public void onEnable() {
 		instance = this;
 
 		prepareFiles();
 
-		ConfigurationSerialization.registerClass(Loadout.class, "Loadout");
 		modules.add(new ItemBuilder(this));
 		modules.add(new NativeSelector(this));
 		modules.add(new CommandModule(this));
