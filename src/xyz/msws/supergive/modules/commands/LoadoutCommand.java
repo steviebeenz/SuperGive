@@ -111,149 +111,149 @@ public class LoadoutCommand extends BukkitCommand {
 		Player player;
 		String name;
 		switch (args[0].toLowerCase()) {
-			case "create":
-				if (!sender.hasPermission("supergive.command.loadout.create")) {
-					Lang.NO_PERMISSION.send(sender, "supergive.command.loadout.create");
-					return true;
-				}
-				if (!(sender instanceof Player)) {
-					Lang.MUST_BE_PLAYER.send(sender);
-					return true;
-				}
-				player = (Player) sender;
-				if (args.length <= 1) {
-					Lang.SPECIFY_NAME.send(sender);
-					return true;
-				}
-
-				name = String.join(" ", (String[]) ArrayUtils.subarray(args, 1, args.length));
-				if (lm.getLoadout(MSG.normalize(name)) != null) {
-					Lang.LOADOUT_EXISTS.send(sender, name);
-					return true;
-				}
-
-				Loadout loadout = new Loadout(player.getInventory().getContents());
-				loadout.setName(name);
-
-				LoadoutCreateEvent event = new LoadoutCreateEvent(player, loadout);
-				Bukkit.getPluginManager().callEvent(event);
-				loadout = event.getLoadout();
-
-				lm.addLoadout(MSG.normalize(name), loadout);
-				Lang.LOADOUT_CREATED.send(sender, name);
-				for (ItemStack item : loadout.getItems()) {
-					if (item == null || item.getType() == Material.AIR)
-						continue;
-					MSG.tell(sender, "&7- " + plugin.getBuilder().humanReadable(item));
-				}
+		case "create":
+			if (!sender.hasPermission("supergive.command.loadout.create")) {
+				Lang.NO_PERMISSION.send(sender, "supergive.command.loadout.create");
 				return true;
-			case "edit":
-				if (!sender.hasPermission("supergive.command.loadout.edit")) {
-					Lang.NO_PERMISSION.send(sender, "supergive.command.loadout.edit");
-					return true;
-				}
-				if (!(sender instanceof Player)) {
-					Lang.MUST_BE_PLAYER.send(sender);
-					return true;
-				}
-				player = (Player) sender;
-				if (args.length <= 1) {
-					if (loadouts.containsKey(player.getUniqueId())) {
-						if (!items.containsKey(player.getUniqueId())) {
-							MSG.tell(sender, "SuperGive",
-									"A potential error occured when restoring your old items, please report this to MSWS if you see this message.");
-						}
-						// End editing of loadout
-						Loadout newLoad = new Loadout(player.getInventory().getContents());
-						Loadout old = lm.getLoadout(loadouts.get(player.getUniqueId()));
-						newLoad.setName(old.getName());
+			}
+			if (!(sender instanceof Player)) {
+				Lang.MUST_BE_PLAYER.send(sender);
+				return true;
+			}
+			player = (Player) sender;
+			if (args.length <= 1) {
+				Lang.SPECIFY_NAME.send(sender);
+				return true;
+			}
 
-						LoadoutEditEvent editEvent = new LoadoutEditEvent(player, old, newLoad);
-						Bukkit.getPluginManager().callEvent(editEvent);
-						newLoad = editEvent.getLoadout();
+			name = String.join(" ", (String[]) ArrayUtils.subarray(args, 1, args.length));
+			if (lm.getLoadout(MSG.normalize(name)) != null) {
+				Lang.LOADOUT_EXISTS.send(sender, name);
+				return true;
+			}
 
-						lm.addLoadout(loadouts.get(player.getUniqueId()), newLoad);
-						player.getInventory().clear();
-						player.getInventory().setContents(items.get(player.getUniqueId()));
-						items.remove(player.getUniqueId());
-						loadouts.remove(player.getUniqueId());
-						return true;
-					}
-					Lang.SPECIFY_NAME.send(sender);
-					return true;
-				}
+			Loadout loadout = new Loadout(player.getInventory().getContents());
+			loadout.setName(name);
 
+			LoadoutCreateEvent event = new LoadoutCreateEvent(player, loadout);
+			Bukkit.getPluginManager().callEvent(event);
+			loadout = event.getLoadout();
+
+			lm.addLoadout(MSG.normalize(name), loadout);
+			Lang.LOADOUT_CREATED.send(sender, name);
+			for (ItemStack item : loadout.getItems()) {
+				if (item == null || item.getType() == Material.AIR)
+					continue;
+				MSG.tell(sender, "&7- " + plugin.getBuilder().humanReadable(item));
+			}
+			return true;
+		case "edit":
+			if (!sender.hasPermission("supergive.command.loadout.edit")) {
+				Lang.NO_PERMISSION.send(sender, "supergive.command.loadout.edit");
+				return true;
+			}
+			if (!(sender instanceof Player)) {
+				Lang.MUST_BE_PLAYER.send(sender);
+				return true;
+			}
+			player = (Player) sender;
+			if (args.length <= 1) {
 				if (loadouts.containsKey(player.getUniqueId())) {
-					Lang.LOADOUT_ALREADY_EDITING.send(sender, loadouts.get(player.getUniqueId()));
-					return true;
-				}
+					if (!items.containsKey(player.getUniqueId())) {
+						MSG.tell(sender, "SuperGive",
+								"A potential error occured when restoring your old items, please report this to MSWS if you see this message.");
+					}
+					// End editing of loadout
+					Loadout newLoad = new Loadout(player.getInventory().getContents());
+					Loadout old = lm.getLoadout(loadouts.get(player.getUniqueId()));
+					newLoad.setName(old.getName());
 
-				name = String.join(" ", (String[]) ArrayUtils.subarray(args, 1, args.length));
+					LoadoutEditEvent editEvent = new LoadoutEditEvent(player, old, newLoad);
+					Bukkit.getPluginManager().callEvent(editEvent);
+					newLoad = editEvent.getLoadout();
 
-				Loadout load = lm.getLoadout(name);
-				if (load == null) {
-					Lang.UNKNOWN_LOADOUT.send(sender, name);
+					lm.addLoadout(loadouts.get(player.getUniqueId()), newLoad);
+					player.getInventory().clear();
+					player.getInventory().setContents(items.get(player.getUniqueId()));
+					items.remove(player.getUniqueId());
+					loadouts.remove(player.getUniqueId());
 					return true;
 				}
-				if (!sender.hasPermission("supergive.command.loadout.edit." + name)) {
-					Lang.NO_PERMISSION.send(sender, "supergive.command.loadout.edit." + name);
-					return true;
-				}
+				Lang.SPECIFY_NAME.send(sender);
+				return true;
+			}
 
-				items.put(player.getUniqueId(), player.getInventory().getContents());
-				player.getInventory().clear();
-				load.give(new DynamicHolder((InventoryHolder) player));
-				Lang.LOADOUT_EDITING.send(sender, name);
-				loadouts.put(player.getUniqueId(), name);
-				break;
-			case "delete":
-				if (!sender.hasPermission("supergive.command.loadout.delete")) {
-					Lang.NO_PERMISSION.send(sender, "supergive.command.loadout.delete");
-					return true;
-				}
-				if (!(sender instanceof Player)) {
-					Lang.MUST_BE_PLAYER.send(sender);
-					return true;
-				}
-				player = (Player) sender;
-				if (args.length <= 1) {
-					Lang.SPECIFY_NAME.send(sender);
-					return true;
-				}
+			if (loadouts.containsKey(player.getUniqueId())) {
+				Lang.LOADOUT_ALREADY_EDITING.send(sender, loadouts.get(player.getUniqueId()));
+				return true;
+			}
 
-				name = String.join(" ", (String[]) ArrayUtils.subarray(args, 1, args.length));
+			name = String.join(" ", (String[]) ArrayUtils.subarray(args, 1, args.length));
 
-				if (lm.getLoadout(name) == null) {
-					Lang.UNKNOWN_LOADOUT.send(sender, name);
-					return true;
-				}
-				if (!sender.hasPermission("supergive.command.loadout.delete." + name)) {
-					Lang.NO_PERMISSION.send(sender, "supergive.command.loadout.delete." + name);
-					return true;
-				}
-				if (lm.deleteLoadout(name)) {
-					Lang.LOADOUT_DELETED.send(sender, name);
-				} else {
-					Lang.LOADOUT_NOT_DELETED.send(sender, name);
-				}
-				break;
-			case "cancel":
-				if (!(sender instanceof Player)) {
-					Lang.MUST_BE_PLAYER.send(sender);
-					return true;
-				}
-				player = (Player) sender;
-				if (!(loadouts.containsKey(player.getUniqueId()))) {
-					Lang.LOADOUT_NOT_EDITING.send(sender);
-					return true;
-				}
-				Lang.LOADOUT_CANCELED.send(sender, loadouts.get(player.getUniqueId()));
-				loadouts.remove(player.getUniqueId());
-				player.getInventory().setContents(items.get(player.getUniqueId()));
-				break;
-			default:
-				Lang.INVALID_ARGUMENT.send(sender);
-				break;
+			Loadout load = lm.getLoadout(name);
+			if (load == null) {
+				Lang.UNKNOWN_LOADOUT.send(sender, name);
+				return true;
+			}
+			if (!sender.hasPermission("supergive.command.loadout.edit." + name)) {
+				Lang.NO_PERMISSION.send(sender, "supergive.command.loadout.edit." + name);
+				return true;
+			}
+
+			items.put(player.getUniqueId(), player.getInventory().getContents());
+			player.getInventory().clear();
+			load.give(new DynamicHolder((InventoryHolder) player));
+			Lang.LOADOUT_EDITING.send(sender, name);
+			loadouts.put(player.getUniqueId(), name);
+			break;
+		case "delete":
+			if (!sender.hasPermission("supergive.command.loadout.delete")) {
+				Lang.NO_PERMISSION.send(sender, "supergive.command.loadout.delete");
+				return true;
+			}
+			if (!(sender instanceof Player)) {
+				Lang.MUST_BE_PLAYER.send(sender);
+				return true;
+			}
+			player = (Player) sender;
+			if (args.length <= 1) {
+				Lang.SPECIFY_NAME.send(sender);
+				return true;
+			}
+
+			name = String.join(" ", (String[]) ArrayUtils.subarray(args, 1, args.length));
+
+			if (lm.getLoadout(name) == null) {
+				Lang.UNKNOWN_LOADOUT.send(sender, name);
+				return true;
+			}
+			if (!sender.hasPermission("supergive.command.loadout.delete." + name)) {
+				Lang.NO_PERMISSION.send(sender, "supergive.command.loadout.delete." + name);
+				return true;
+			}
+			if (lm.deleteLoadout(name)) {
+				Lang.LOADOUT_DELETED.send(sender, name);
+			} else {
+				Lang.LOADOUT_NOT_DELETED.send(sender, name);
+			}
+			break;
+		case "cancel":
+			if (!(sender instanceof Player)) {
+				Lang.MUST_BE_PLAYER.send(sender);
+				return true;
+			}
+			player = (Player) sender;
+			if (!(loadouts.containsKey(player.getUniqueId()))) {
+				Lang.LOADOUT_NOT_EDITING.send(sender);
+				return true;
+			}
+			Lang.LOADOUT_CANCELED.send(sender, loadouts.get(player.getUniqueId()));
+			loadouts.remove(player.getUniqueId());
+			player.getInventory().setContents(items.get(player.getUniqueId()));
+			break;
+		default:
+			Lang.INVALID_ARGUMENT.send(sender);
+			break;
 		}
 		return true;
 	}

@@ -121,77 +121,77 @@ public class GiveCommand extends BukkitCommand {
 
 		Loadout loadout = null;
 		switch (args[1].toLowerCase()) {
-			case "@hand":
-				if (!sender.hasPermission("supergive.command.give.hand")) {
-					Lang.NO_PERMISSION.send(sender, "supergive.command.give.hand");
+		case "@hand":
+			if (!sender.hasPermission("supergive.command.give.hand")) {
+				Lang.NO_PERMISSION.send(sender, "supergive.command.give.hand");
+				return true;
+			}
+			if (sender instanceof Player) {
+				loadout = new Loadout(((Player) sender).getInventory().getItemInHand());
+				item = ((Player) sender).getInventory().getItemInHand();
+			}
+			break;
+		case "@inventory":
+			if (!sender.hasPermission("supergive.command.give.inventory")) {
+				Lang.NO_PERMISSION.send(sender, "supergive.command.give.inventory");
+				return true;
+			}
+			if (!(sender instanceof Player)) {
+				Lang.MUST_BE_PLAYER.send(sender);
+				return true;
+			}
+			loadout = new Loadout(((Player) sender).getInventory().getContents());
+			break;
+		case "@block":
+			if (!sender.hasPermission("supergive.command.give.block")) {
+				Lang.NO_PERMISSION.send(sender, "supergive.command.give.block");
+				return true;
+			}
+			if (!(sender instanceof Player)) {
+				Lang.MUST_BE_PLAYER.send(sender);
+				return true;
+			}
+			RayTraceResult result = ((Player) sender).rayTraceBlocks(20);
+			if (result == null || result.getHitBlock() == null) {
+				Lang.INVALID_BLOCK.send(sender, "Air");
+				return true;
+			}
+			Block target = result.getHitBlock();
+			if (!(target.getState() instanceof Container)) {
+				Lang.INVALID_BLOCK.send(sender, MSG.camelCase(target.getType().toString()));
+				return true;
+			}
+			loadout = new Loadout(((Container) target.getState()).getInventory().getContents());
+			break;
+		case "@enderchest":
+			if (!sender.hasPermission("supergive.command.give.enderchest")) {
+				Lang.NO_PERMISSION.send(sender, "supergive.command.give.enderchest");
+				return true;
+			}
+			if (!(sender instanceof Player)) {
+				Lang.MUST_BE_PLAYER.send(sender);
+				return true;
+			}
+			loadout = new Loadout(((Player) sender).getEnderChest().getContents());
+			break;
+		default:
+			if (args[1].startsWith("#")) {
+				loadout = plugin.getModule(LoadoutManager.class).matchLoadout(args[1].substring(1));
+				if (loadout == null) {
+					MSG.tell(sender, "SuperGive", "Unknown loadout specified.");
 					return true;
 				}
-				if (sender instanceof Player) {
-					loadout = new Loadout(((Player) sender).getInventory().getItemInHand());
-					item = ((Player) sender).getInventory().getItemInHand();
+				if (!sender.hasPermission("supergive.command.give.loadout." + args[1].substring(1))) {
+					Lang.NO_PERMISSION.send(sender, "supergive.command.give.loadout" + args[1].substring(1));
+					return true;
 				}
 				break;
-			case "@inventory":
-				if (!sender.hasPermission("supergive.command.give.inventory")) {
-					Lang.NO_PERMISSION.send(sender, "supergive.command.give.inventory");
-					return true;
-				}
-				if (!(sender instanceof Player)) {
-					Lang.MUST_BE_PLAYER.send(sender);
-					return true;
-				}
-				loadout = new Loadout(((Player) sender).getInventory().getContents());
-				break;
-			case "@block":
-				if (!sender.hasPermission("supergive.command.give.block")) {
-					Lang.NO_PERMISSION.send(sender, "supergive.command.give.block");
-					return true;
-				}
-				if (!(sender instanceof Player)) {
-					Lang.MUST_BE_PLAYER.send(sender);
-					return true;
-				}
-				RayTraceResult result = ((Player) sender).rayTraceBlocks(20);
-				if (result == null || result.getHitBlock() == null) {
-					Lang.INVALID_BLOCK.send(sender, "Air");
-					return true;
-				}
-				Block target = result.getHitBlock();
-				if (!(target.getState() instanceof Container)) {
-					Lang.INVALID_BLOCK.send(sender, MSG.camelCase(target.getType().toString()));
-					return true;
-				}
-				loadout = new Loadout(((Container) target.getState()).getInventory().getContents());
-				break;
-			case "@enderchest":
-				if (!sender.hasPermission("supergive.command.give.enderchest")) {
-					Lang.NO_PERMISSION.send(sender, "supergive.command.give.enderchest");
-					return true;
-				}
-				if (!(sender instanceof Player)) {
-					Lang.MUST_BE_PLAYER.send(sender);
-					return true;
-				}
-				loadout = new Loadout(((Player) sender).getEnderChest().getContents());
-				break;
-			default:
-				if (args[1].startsWith("#")) {
-					loadout = plugin.getModule(LoadoutManager.class).matchLoadout(args[1].substring(1));
-					if (loadout == null) {
-						MSG.tell(sender, "SuperGive", "Unknown loadout specified.");
-						return true;
-					}
-					if (!sender.hasPermission("supergive.command.give.loadout." + args[1].substring(1))) {
-						Lang.NO_PERMISSION.send(sender, "supergive.command.give.loadout" + args[1].substring(1));
-						return true;
-					}
-					break;
-				}
-				if (item == null) {
-					Lang.INVALID_ITEM.send(sender, args[1]);
-					return true;
-				}
-				loadout = new Loadout(item);
+			}
+			if (item == null) {
+				Lang.INVALID_ITEM.send(sender, args[1]);
+				return true;
+			}
+			loadout = new Loadout(item);
 		}
 
 		if (loadout == null) {

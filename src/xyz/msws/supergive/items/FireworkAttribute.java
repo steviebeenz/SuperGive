@@ -57,25 +57,25 @@ public class FireworkAttribute implements ItemAttribute {
 
 		for (String s : line.split(",")) {
 			switch (s.toLowerCase()) {
-				case "flicker":
-					effect.withFlicker();
-					break;
-				case "trail":
-					effect.withTrail();
-					break;
-				default:
-					if (s.startsWith("power")) {
-						try {
-							fire.setPower(Integer.parseInt(s.substring("power".length()).trim()));
-						} catch (NumberFormatException e) {
-						}
-					}
+			case "flicker":
+				effect.withFlicker();
+				break;
+			case "trail":
+				effect.withTrail();
+				break;
+			default:
+				if (s.startsWith("power")) {
 					try {
-						Type type = Type.valueOf(s.toUpperCase());
-						effect.with(type);
-					} catch (IllegalArgumentException e) {
+						fire.setPower(Integer.parseInt(s.substring("power".length()).trim()));
+					} catch (NumberFormatException e) {
 					}
-					break;
+				}
+				try {
+					Type type = Type.valueOf(s.toUpperCase());
+					effect.with(type);
+				} catch (IllegalArgumentException e) {
+				}
+				break;
 			}
 		}
 
